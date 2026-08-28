@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+build/
+dist/
+*.egg-info/
+
+# Raw experiments are retained, but transient scratch files are not.
+experiments/**/scratch/

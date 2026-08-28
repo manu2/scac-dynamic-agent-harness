@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/scac/scac-sst-v0.1.json",
+  "title": "SCAC Self-Telemetry Snapshot v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "seq",
+    "observed_at_ms",
+    "fresh_for_ms",
+    "hardware",
+    "tools",
+    "runtime",
+    "economics"
+  ],
+  "properties": {
+    "schema": {"const": "scac-sst-v0.1"},
+    "seq": {"type": "integer", "minimum": 0},
+    "observed_at_ms": {"type": "integer", "minimum": 0},
+    "fresh_for_ms": {"type": "integer", "minimum": 0},
+    "hardware": {"type": "object"},
+    "tools": {"type": "object"},
+    "runtime": {"type": "object"},
+    "economics": {"type": "object"}
+  }
+}
