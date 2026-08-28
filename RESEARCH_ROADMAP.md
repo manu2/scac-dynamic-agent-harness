@@ -29,8 +29,10 @@ Every snapshot enforces:
 - **G0 — specification (Complete):** freeze SST v0.1 JSON Schema Draft 2020-12,
   RFC 8785 canonicalization, sliding-window deterministic reducer, compact renderer,
   trust boundaries, and comprehensive invariant test suite.
-- **G1 — enforcement:** implement collectors and fail-closed memory, timeout, and
-  tool-fault positive controls.
+- **G1 — enforcement (In progress):** cgroup-v2 collector and host-owned positive
+  controls are implemented. Timeout and deterministic tool-fault controls pass
+  locally; the cgroup-v2 memory OOM-kill positive control is blocked pending a
+  delegated Linux cgroup-v2 runner and cannot be substituted with a host limit.
 - **G2 — scenarios:** implement deterministic ToolRoute, MemoryGovernor, and
   RetryBudget simulators, external oracles, and context-isolated reviews.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.

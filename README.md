@@ -46,4 +46,4 @@ docs/                    design reviews and empirical reports
 
 ## Current status
 
-Gate G0 (Specification & Threat Model) implemented on branch `codex/g0-sst-schema` with strict RFC 8785 canonicalization, sliding-window tool health, non-fabricating reducer, derivation provenance, and complete test suite (48 tests passing). Provider trials remain unauthorized until G1 positive controls and G2 deterministic scenario calibration pass.
+Gate G0 (Specification & Threat Model) is complete on branch `codex/g0-sst-schema` with RFC 8785 canonicalization, sliding-window tool health, sparse deltas, and fail-closed missing-data semantics. Gate G1 collector and positive-control code is implemented. Timeout and deterministic tool-fault controls pass locally; cgroup-v2 memory enforcement must be demonstrated on a delegated Linux cgroup-v2 runner before G1 can close. Provider trials remain unauthorized until G1, G2, and the protocol's remaining pre-pilot requirements pass.

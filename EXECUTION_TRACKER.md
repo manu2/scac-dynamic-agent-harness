@@ -2,7 +2,7 @@
 
 ## Overall status
 
-- **Current stage:** G0 specification & review remediation round 2 (Complete; branch `codex/g0-sst-schema`).
+- **Current stage:** G1 enforcement implementation and capability-gated controls (In progress; branch `codex/g0-sst-schema`).
 - **Provider calls:** not authorized.
 - **Empirical trials:** none.
 - **Upstream design basis:** `manu2/Context-Aware-Agent-Experiment` commit
@@ -21,7 +21,7 @@
 | G0.6 | Implement deterministic reducer interface | Complete | `src/scac_harness/reducer.py`, `tests/test_reducer.py` |
 | G0.7 | Implement compact model-visible renderer | Complete | `src/scac_harness/renderer.py`, `tests/test_renderer.py` |
 | G0.8 | Complete threat model & representation semantics | Complete | `docs/01_threat_model_and_trust_boundaries.md`, `docs/02_representation_semantics.md` |
-| G1 | Collectors and fail-closed enforcement | Pending | positive-control records (Next stage upon authorization) |
+| G1 | Collectors and fail-closed enforcement | In progress | `collectors.py`, `enforcement.py`, and immutable `experiments/g1-controls/` records; Linux cgroup-v2 memory proof pending |
 | G2 | Deterministic scenarios and oracles | Pending | calibration artifacts |
 | G3 | One-model pilot | Blocked by G0–G2 | frozen pilot manifest |
 
@@ -37,3 +37,20 @@
 - **Genuine Unsupported-as-Zero Fixture & Validation:** Updated `unsupported_metric_represented_as_zero.json` to declare an unavailable metric with value 0, and updated `validate_snapshot` to reject any unavailable field represented as zero.
 - **Roadmap Scope Correction:** Restored protocol-aligned wording in `RESEARCH_ROADMAP.md` (removing premature sample size and model commitments).
 - **Test Suite:** 52 passing unit and integration tests with 0 failures.
+
+### 2026-08-28 — G1 host-controlled enforcement implementation
+
+- Added `CgroupV2Collector`, which parses `memory.current`, `memory.max`,
+  `memory.events`, `cpu.max`, and `cpu.stat`; it emits explicit first-window
+  deltas and fails closed on unavailable files, malformed data, or counter
+  regression.
+- Added host-owned timeout and deterministic tool-fault positive controls. Both
+  passed locally and their stdout, stderr, classification, and timing records
+  were retained immutably in `experiments/g1-controls/`.
+- Added a Linux-only cgroup-v2 memory allocation control. It can pass only after
+  a dedicated child cgroup reports an `oom_kill` increment. This macOS host has
+  no cgroup-v2 filesystem, so the attempted memory control is recorded as
+  `BLOCKED/CGROUP_V2_UNAVAILABLE`; it is not counted as a pass.
+- Revalidated G0 with the vetted `jcs` implementation, immutable raw event
+  payloads, sparse deltas, and 52 pre-G1 tests passing. The combined local suite
+  now has 58 passing tests.
