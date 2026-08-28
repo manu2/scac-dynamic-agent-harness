@@ -64,6 +64,59 @@ def test_reducer_does_not_fabricate_unobserved_telemetry() -> None:
     assert "hardware.ephemeral_disk" in snap["unavailable_fields"]
 
 
+def test_reducer_partial_observation_does_not_fabricate_ok_or_headroom() -> None:
+    """A memory event containing only current_bytes without max_bytes must have unknown headroom and state=UNKNOWN."""
+    reducer = DeterministicReducer()
+    ev = [
+        RawTelemetryEvent(
+            timestamp_ms=1000,
+            source="cgroup_v2",
+            topic="memory",
+            payload={"current_bytes": 1048576},
+        )
+    ]
+    snap = reducer.reduce(trajectory_id="traj-partial-obs", seq=1, events=ev)
+    mem = snap["hardware"]["memory"]
+    assert mem["current_bytes"] == 1048576
+    assert "headroom_ratio" not in mem or mem.get("headroom_ratio") is None
+    assert mem["state"] == "UNKNOWN"
+
+
+def test_reducer_interval_deltas_are_not_carried_across_turns() -> None:
+    """Interval deltas from turn 1 must NOT be carried over to turn 2 when turn 2 has no new memory events."""
+    reducer = DeterministicReducer()
+
+    # Turn 1: memory event with high=1 delta
+    ev1 = [
+        RawTelemetryEvent(
+            timestamp_ms=1000,
+            source="cgroup_v2",
+            topic="memory",
+            payload={
+                "current_bytes": 134217728,
+                "max_bytes": 268435456,
+                "events_delta": {"high": 1, "max": 0, "oom": 0, "oom_kill": 0},
+            },
+        )
+    ]
+    s1 = reducer.reduce("traj-intervals", 1, ev1)
+    assert s1["hardware"]["memory"]["events_delta"]["high"] == 1
+
+    # Turn 2: tool-only event at t=5000
+    ev2 = [
+        RawTelemetryEvent(
+            timestamp_ms=5000,
+            source="tool_wrapper",
+            topic="tool_span",
+            payload={"tool_id": "search_api", "latency_ms": 100.0, "success": True},
+        )
+    ]
+    s2 = reducer.reduce("traj-intervals", 2, ev2, prior_snapshot=s1, kind="full_checkpoint")
+
+    # The high=1 delta from turn 1 must NOT appear in turn 2!
+    assert "events_delta" not in s2["hardware"]["memory"]
+
+
 def test_tool_health_sliding_window_eviction() -> None:
     """10 successes followed by 10 failures must evict old successes, yielding 10 failures and OPEN circuit."""
     reducer = DeterministicReducer(circuit_consecutive_failure_limit=3, max_tool_window=10)
@@ -178,7 +231,7 @@ def test_reducer_field_level_derivation_provenance() -> None:
 
 
 def test_delta_rehydration() -> None:
-    """Rehydrating a delta snapshot with its base checkpoint produces a complete, coherent state."""
+    """Rehydrating a sparse delta snapshot with its base checkpoint produces a complete, coherent state."""
     reducer = DeterministicReducer()
     ev1 = [
         RawTelemetryEvent(
@@ -199,6 +252,10 @@ def test_delta_rehydration() -> None:
         )
     ]
     delta = reducer.reduce("traj-rehydrate", 2, ev2, prior_snapshot=base, kind="delta")
+
+    # Delta should be sparse: hardware is omitted because no hardware events occurred
+    assert "hardware" not in delta
+    assert "tools" in delta
 
     rehydrated = rehydrate_snapshot(delta, base)
     assert rehydrated["seq"] == 2

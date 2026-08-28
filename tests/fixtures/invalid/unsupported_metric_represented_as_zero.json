@@ -9,7 +9,7 @@
   "fresh_for_ms": 2000,
   "reducer": {
     "name": "scac-deterministic-reducer",
-    "version": "unsupported_version_0.0.0"
+    "version": "0.1.0"
   },
   "raw_event_hashes": [
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
@@ -34,5 +34,10 @@
   "runtime": {
     "network": "ENABLED"
   },
-  "economics": {}
+  "economics": {
+    "rate_limit_remaining": 0
+  },
+  "unavailable_fields": [
+    "economics.rate_limit_remaining"
+  ]
 }

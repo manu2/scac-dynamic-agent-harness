@@ -37,68 +37,71 @@ def render_tier2_envelope(snapshot: dict[str, Any], max_chars: int = 2000) -> st
     lines.append(f"=== HOST TELEMETRY [seq={seq_str} kind={kind}{base_str} id={snap_id} obs={obs_str} fresh={fresh_str}] ===")
 
     # 1. Hardware section
+    # 1. Hardware section
     hw = snapshot.get("hardware", {})
-    hw_lines: list[str] = ["[HARDWARE]"]
+    if hw:
+        hw_lines: list[str] = ["[HARDWARE]"]
 
-    mem = hw.get("memory", {})
-    if mem:
-        cur_b = mem.get("current_bytes")
-        cur_str = f"{cur_b}B" if cur_b is not None else "UNAVAILABLE"
-        max_b = mem.get("max_bytes")
-        max_str = f"{max_b}B" if max_b is not None else "UNLIMITED"
-        headroom = mem.get("headroom_ratio")
-        headroom_str = str(headroom) if headroom is not None else "UNAVAILABLE"
-        mem_state = mem.get("state", "UNKNOWN")
-        psi_some = mem.get("psi_some_avg10")
-        psi_str = f"{psi_some}%" if psi_some is not None else "UNAVAILABLE"
-        ev_delta = mem.get("events_delta")
-        if ev_delta:
-            high_cnt = ev_delta.get("high", "UNAVAILABLE")
-            oom_cnt = ev_delta.get("oom", 0) + ev_delta.get("oom_kill", 0) if "oom" in ev_delta else "UNAVAILABLE"
-            ev_str = f"events_delta(high={high_cnt},oom={oom_cnt})"
-        else:
-            ev_str = "events_delta=UNAVAILABLE"
-        hw_lines.append(
-            f"  memory: cur={cur_str} max={max_str} headroom={headroom_str} state={mem_state} "
-            f"psi_some_avg10={psi_str} {ev_str}"
-        )
+        mem = hw.get("memory", {})
+        if mem:
+            cur_b = mem.get("current_bytes")
+            cur_str = f"{cur_b}B" if cur_b is not None else "UNAVAILABLE"
+            max_b = mem.get("max_bytes")
+            max_str = f"{max_b}B" if max_b is not None else "UNLIMITED"
+            headroom = mem.get("headroom_ratio")
+            headroom_str = str(headroom) if headroom is not None else "UNAVAILABLE"
+            mem_state = mem.get("state", "UNKNOWN")
+            psi_some = mem.get("psi_some_avg10")
+            psi_str = f"{psi_some}%" if psi_some is not None else "UNAVAILABLE"
+            ev_delta = mem.get("events_delta")
+            if ev_delta:
+                high_cnt = ev_delta.get("high", "UNAVAILABLE")
+                oom_cnt = ev_delta.get("oom", 0) + ev_delta.get("oom_kill", 0) if "oom" in ev_delta else "UNAVAILABLE"
+                ev_str = f"events_delta(high={high_cnt},oom={oom_cnt})"
+            else:
+                ev_str = "events_delta=UNAVAILABLE"
+            hw_lines.append(
+                f"  memory: cur={cur_str} max={max_str} headroom={headroom_str} state={mem_state} "
+                f"psi_some_avg10={psi_str} {ev_str}"
+            )
 
-    cpu = hw.get("cpu", {})
-    if cpu:
-        quota = cpu.get("quota_cores")
-        quota_str = f"{quota}cores" if quota is not None else "UNLIMITED"
-        throttled_usec = cpu.get("throttled_usec_delta")
-        throttled_str = f"{throttled_usec}us" if throttled_usec is not None else "UNAVAILABLE"
-        cpu_state = cpu.get("state", "UNKNOWN")
-        cpu_psi = cpu.get("psi_some_avg10")
-        cpu_psi_str = f"{cpu_psi}%" if cpu_psi is not None else "UNAVAILABLE"
-        hw_lines.append(
-            f"  cpu: quota={quota_str} throttled_usec_delta={throttled_str} psi_some_avg10={cpu_psi_str} state={cpu_state}"
-        )
+        cpu = hw.get("cpu", {})
+        if cpu:
+            quota = cpu.get("quota_cores")
+            quota_str = f"{quota}cores" if quota is not None else "UNLIMITED"
+            throttled_usec = cpu.get("throttled_usec_delta")
+            throttled_str = f"{throttled_usec}us" if throttled_usec is not None else "UNAVAILABLE"
+            cpu_state = cpu.get("state", "UNKNOWN")
+            cpu_psi = cpu.get("psi_some_avg10")
+            cpu_psi_str = f"{cpu_psi}%" if cpu_psi is not None else "UNAVAILABLE"
+            hw_lines.append(
+                f"  cpu: quota={quota_str} throttled_usec_delta={throttled_str} psi_some_avg10={cpu_psi_str} state={cpu_state}"
+            )
 
-    disk = hw.get("ephemeral_disk", {})
-    if disk:
-        free_b = disk.get("free_bytes")
-        free_str = f"{free_b}B" if free_b is not None else "UNAVAILABLE"
-        disk_state = disk.get("state", "UNKNOWN")
-        used_ratio = disk.get("used_ratio")
-        used_ratio_str = str(used_ratio) if used_ratio is not None else "UNAVAILABLE"
-        hw_lines.append(f"  disk: free={free_str} used_ratio={used_ratio_str} state={disk_state}")
+        disk = hw.get("ephemeral_disk", {})
+        if disk:
+            free_b = disk.get("free_bytes")
+            free_str = f"{free_b}B" if free_b is not None else "UNAVAILABLE"
+            disk_state = disk.get("state", "UNKNOWN")
+            used_ratio = disk.get("used_ratio")
+            used_ratio_str = str(used_ratio) if used_ratio is not None else "UNAVAILABLE"
+            hw_lines.append(f"  disk: free={free_str} used_ratio={used_ratio_str} state={disk_state}")
 
-    gpu = hw.get("gpu", {})
-    if gpu:
-        avail = gpu.get("available", False)
-        if avail:
-            gpu_state = gpu.get("state", "OK")
-            vram_used = gpu.get("vram_used_bytes")
-            vram_used_str = f"{vram_used}B" if vram_used is not None else "UNAVAILABLE"
-            vram_tot = gpu.get("vram_total_bytes")
-            vram_tot_str = f"{vram_tot}B" if vram_tot is not None else "UNAVAILABLE"
-            hw_lines.append(f"  gpu: available=true vram={vram_used_str}/{vram_tot_str} state={gpu_state}")
-        else:
-            hw_lines.append("  gpu: available=false (UNAVAILABLE)")
+        gpu = hw.get("gpu", {})
+        if gpu:
+            avail = gpu.get("available", False)
+            if avail:
+                gpu_state = gpu.get("state", "OK")
+                vram_used = gpu.get("vram_used_bytes")
+                vram_used_str = f"{vram_used}B" if vram_used is not None else "UNAVAILABLE"
+                vram_tot = gpu.get("vram_total_bytes")
+                vram_tot_str = f"{vram_tot}B" if vram_tot is not None else "UNAVAILABLE"
+                hw_lines.append(f"  gpu: available=true vram={vram_used_str}/{vram_tot_str} state={gpu_state}")
+            else:
+                hw_lines.append("  gpu: available=false (UNAVAILABLE)")
 
-    lines.extend(hw_lines)
+        if len(hw_lines) > 1:
+            lines.extend(hw_lines)
 
     # 2. Tools section
     tools = snapshot.get("tools", {})

@@ -14,11 +14,36 @@
     "observed_at_ms",
     "fresh_for_ms",
     "reducer",
-    "raw_event_hashes",
-    "hardware",
-    "tools",
-    "runtime",
-    "economics"
+    "raw_event_hashes"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": { "kind": { "const": "full_checkpoint" } }
+      },
+      "then": {
+        "required": ["hardware", "tools", "runtime", "economics"],
+        "properties": {
+          "hardware": {
+            "required": ["memory", "cpu", "gpu", "ephemeral_disk"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "kind": { "const": "delta" } }
+      },
+      "then": {
+        "required": ["base_snapshot_id"],
+        "properties": {
+          "base_snapshot_id": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      }
+    }
   ],
   "properties": {
     "schema": {
@@ -60,6 +85,17 @@
       "type": "integer",
       "minimum": 1,
       "description": "Maximum validity duration in milliseconds before snapshot must be considered stale."
+    },
+    "subsystem_observed_at_ms": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-zA-Z0-9_.-]+$": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "description": "Per-subsystem observation timestamps in milliseconds for fine-grained freshness tracking."
     },
     "reducer": {
       "type": "object",
@@ -104,7 +140,6 @@
     "hardware": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["memory", "cpu", "gpu", "ephemeral_disk"],
       "properties": {
         "memory": {
           "type": "object",
@@ -420,7 +455,6 @@
     "runtime": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["network"],
       "properties": {
         "wall_remaining_ms": {
           "type": ["integer", "null"],

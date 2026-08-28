@@ -14,53 +14,9 @@
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   ],
   "derivation_provenance": {
-    "hardware.memory": [
+    "tools.query_db": [
       "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     ]
-  },
-  "hardware": {
-    "memory": {
-      "current_bytes": 67108864,
-      "peak_bytes": 73400320,
-      "max_bytes": 268435456,
-      "headroom_ratio": 0.75,
-      "events_delta": {
-        "high": 0,
-        "max": 0,
-        "oom": 0,
-        "oom_kill": 0
-      },
-      "psi_some_avg10": 0.0,
-      "psi_full_avg10": 0.0,
-      "psi_some_total_usec_delta": 0,
-      "psi_full_total_usec_delta": 0,
-      "state": "OK"
-    },
-    "cpu": {
-      "quota_cores": 2.0,
-      "period_usec": 100000,
-      "nr_throttled_delta": 0,
-      "throttled_usec_delta": 0,
-      "usage_usec_delta": 15000,
-      "psi_some_avg10": 0.0,
-      "psi_full_avg10": 0.0,
-      "state": "OK"
-    },
-    "gpu": {
-      "available": false
-    },
-    "ephemeral_disk": {
-      "free_bytes": 10737418240,
-      "used_bytes": 536870912,
-      "total_bytes": 11274289152,
-      "used_ratio": 0.0476,
-      "state": "OK"
-    },
-    "processes": {
-      "pids_current": 4,
-      "pids_max": 64,
-      "threads_current": 8
-    }
   },
   "tools": {
     "query_db": {
@@ -86,32 +42,5 @@
       "state": "OK"
     }
   },
-  "runtime": {
-    "wall_remaining_ms": 60000,
-    "step": 0,
-    "pids_current": 4,
-    "pids_max": 64,
-    "threads_current": 8,
-    "last_exit": {
-      "code": 0,
-      "signal": null,
-      "class": "NONE"
-    },
-    "network": "ENABLED",
-    "filesystem": "READ_WRITE",
-    "state": "RUNNING"
-  },
-  "economics": {
-    "context_tokens_remaining": 120000,
-    "trajectory_tokens": 1250,
-    "input_tokens": 800,
-    "output_tokens": 450,
-    "cached_tokens": 400,
-    "estimated_cost_usd": 0.0042,
-    "budget_remaining_usd": 10.0,
-    "rate_limit_remaining": 100,
-    "rate_limit_reset_ms": 60000,
-    "state": "OK"
-  },
-  "snapshot_id": "206be18c40f15991097af3d33f1a290bd9d641b7846254fc42408ba6d75055fc"
+  "snapshot_id": "9cc985129b97d1dda8bbe3de205295ab8007626035b3c8bf6536773cee3ce062"
 }

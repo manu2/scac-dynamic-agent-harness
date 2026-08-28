@@ -45,7 +45,7 @@ EXPECTED_INVALID_KEYWORDS = {
     "unknown_privileged_field.json": "privileged_admin_override",
     "raw_tool_content_in_privileged_block.json": "raw_tool_output",
     "tool_supplied_overwrite_attempt.json": "fake_cgroup_override",
-    "unsupported_metric_represented_as_zero.json": "unsupported_version_0.0.0",
+    "unsupported_metric_represented_as_zero.json": "represented as 0 while declared in unavailable_fields",
     "malformed_terminal_exit_classification.json": "MALFORMED_NONEXISTENT_SIGNAL",
 }
 

@@ -33,6 +33,18 @@ class TrajectoryValidationResult:
             raise ValueError(f"Trajectory validation failed: {'; '.join(self.errors)}")
 
 
+def _get_path_value(d: dict[str, Any], path: str) -> Any:
+    """Retrieve value from a nested dict using dot notation."""
+    parts = path.split(".")
+    curr: Any = d
+    for p in parts:
+        if isinstance(curr, dict) and p in curr:
+            curr = curr[p]
+        else:
+            return None
+    return curr
+
+
 def validate_snapshot(
     snapshot: dict[str, Any],
     verify_identity_hash: bool = True,
@@ -56,7 +68,17 @@ def validate_snapshot(
     elif kind == "full_checkpoint":
         pass
 
-    # 3. Snapshot identity verification
+    # 3. Explicit check: unavailable metrics must never be represented as zero
+    unavail = snapshot.get("unavailable_fields", [])
+    for field_path in unavail:
+        val = _get_path_value(snapshot, field_path)
+        # If val is 0 or 0.0 (and not a boolean False), it violates "missing must never be encoded as zero"
+        if val == 0 and not isinstance(val, bool):
+            errors.append(
+                f"Unsupported metric '{field_path}' represented as 0 while declared in unavailable_fields."
+            )
+
+    # 4. Snapshot identity verification
     if verify_identity_hash and "snapshot_id" in snapshot:
         if not verify_snapshot_id(snapshot):
             expected = compute_snapshot_id(snapshot)

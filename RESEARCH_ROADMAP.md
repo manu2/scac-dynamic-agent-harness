@@ -33,8 +33,8 @@ Every snapshot enforces:
   tool-fault positive controls.
 - **G2 — scenarios:** implement deterministic ToolRoute, MemoryGovernor, and
   RetryBudget simulators, external oracles, and context-isolated reviews.
-- **G3 — pilot:** one configured model (Gemini 3.7 Flash); A/B/C conditions; natural-language subset.
-- **G4 — main study:** powered, randomized, frozen multi-model execution (Gemini 3.7 Flash, DeepSeek-R1 / Kimi K3, GPT-5.6 Terra; \(N=30\) per cell).
+- **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
+- **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,
   and telemetry-poisoning robustness under separate protocols.
 

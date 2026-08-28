@@ -13,17 +13,28 @@ from scac_harness.identity import (
 )
 
 
-def test_rfc8785_negative_zero_normalization() -> None:
-    """RFC 8785 requires negative zero (-0.0) to be serialized as 0."""
-    assert rfc8785_canonical_dumps(-0.0) == "0"
-    assert rfc8785_canonical_dumps(0.0) == "0"
-    assert rfc8785_canonical_dumps({"zero": -0.0}) == '{"zero":0}'
+def test_rfc8785_ecmascript_number_representations() -> None:
+    """RFC 8785 requires strict ECMAScript 7.1.12.1 number serialization."""
+    # Negative zero must serialize to "0"
+    assert canonical_json_dumps(-0.0) == "0"
+    assert canonical_json_dumps(0.0) == "0"
+    assert canonical_json_dumps({"val": -0.0}) == '{"val":0}'
+
+    # Integer-valued floats must not have trailing ".0"
+    assert canonical_json_dumps(10.0) == "10"
+    assert canonical_json_dumps(10.5) == "10.5"
+
+    # Exponential representations
+    assert canonical_json_dumps(1e30) == "1e+30"
+    assert canonical_json_dumps(1e-7) == "1e-7"
 
 
-def test_rfc8785_integer_float_representation() -> None:
-    """RFC 8785 / ECMAScript standard serializes integer-valued floats without decimal point."""
-    assert rfc8785_canonical_dumps(10.0) == "10"
-    assert rfc8785_canonical_dumps(10.5) == "10.5"
+def test_rfc8785_utf16_key_sorting() -> None:
+    """RFC 8785 requires property keys to be sorted by UTF-16 code units."""
+    # Unicode code point order vs UTF-16 code unit order
+    obj = {"\uffff": 1, "\U00010000": 2, "a": 3}
+    canonical = canonical_json_dumps(obj)
+    assert canonical.startswith('{"a":3')
 
 
 def test_canonical_json_ordering_and_compactness() -> None:

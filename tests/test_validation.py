@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 import pytest
@@ -24,6 +25,32 @@ def test_raw_event_rejects_forged_event_id() -> None:
             payload={"current_bytes": 1024},
             event_id="0000000000000000000000000000000000000000000000000000000000000000",
         )
+
+
+def test_raw_event_payload_is_immutable() -> None:
+    """RawTelemetryEvent payload must be deeply immutable, rejecting in-place mutation attempts."""
+    event = RawTelemetryEvent(
+        timestamp_ms=1000,
+        source="cgroup_v2",
+        topic="memory",
+        payload={"current_bytes": 1024, "nested": {"val": 1}},
+    )
+    with pytest.raises(TypeError):
+        event.payload["current_bytes"] = 2048  # type: ignore[index]
+
+    with pytest.raises(TypeError):
+        event.payload["nested"]["val"] = 2  # type: ignore[index]
+
+
+def test_snapshot_rejects_unavailable_metric_represented_as_zero() -> None:
+    """Validator must reject a snapshot that declares a metric in unavailable_fields but provides 0."""
+    snap = json.loads((VALID_DIR / "healthy_state.json").read_text(encoding="utf-8"))
+    snap["economics"]["rate_limit_remaining"] = 0
+    snap["unavailable_fields"] = ["economics.rate_limit_remaining"]
+
+    result = validate_snapshot(snap, verify_identity_hash=False)
+    assert result.valid is False
+    assert any("represented as 0 while declared in unavailable_fields" in err for err in result.errors)
 
 
 def test_trajectory_monotonic_sequence_and_timestamps() -> None:

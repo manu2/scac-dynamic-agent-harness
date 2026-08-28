@@ -14,7 +14,6 @@ INVALID_DIR = FIXTURES_DIR / "invalid"
 
 
 def build_valid_fixtures() -> dict[str, dict]:
-    # Base template
     base_snap = {
         "schema": "scac-sst-v0.1",
         "trajectory_id": "traj-main-001",
@@ -200,17 +199,44 @@ def build_valid_fixtures() -> dict[str, dict]:
     f8["base_snapshot_id"] = None
     fixtures["full_checkpoint.json"] = f8
 
-    # 9. delta_snapshot
-    # Compute base checkpoint snapshot_id
+    # 9. delta_snapshot (true sparse delta containing only changed tool namespace)
     base_id = compute_snapshot_id(f8)
     f8["snapshot_id"] = base_id
 
-    f9 = copy.deepcopy(base_snap)
-    f9["trajectory_id"] = "traj-full-008"
-    f9["seq"] = 11
-    f9["kind"] = "delta"
-    f9["base_snapshot_id"] = base_id
-    f9["observed_at_ms"] = 1787884201000
+    f9 = {
+        "schema": "scac-sst-v0.1",
+        "trajectory_id": "traj-full-008",
+        "seq": 11,
+        "kind": "delta",
+        "base_snapshot_id": base_id,
+        "observed_at_ms": 1787884201000,
+        "fresh_for_ms": 2000,
+        "reducer": {
+            "name": "scac-deterministic-reducer",
+            "version": "0.1.0",
+        },
+        "raw_event_hashes": [
+            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        ],
+        "derivation_provenance": {
+            "tools.query_db": [
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ]
+        },
+        "tools": {
+            "query_db": {
+                "window_n": 10,
+                "successes": 10,
+                "failures": 0,
+                "history": [True] * 10,
+                "consecutive_failures": 0,
+                "latency_ewma_ms": 42.5,
+                "last_error": "NONE",
+                "circuit": "CLOSED",
+                "state": "OK",
+            }
+        },
+    }
     fixtures["delta_snapshot.json"] = f9
 
     # Now compute RFC 8785 snapshot_id for all
@@ -303,9 +329,10 @@ def build_invalid_fixtures() -> dict[str, dict]:
     i10["hardware"]["fake_cgroup_override"] = {"memory_unlimited": True}
     invalids["tool_supplied_overwrite_attempt.json"] = i10
 
-    # 11. unsupported_metric_represented_as_zero: unsupported reducer version
+    # 11. unsupported_metric_represented_as_zero: declares metric in unavailable_fields but provides 0
     i11 = copy.deepcopy(base)
-    i11["reducer"]["version"] = "unsupported_version_0.0.0"
+    i11["economics"]["rate_limit_remaining"] = 0
+    i11["unavailable_fields"] = ["economics.rate_limit_remaining"]
     invalids["unsupported_metric_represented_as_zero.json"] = i11
 
     # 12. malformed_terminal_exit_classification: unknown exit class
