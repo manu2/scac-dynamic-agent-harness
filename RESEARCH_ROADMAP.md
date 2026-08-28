@@ -42,6 +42,8 @@ Every snapshot enforces:
   fresh-context Codex subagents after complete host-side capture. These are
   engineering smoke tests only: shared workspace access prevents them from being
   blinded empirical trials or inclusion in a study denominator.
+  The `smoke_cli` runbook provides deterministic handoff and complete per-turn
+  capture for these engineering checks.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
 - **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,

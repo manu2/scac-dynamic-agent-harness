@@ -28,3 +28,13 @@ def test_recorded_trial_can_resume_only_at_pending_action(tmp_path: Path) -> Non
     trial.next_turn()
     resumed = ToolRouteDevelopmentTrial.resume_for_submission(trial.directory)
     assert resumed.submit("tool_alpha")["action"] == "tool_alpha"
+
+
+def test_next_turn_resume_restores_delta_linkage(tmp_path: Path) -> None:
+    trial = ToolRouteDevelopmentTrial(10, "C", tmp_path)
+    trial.next_turn()
+    trial.submit("wait")
+    resumed = ToolRouteDevelopmentTrial.resume_for_next_turn(trial.directory)
+    second = resumed.next_turn()
+    assert second.turn == 1
+    assert second.snapshot is not None and second.snapshot["kind"] == "delta"

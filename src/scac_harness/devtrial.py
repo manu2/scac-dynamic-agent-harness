@@ -88,6 +88,28 @@ class ToolRouteDevelopmentTrial:
         obj.directory = directory
         return obj
 
+    @classmethod
+    def resume_for_next_turn(cls, directory: Path) -> ToolRouteDevelopmentTrial:
+        """Resume only after a submitted action, restoring the prior SST snapshot."""
+        directory = Path(directory)
+        manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
+        inputs = sorted(directory.glob("turn-*-input.json"))
+        results = sorted(directory.glob("turn-*-result.json"))
+        if len(inputs) != len(results) or not results:
+            raise RuntimeError("trial is not ready to compile its next turn")
+        turn = len(results)
+        if turn >= 4:
+            raise RuntimeError("development trial is terminal")
+        host = json.loads((directory / f"turn-{turn - 1:02d}-host.json").read_text(encoding="utf-8"))
+        obj = object.__new__(cls)
+        obj.seed = int(manifest["seed"])
+        obj.condition = manifest["condition"]
+        obj._turn = turn
+        obj._reducer = DeterministicReducer()
+        obj._prior_snapshot = host["snapshot"]
+        obj.directory = directory
+        return obj
+
     def _telemetry(self, state: ToolRouteState) -> tuple[dict[str, object], str, list[dict[str, object]]]:
         events = []
         for index, (tool, health) in enumerate(sorted(state.health.items())):
@@ -146,9 +168,11 @@ class ToolRouteDevelopmentTrial:
         })
         return turn
 
-    def submit(self, action: Action) -> dict[str, object]:
+    def submit(self, action: Action, subject_id: str = "unspecified", response_text: str | None = None) -> dict[str, object]:
         if action not in {"tool_alpha", "tool_beta", "wait"}:
             raise ValueError("action must be tool_alpha, tool_beta, or wait")
+        if response_text is not None and response_text.strip() != action:
+            raise ValueError("response must contain exactly the submitted action label")
         state = ToolRouteState(self._turn, self._health())
         health = state.health.get(action)
         if health is None:
@@ -159,7 +183,7 @@ class ToolRouteDevelopmentTrial:
             if not success:
                 error = "HTTP_503"
         result = {
-            "action": action, "success": success, "latency_ms": latency,
+            "subject_id": subject_id, "response_text": response_text, "action": action, "success": success, "latency_ms": latency,
             "error_class": error, "policy_regret": ToolRouteOracle.regret(state, action),
             "terminal": self._turn == 3,
         }

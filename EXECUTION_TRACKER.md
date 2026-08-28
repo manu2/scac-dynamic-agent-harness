@@ -93,3 +93,14 @@
 - The combined local suite has 70 passing tests. Next hardening: isolate hidden
   schedules from the action agent's filesystem and add an evaluator-defeat test
   suite before collecting additional development smoke trajectories.
+
+### 2026-08-29 — Fresh-subagent smoke handoff
+
+- Added `python -m scac_harness.smoke_cli` with deterministic `start`, `submit`,
+  and `next` operations. It validates one-label action responses, captures the
+  unedited response and subject identifier, and restores the prior SST snapshot
+  when compiling a delta turn after a cross-process subagent response.
+- Added `docs/04_offline_subagent_smoke_runbook.md` for another Codex agent to
+  orchestrate A/B/C smoke trajectories using fresh-context subagents. The
+  runbook preserves the non-blinded, development-only interpretation boundary.
+- Verified the complete command lifecycle and combined suite: 72 tests passing.
