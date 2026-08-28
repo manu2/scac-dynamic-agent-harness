@@ -13,6 +13,11 @@
   "raw_event_hashes": [
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   ],
+  "derivation_provenance": {
+    "hardware.memory": [
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    ]
+  },
   "hardware": {
     "memory": {
       "current_bytes": 67108864,
@@ -62,6 +67,18 @@
       "window_n": 10,
       "successes": 10,
       "failures": 0,
+      "history": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
       "consecutive_failures": 0,
       "latency_ewma_ms": 42.5,
       "last_error": "NONE",
@@ -101,5 +118,5 @@
     "economics.rate_limit_remaining",
     "economics.rate_limit_reset_ms"
   ],
-  "snapshot_id": "ff79fe93f6a18700ed5cad4eade4dcce05f326b94ce5439f2a73a24e9bf42ea6"
+  "snapshot_id": "8523f0ad5393b2e9aa2b660d0b223f7b7ffb2a30b4b27bfcd47f155f0f573d37"
 }

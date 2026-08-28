@@ -13,6 +13,11 @@
   "raw_event_hashes": [
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   ],
+  "derivation_provenance": {
+    "hardware.memory": [
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    ]
+  },
   "hardware": {
     "memory": {
       "current_bytes": 241172480,
@@ -62,6 +67,18 @@
       "window_n": 10,
       "successes": 10,
       "failures": 0,
+      "history": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
       "consecutive_failures": 0,
       "latency_ewma_ms": 42.5,
       "last_error": "NONE",
@@ -99,5 +116,5 @@
   "recommended_constraints": [
     "avoid new allocations above 16 MiB"
   ],
-  "snapshot_id": "5666425a6fba2e73f2ef47c37ac76879b91b805bd09a0456e7f25b552b6c2f43"
+  "snapshot_id": "811137227df28abc45f80da66f80306017f469a66255c46fe81fec99bc22e6fc"
 }

@@ -1,4 +1,4 @@
-"""Tests for SST JSON Schema loading and fixture compliance."""
+"""Tests for SST JSON Schema loading, fixture compliance, and specific invariant failures."""
 
 from __future__ import annotations
 
@@ -34,13 +34,33 @@ def test_valid_fixtures_pass_validation(fixture_path: Path) -> None:
     assert len(result.errors) == 0
 
 
+EXPECTED_INVALID_KEYWORDS = {
+    "missing_required_provenance.json": "raw_event_hashes",
+    "missing_observation_timestamp.json": "observed_at_ms",
+    "negative_counters.json": "minimum of 0",
+    "ratio_above_one.json": "maximum of 1.0",
+    "incompatible_or_ambiguous_units.json": "type",
+    "expired_stale_state.json": "minimum of 1",
+    "duplicate_or_regressing_seq.json": "minimum of 0",
+    "unknown_privileged_field.json": "privileged_admin_override",
+    "raw_tool_content_in_privileged_block.json": "raw_tool_output",
+    "tool_supplied_overwrite_attempt.json": "fake_cgroup_override",
+    "unsupported_metric_represented_as_zero.json": "unsupported_version_0.0.0",
+    "malformed_terminal_exit_classification.json": "MALFORMED_NONEXISTENT_SIGNAL",
+}
+
+
 @pytest.mark.parametrize("fixture_path", sorted(list(INVALID_DIR.glob("*.json"))))
-def test_invalid_fixtures_fail_validation(fixture_path: Path) -> None:
-    """All 12 invalid / adversarial fixtures must be rejected with informative errors."""
+def test_invalid_fixtures_fail_with_specific_reasons(fixture_path: Path) -> None:
+    """Each invalid fixture must fail for its specific, predeclared contract violation."""
     data = json.loads(fixture_path.read_text(encoding="utf-8"))
     result = validate_snapshot(data, verify_identity_hash=False)
     assert not result.valid, f"Invalid fixture {fixture_path.name} unexpectedly passed validation!"
-    assert len(result.errors) > 0
+
+    expected_kw = EXPECTED_INVALID_KEYWORDS[fixture_path.name]
+    assert any(
+        expected_kw in err for err in result.errors
+    ), f"Fixture {fixture_path.name} failed, but not for expected reason '{expected_kw}'. Errors: {result.errors}"
 
 
 def test_rejects_unknown_privileged_fields() -> None:

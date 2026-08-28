@@ -54,7 +54,6 @@ def validate_snapshot(
         if not base_snapshot_id or not isinstance(base_snapshot_id, str):
             errors.append("Delta snapshot must specify a non-empty 'base_snapshot_id'.")
     elif kind == "full_checkpoint":
-        # full checkpoints may have null or omit base_snapshot_id
         pass
 
     # 3. Snapshot identity verification
@@ -139,17 +138,23 @@ def validate_trajectory(
                     f"expiry={obs_ms + fresh_for_ms} (observed_at_ms={obs_ms}, fresh_for_ms={fresh_for_ms})."
                 )
 
-        # 7. Delta linkage check
-        snap_id = snap.get("snapshot_id")
-        if snap_id:
-            seen_snapshot_ids.add(snap_id)
-
+        # 7. Delta linkage check (checked BEFORE adding current snap_id to seen_snapshot_ids)
         kind = snap.get("kind")
+        snap_id = snap.get("snapshot_id")
         if kind == "delta":
+            if idx == 0 or len(seen_snapshot_ids) == 0:
+                errors.append(f"Step {idx}: Delta snapshot cannot be the initial snapshot of a trajectory.")
             base_id = snap.get("base_snapshot_id")
-            if base_id and base_id not in seen_snapshot_ids:
+            if not base_id:
+                errors.append(f"Step {idx}: Delta snapshot missing 'base_snapshot_id'.")
+            elif base_id == snap_id:
+                errors.append(f"Step {idx}: Delta snapshot cannot be self-linked (base_snapshot_id == snapshot_id).")
+            elif base_id not in seen_snapshot_ids:
                 errors.append(
                     f"Step {idx}: Delta base_snapshot_id '{base_id}' was not previously seen in this trajectory."
                 )
+
+        if snap_id:
+            seen_snapshot_ids.add(snap_id)
 
     return TrajectoryValidationResult(valid=len(errors) == 0, errors=errors)

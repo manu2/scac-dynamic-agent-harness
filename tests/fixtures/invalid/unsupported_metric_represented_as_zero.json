@@ -9,7 +9,7 @@
   "fresh_for_ms": 2000,
   "reducer": {
     "name": "scac-deterministic-reducer",
-    "version": "0.1.0"
+    "version": "unsupported_version_0.0.0"
   },
   "raw_event_hashes": [
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
@@ -17,8 +17,7 @@
   "hardware": {
     "memory": {
       "current_bytes": 1024,
-      "state": "OK",
-      "headroom_ratio": -0.1
+      "state": "OK"
     },
     "cpu": {
       "state": "OK"

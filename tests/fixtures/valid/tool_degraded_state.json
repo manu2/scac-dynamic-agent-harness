@@ -13,6 +13,11 @@
   "raw_event_hashes": [
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   ],
+  "derivation_provenance": {
+    "hardware.memory": [
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    ]
+  },
   "hardware": {
     "memory": {
       "current_bytes": 67108864,
@@ -62,6 +67,18 @@
       "window_n": 10,
       "successes": 10,
       "failures": 0,
+      "history": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
       "consecutive_failures": 0,
       "latency_ewma_ms": 42.5,
       "last_error": "NONE",
@@ -72,7 +89,19 @@
       "window_n": 10,
       "successes": 2,
       "failures": 8,
-      "consecutive_failures": 4,
+      "history": [
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "consecutive_failures": 8,
       "latency_ewma_ms": 4200.0,
       "last_error": "HTTP_503",
       "retry_after_ms": 5000,
@@ -110,5 +139,5 @@
   "recommended_constraints": [
     "do not call search_api before circuit closes (wait 5000ms)"
   ],
-  "snapshot_id": "6ebddfc858b4a125d5febfdbee36126d61400f73a599809cddb4c1c3ae3c98b3"
+  "snapshot_id": "5b66a6cbeddb5d79ccaabf3ecd7daf465ec57da0cef9fd7c38c6b21728d14558"
 }

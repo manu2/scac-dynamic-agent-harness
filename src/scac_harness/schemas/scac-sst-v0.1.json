@@ -68,12 +68,12 @@
       "properties": {
         "name": {
           "type": "string",
-          "pattern": "^[a-zA-Z0-9_.-]{1,64}$",
+          "enum": ["scac-deterministic-reducer"],
           "description": "Identifier of the deterministic reducer implementation."
         },
         "version": {
           "type": "string",
-          "pattern": "^[a-zA-Z0-9_.-]{1,32}$",
+          "enum": ["0.1.0"],
           "description": "Semantic version of the deterministic reducer."
         }
       }
@@ -87,6 +87,20 @@
       "minItems": 1,
       "description": "Ordered list of SHA-256 hashes of raw telemetry events reduced into this snapshot."
     },
+    "derivation_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-zA-Z0-9_.-]+$": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      },
+      "description": "Audit linkage mapping derived field paths to contributing raw event hashes."
+    },
     "hardware": {
       "type": "object",
       "additionalProperties": false,
@@ -95,25 +109,25 @@
         "memory": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["current_bytes", "state"],
+          "required": ["state"],
           "properties": {
             "current_bytes": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Current memory usage in bytes from cgroup v2 memory.current."
             },
             "peak_bytes": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Peak memory usage in bytes from cgroup v2 memory.peak."
             },
             "max_bytes": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Memory ceiling limit in bytes from cgroup v2 memory.max."
             },
             "headroom_ratio": {
-              "type": "number",
+              "type": ["number", "null"],
               "minimum": 0.0,
               "maximum": 1.0,
               "description": "Remaining headroom ratio (max_bytes - current_bytes) / max_bytes in range [0, 1]."
@@ -125,24 +139,24 @@
               "$ref": "#/$defs/MemoryEventsDelta"
             },
             "psi_some_avg10": {
-              "type": "number",
+              "type": ["number", "null"],
               "minimum": 0.0,
               "maximum": 100.0,
               "description": "Memory PSI some avg10 rolling stall percentage."
             },
             "psi_full_avg10": {
-              "type": "number",
+              "type": ["number", "null"],
               "minimum": 0.0,
               "maximum": 100.0,
               "description": "Memory PSI full avg10 rolling stall percentage."
             },
             "psi_some_total_usec_delta": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Interval delta of memory PSI some total stall time in microseconds."
             },
             "psi_full_total_usec_delta": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Interval delta of memory PSI full total stall time in microseconds."
             },
@@ -159,38 +173,38 @@
           "required": ["state"],
           "properties": {
             "quota_cores": {
-              "type": "number",
+              "type": ["number", "null"],
               "minimum": 0.0,
               "description": "Allocated CPU core quota (cpu.max quota / period)."
             },
             "period_usec": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "cgroup v2 cpu.max period in microseconds."
             },
             "nr_throttled_delta": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Delta of cgroup v2 cpu.stat nr_throttled in the recent interval."
             },
             "throttled_usec_delta": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Delta of cgroup v2 cpu.stat throttled_usec in the recent interval."
             },
             "usage_usec_delta": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Delta of cgroup v2 cpu.stat usage_usec in the recent interval."
             },
             "psi_some_avg10": {
-              "type": "number",
+              "type": ["number", "null"],
               "minimum": 0.0,
               "maximum": 100.0,
               "description": "CPU PSI some avg10 rolling percentage."
             },
             "psi_full_avg10": {
-              "type": "number",
+              "type": ["number", "null"],
               "minimum": 0.0,
               "maximum": 100.0,
               "description": "CPU PSI full avg10 rolling percentage."
@@ -208,13 +222,13 @@
           "required": ["state"],
           "properties": {
             "psi_some_avg10": {
-              "type": "number",
+              "type": ["number", "null"],
               "minimum": 0.0,
               "maximum": 100.0,
               "description": "I/O PSI some avg10 percentage."
             },
             "psi_full_avg10": {
-              "type": "number",
+              "type": ["number", "null"],
               "minimum": 0.0,
               "maximum": 100.0,
               "description": "I/O PSI full avg10 percentage."
@@ -235,22 +249,22 @@
               "description": "Whether an accelerator/GPU device is detected and accessible."
             },
             "device_count": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Number of detected GPU devices."
             },
             "vram_used_bytes": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "GPU VRAM currently allocated in bytes."
             },
             "vram_total_bytes": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Total GPU VRAM capacity in bytes."
             },
             "utilization_ratio": {
-              "type": "number",
+              "type": ["number", "null"],
               "minimum": 0.0,
               "maximum": 1.0,
               "description": "GPU core/SM utilization ratio in range [0, 1]."
@@ -264,25 +278,25 @@
         "ephemeral_disk": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["free_bytes", "state"],
+          "required": ["state"],
           "properties": {
             "free_bytes": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Free ephemeral scratch disk space in bytes."
             },
             "used_bytes": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Used ephemeral disk space in bytes."
             },
             "total_bytes": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Total ephemeral disk capacity in bytes."
             },
             "used_ratio": {
-              "type": "number",
+              "type": ["number", "null"],
               "minimum": 0.0,
               "maximum": 1.0,
               "description": "Fraction of disk used in range [0, 1]."
@@ -298,17 +312,17 @@
           "additionalProperties": false,
           "properties": {
             "pids_current": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Current process count in cgroup v2 pids.current."
             },
             "pids_max": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Maximum process limit in cgroup v2 pids.max."
             },
             "threads_current": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Current thread count in the execution scope."
             }
@@ -347,6 +361,12 @@
               "minimum": 0,
               "description": "Number of failed calls in the recent sample window."
             },
+            "history": {
+              "type": "array",
+              "items": {"type": "boolean"},
+              "maxItems": 32,
+              "description": "Sliding sequence of recent call outcomes (true=success, false=failure)."
+            },
             "consecutive_failures": {
               "type": "integer",
               "minimum": 0,
@@ -380,7 +400,7 @@
               "description": "Normalized category of the last encountered error."
             },
             "retry_after_ms": {
-              "type": "integer",
+              "type": ["integer", "null"],
               "minimum": 0,
               "description": "Host-parsed retry-after delay in milliseconds."
             },
@@ -403,27 +423,27 @@
       "required": ["network"],
       "properties": {
         "wall_remaining_ms": {
-          "type": "integer",
+          "type": ["integer", "null"],
           "minimum": 0,
           "description": "Remaining wall clock budget in milliseconds before hard timeout."
         },
         "step": {
-          "type": "integer",
+          "type": ["integer", "null"],
           "minimum": 0,
           "description": "Current multi-turn step index."
         },
         "pids_current": {
-          "type": "integer",
+          "type": ["integer", "null"],
           "minimum": 0,
           "description": "Current process count."
         },
         "pids_max": {
-          "type": "integer",
+          "type": ["integer", "null"],
           "minimum": 0,
           "description": "Maximum allowed process count."
         },
         "threads_current": {
-          "type": "integer",
+          "type": ["integer", "null"],
           "minimum": 0,
           "description": "Current thread count."
         },
@@ -477,22 +497,22 @@
       "additionalProperties": false,
       "properties": {
         "context_tokens_remaining": {
-          "type": "integer",
+          "type": ["integer", "null"],
           "minimum": 0,
           "description": "Estimated remaining tokens before model context window limit."
         },
         "trajectory_tokens": {
-          "type": "integer",
+          "type": ["integer", "null"],
           "minimum": 0,
           "description": "Cumulative tokens consumed across the entire trajectory."
         },
         "input_tokens": {
-          "type": "integer",
+          "type": ["integer", "null"],
           "minimum": 0,
           "description": "Input tokens consumed in recent step."
         },
         "output_tokens": {
-          "type": "integer",
+          "type": ["integer", "null"],
           "minimum": 0,
           "description": "Output tokens generated in recent step."
         },
@@ -502,12 +522,12 @@
           "description": "Cached prompt tokens explicitly reported by provider; null if unsupported."
         },
         "estimated_cost_usd": {
-          "type": "number",
+          "type": ["number", "null"],
           "minimum": 0.0,
           "description": "Estimated monetary cost in USD consumed so far."
         },
         "budget_remaining_usd": {
-          "type": "number",
+          "type": ["number", "null"],
           "minimum": 0.0,
           "description": "Remaining financial budget in USD."
         },

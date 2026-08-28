@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 from scac_harness.identity import compute_snapshot_id
@@ -29,6 +30,11 @@ def build_valid_fixtures() -> dict[str, dict]:
         "raw_event_hashes": [
             "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
         ],
+        "derivation_provenance": {
+            "hardware.memory": [
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ]
+        },
         "hardware": {
             "memory": {
                 "current_bytes": 67108864,
@@ -73,6 +79,7 @@ def build_valid_fixtures() -> dict[str, dict]:
                 "window_n": 10,
                 "successes": 10,
                 "failures": 0,
+                "history": [True] * 10,
                 "consecutive_failures": 0,
                 "latency_ewma_ms": 42.5,
                 "last_error": "NONE",
@@ -108,8 +115,6 @@ def build_valid_fixtures() -> dict[str, dict]:
             "state": "OK",
         },
     }
-
-    import copy
 
     fixtures = {}
 
@@ -147,7 +152,8 @@ def build_valid_fixtures() -> dict[str, dict]:
         "window_n": 10,
         "successes": 2,
         "failures": 8,
-        "consecutive_failures": 4,
+        "history": [True, True, False, False, False, False, False, False, False, False],
+        "consecutive_failures": 8,
         "latency_ewma_ms": 4200.0,
         "last_error": "HTTP_503",
         "retry_after_ms": 5000,
@@ -207,7 +213,7 @@ def build_valid_fixtures() -> dict[str, dict]:
     f9["observed_at_ms"] = 1787884201000
     fixtures["delta_snapshot.json"] = f9
 
-    # Now compute snapshot_id for all
+    # Now compute RFC 8785 snapshot_id for all
     for name, s in fixtures.items():
         if "snapshot_id" not in s or s["snapshot_id"] is None:
             s["snapshot_id"] = compute_snapshot_id(s)
@@ -216,8 +222,6 @@ def build_valid_fixtures() -> dict[str, dict]:
 
 
 def build_invalid_fixtures() -> dict[str, dict]:
-    import copy
-
     base = {
         "schema": "scac-sst-v0.1",
         "trajectory_id": "traj-invalid-001",
@@ -249,62 +253,62 @@ def build_invalid_fixtures() -> dict[str, dict]:
 
     invalids = {}
 
-    # 1. missing_required_provenance
+    # 1. missing_required_provenance: missing raw_event_hashes
     i1 = copy.deepcopy(base)
     del i1["raw_event_hashes"]
     invalids["missing_required_provenance.json"] = i1
 
-    # 2. missing_observation_timestamp
+    # 2. missing_observation_timestamp: missing observed_at_ms
     i2 = copy.deepcopy(base)
     del i2["observed_at_ms"]
     invalids["missing_observation_timestamp.json"] = i2
 
-    # 3. negative_counters
+    # 3. negative_counters: current_bytes is negative
     i3 = copy.deepcopy(base)
     i3["hardware"]["memory"]["current_bytes"] = -512
     invalids["negative_counters.json"] = i3
 
-    # 4. ratio_above_one
+    # 4. ratio_above_one: headroom_ratio exceeds 1.0
     i4 = copy.deepcopy(base)
     i4["hardware"]["memory"]["headroom_ratio"] = 1.45
     invalids["ratio_above_one.json"] = i4
 
-    # 5. incompatible_or_ambiguous_units
+    # 5. incompatible_or_ambiguous_units: string bytes instead of integer
     i5 = copy.deepcopy(base)
     i5["hardware"]["memory"]["current_bytes"] = "128MB"
     invalids["incompatible_or_ambiguous_units.json"] = i5
 
-    # 6. expired_stale_state
+    # 6. expired_stale_state: fresh_for_ms is 0 (violates minimum 1ms)
     i6 = copy.deepcopy(base)
-    i6["fresh_for_ms"] = 0  # Invalid freshness (min 1)
+    i6["fresh_for_ms"] = 0
     invalids["expired_stale_state.json"] = i6
 
-    # 7. duplicate_or_regressing_seq
+    # 7. duplicate_or_regressing_seq: seq is negative
     i7 = copy.deepcopy(base)
-    i7["seq"] = -1  # Negative sequence
+    i7["seq"] = -1
     invalids["duplicate_or_regressing_seq.json"] = i7
 
-    # 8. unknown_privileged_field
+    # 8. unknown_privileged_field: unauthorized top-level field
     i8 = copy.deepcopy(base)
     i8["privileged_admin_override"] = True
     invalids["unknown_privileged_field.json"] = i8
 
-    # 9. raw_tool_content_in_privileged_block
+    # 9. raw_tool_content_in_privileged_block: prompt injection in privileged field
     i9 = copy.deepcopy(base)
     i9["hardware"]["memory"]["raw_tool_output"] = "<script>alert('pwn')</script>"
     invalids["raw_tool_content_in_privileged_block.json"] = i9
 
-    # 10. tool_supplied_overwrite_attempt
+    # 10. tool_supplied_overwrite_attempt: unauthorized sub-object
     i10 = copy.deepcopy(base)
     i10["hardware"]["fake_cgroup_override"] = {"memory_unlimited": True}
     invalids["tool_supplied_overwrite_attempt.json"] = i10
 
-    # 11. unsupported_metric_represented_as_zero
+    # 11. unsupported_metric_represented_as_zero: unsupported reducer version
     i11 = copy.deepcopy(base)
-    i11["hardware"]["memory"]["headroom_ratio"] = -0.1
+    i11["reducer"]["version"] = "unsupported_version_0.0.0"
     invalids["unsupported_metric_represented_as_zero.json"] = i11
 
-    # 12. malformed_terminal_exit_classification
+    # 12. malformed_terminal_exit_classification: unknown exit class
     i12 = copy.deepcopy(base)
     i12["runtime"]["last_exit"] = {
         "code": 1,

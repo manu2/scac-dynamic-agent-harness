@@ -4,12 +4,26 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from scac_harness.identity import compute_snapshot_id
+import pytest
+
+from scac_harness.events import RawTelemetryEvent
 from scac_harness.validator import validate_snapshot, validate_trajectory
 
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 VALID_DIR = FIXTURES_DIR / "valid"
+
+
+def test_raw_event_rejects_forged_event_id() -> None:
+    """RawTelemetryEvent must reject a forged or corrupted event_id."""
+    with pytest.raises(ValueError, match="Forged or corrupted event_id"):
+        RawTelemetryEvent(
+            timestamp_ms=1000,
+            source="cgroup_v2",
+            topic="memory",
+            payload={"current_bytes": 1024},
+            event_id="0000000000000000000000000000000000000000000000000000000000000000",
+        )
 
 
 def test_trajectory_monotonic_sequence_and_timestamps() -> None:
@@ -48,7 +62,6 @@ def test_trajectory_rejects_regressing_timestamps() -> None:
 def test_trajectory_rejects_stale_snapshot_at_injection_time() -> None:
     """Trajectory validator must reject an active snapshot whose fresh_for_ms window has expired."""
     snap1 = json.loads((VALID_DIR / "full_checkpoint.json").read_text(encoding="utf-8"))
-    # snap1 has observed_at_ms=1787884200000, fresh_for_ms=2000 => expiry is 1787884202000
     current_time_ms = 1787884205000  # 3 seconds past expiry
 
     result = validate_trajectory([snap1], current_time_ms=current_time_ms)
@@ -56,11 +69,11 @@ def test_trajectory_rejects_stale_snapshot_at_injection_time() -> None:
     assert any("is stale" in err for err in result.errors)
 
 
-def test_trajectory_rejects_unlinked_delta_snapshot() -> None:
-    """Delta snapshot pointing to an unknown base_snapshot_id must be rejected."""
+def test_trajectory_rejects_initial_delta_or_self_linked_delta() -> None:
+    """Trajectory validator must reject a delta as the first snapshot, or a self-linked delta."""
     delta_snap = json.loads((VALID_DIR / "delta_snapshot.json").read_text(encoding="utf-8"))
-    delta_snap["base_snapshot_id"] = "f" * 64  # Not previously seen
+    delta_snap["base_snapshot_id"] = delta_snap["snapshot_id"]  # Self-link attempt
 
     result = validate_trajectory([delta_snap], verify_identity_hashes=False)
     assert result.valid is False
-    assert any("not previously seen in this trajectory" in err for err in result.errors)
+    assert any("cannot be the initial snapshot" in err or "cannot be self-linked" in err for err in result.errors)

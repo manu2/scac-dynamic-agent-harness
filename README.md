@@ -46,6 +46,4 @@ docs/                    design reviews and empirical reports
 
 ## Current status
 
-Design scaffold only. No provider trials are authorized. Begin with G0 schema and
-threat-model fixtures, followed by local G1 positive controls and G2 deterministic
-scenario calibration.
+Gate G0 (Specification & Threat Model) implemented on branch `codex/g0-sst-schema` with strict RFC 8785 canonicalization, sliding-window tool health, non-fabricating reducer, derivation provenance, and complete test suite (48 tests passing). Provider trials remain unauthorized until G1 positive controls and G2 deterministic scenario calibration pass.

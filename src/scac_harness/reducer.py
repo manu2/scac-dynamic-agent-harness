@@ -1,7 +1,8 @@
-"""Deterministic host-controlled Reducer producing validated SST snapshots."""
+"""Deterministic host-controlled Reducer producing validated SST snapshots with true sliding windows and provenance."""
 
 from __future__ import annotations
 
+import copy
 from typing import Any
 
 from scac_harness.events import RawTelemetryEvent
@@ -19,12 +20,14 @@ class DeterministicReducer:
         default_fresh_for_ms: int = 2000,
         ewma_alpha: float = 0.2,
         circuit_consecutive_failure_limit: int = 3,
+        max_tool_window: int = 10,
     ) -> None:
         self.name = name
         self.version = version
         self.default_fresh_for_ms = default_fresh_for_ms
         self.ewma_alpha = ewma_alpha
         self.circuit_consecutive_failure_limit = circuit_consecutive_failure_limit
+        self.max_tool_window = max_tool_window
 
     def reduce(
         self,
@@ -54,26 +57,36 @@ class DeterministicReducer:
         # Extract event hashes for immutable audit linkage
         raw_event_hashes = [e.event_id for e in events]
         if not raw_event_hashes and prior_snapshot:
-            # Inherit last event hashes if no new events
             raw_event_hashes = prior_snapshot.get("raw_event_hashes", [])
 
-        # Start with default state or copy from prior snapshot
+        # Start with base state or copy from prior snapshot
         hardware = self._init_hardware(prior_snapshot)
         tools = self._init_tools(prior_snapshot)
         runtime = self._init_runtime(prior_snapshot)
         economics = self._init_economics(prior_snapshot)
         unavailable_fields: set[str] = set(prior_snapshot.get("unavailable_fields", [])) if prior_snapshot else set()
 
-        # Fold events in strict chronological order
+        # Track field-level derivation provenance
+        derivation_prov: dict[str, list[str]] = (
+            copy.deepcopy(prior_snapshot.get("derivation_provenance", {})) if prior_snapshot else {}
+        )
+
+        # Track which subsystems received events in this batch
+        observed_topics: set[str] = set()
+
+        # Fold events in strict chronological order, ties broken by event_id
         sorted_events = sorted(events, key=lambda e: (e.timestamp_ms, e.event_id))
         for ev in sorted_events:
-            self._apply_event(ev, hardware, tools, runtime, economics, unavailable_fields)
+            observed_topics.add(ev.topic)
+            self._apply_event(
+                ev, hardware, tools, runtime, economics, unavailable_fields, derivation_prov
+            )
 
-        # Recompute derived metrics, states, and constraints
-        self._finalize_hardware(hardware)
+        # Finalize states without fabricating unobserved measurements
+        self._finalize_hardware(hardware, unavailable_fields, has_prior=(prior_snapshot is not None))
         self._finalize_tools(tools)
-        self._finalize_runtime(runtime)
-        self._finalize_economics(economics)
+        self._finalize_runtime(runtime, unavailable_fields)
+        self._finalize_economics(economics, unavailable_fields)
         recommended_constraints = self._derive_constraints(hardware, tools, runtime, economics)
 
         # Base snapshot id for delta snapshots
@@ -96,6 +109,7 @@ class DeterministicReducer:
                 "version": self.version,
             },
             "raw_event_hashes": raw_event_hashes,
+            "derivation_provenance": derivation_prov,
             "hardware": hardware,
             "tools": tools,
             "runtime": runtime,
@@ -108,7 +122,7 @@ class DeterministicReducer:
         if unavailable_fields:
             snapshot["unavailable_fields"] = sorted(list(unavailable_fields))
 
-        # Compute deterministic snapshot_id
+        # Compute deterministic snapshot_id using RFC 8785 canonical hashing
         snapshot["snapshot_id"] = compute_snapshot_id(snapshot)
 
         # Validate snapshot against schema and invariants
@@ -119,43 +133,38 @@ class DeterministicReducer:
 
     def _init_hardware(self, prior: dict[str, Any] | None) -> dict[str, Any]:
         if prior and "hardware" in prior:
-            import copy
             return copy.deepcopy(prior["hardware"])
+        # Unobserved hardware baseline: state is UNKNOWN, no fabricated values
         return {
             "memory": {
-                "current_bytes": 0,
-                "state": "OK",
-                "events_delta": {"high": 0, "max": 0, "oom": 0, "oom_kill": 0},
+                "state": "UNKNOWN",
             },
             "cpu": {
-                "state": "OK",
+                "state": "UNKNOWN",
             },
             "gpu": {
                 "available": False,
+                "state": "UNAVAILABLE",
             },
             "ephemeral_disk": {
-                "free_bytes": 1073741824,
-                "state": "OK",
+                "state": "UNKNOWN",
             },
         }
 
     def _init_tools(self, prior: dict[str, Any] | None) -> dict[str, Any]:
         if prior and "tools" in prior:
-            import copy
             return copy.deepcopy(prior["tools"])
         return {}
 
     def _init_runtime(self, prior: dict[str, Any] | None) -> dict[str, Any]:
         if prior and "runtime" in prior:
-            import copy
             return copy.deepcopy(prior["runtime"])
         return {
-            "network": "ENABLED",
+            "network": "UNKNOWN",
         }
 
     def _init_economics(self, prior: dict[str, Any] | None) -> dict[str, Any]:
         if prior and "economics" in prior:
-            import copy
             return copy.deepcopy(prior["economics"])
         return {}
 
@@ -167,98 +176,113 @@ class DeterministicReducer:
         runtime: dict[str, Any],
         economics: dict[str, Any],
         unavailable_fields: set[str],
+        derivation_prov: dict[str, list[str]],
     ) -> None:
         topic = event.topic
         p = event.payload
+        ev_id = event.event_id
 
         if topic == "memory":
             mem = hardware["memory"]
-            if "current_bytes" in p:
-                mem["current_bytes"] = p["current_bytes"]
-            if "peak_bytes" in p:
-                mem["peak_bytes"] = p["peak_bytes"]
-            if "max_bytes" in p:
-                mem["max_bytes"] = p["max_bytes"]
-            if "events_delta" in p:
-                mem["events_delta"] = p["events_delta"]
-            if "events_local_delta" in p:
-                mem["events_local_delta"] = p["events_local_delta"]
-            if "psi_some_avg10" in p:
-                mem["psi_some_avg10"] = p["psi_some_avg10"]
-            if "psi_full_avg10" in p:
-                mem["psi_full_avg10"] = p["psi_full_avg10"]
-            if "psi_some_total_usec_delta" in p:
-                mem["psi_some_total_usec_delta"] = p["psi_some_total_usec_delta"]
-            if "psi_full_total_usec_delta" in p:
-                mem["psi_full_total_usec_delta"] = p["psi_full_total_usec_delta"]
+            derivation_prov.setdefault("hardware.memory", []).append(ev_id)
+            unavailable_fields.discard("hardware.memory")
+            for k in [
+                "current_bytes",
+                "peak_bytes",
+                "max_bytes",
+                "events_delta",
+                "events_local_delta",
+                "psi_some_avg10",
+                "psi_full_avg10",
+                "psi_some_total_usec_delta",
+                "psi_full_total_usec_delta",
+            ]:
+                if k in p:
+                    mem[k] = p[k]
 
         elif topic == "cpu":
             cpu = hardware["cpu"]
-            if "quota_cores" in p:
-                cpu["quota_cores"] = p["quota_cores"]
-            if "period_usec" in p:
-                cpu["period_usec"] = p["period_usec"]
-            if "nr_throttled_delta" in p:
-                cpu["nr_throttled_delta"] = p["nr_throttled_delta"]
-            if "throttled_usec_delta" in p:
-                cpu["throttled_usec_delta"] = p["throttled_usec_delta"]
-            if "usage_usec_delta" in p:
-                cpu["usage_usec_delta"] = p["usage_usec_delta"]
-            if "psi_some_avg10" in p:
-                cpu["psi_some_avg10"] = p["psi_some_avg10"]
-            if "psi_full_avg10" in p:
-                cpu["psi_full_avg10"] = p["psi_full_avg10"]
+            derivation_prov.setdefault("hardware.cpu", []).append(ev_id)
+            unavailable_fields.discard("hardware.cpu")
+            for k in [
+                "quota_cores",
+                "period_usec",
+                "nr_throttled_delta",
+                "throttled_usec_delta",
+                "usage_usec_delta",
+                "psi_some_avg10",
+                "psi_full_avg10",
+            ]:
+                if k in p:
+                    cpu[k] = p[k]
 
         elif topic == "gpu":
             gpu = hardware["gpu"]
+            derivation_prov.setdefault("hardware.gpu", []).append(ev_id)
             if "available" in p:
                 gpu["available"] = p["available"]
-            if "device_count" in p:
-                gpu["device_count"] = p["device_count"]
-            if "vram_used_bytes" in p:
-                gpu["vram_used_bytes"] = p["vram_used_bytes"]
-            if "vram_total_bytes" in p:
-                gpu["vram_total_bytes"] = p["vram_total_bytes"]
-            if "utilization_ratio" in p:
-                gpu["utilization_ratio"] = p["utilization_ratio"]
+            for k in ["device_count", "vram_used_bytes", "vram_total_bytes", "utilization_ratio"]:
+                if k in p:
+                    gpu[k] = p[k]
             if not gpu.get("available", False):
                 gpu["state"] = "UNAVAILABLE"
+                unavailable_fields.add("hardware.gpu")
             else:
                 gpu["state"] = "OK"
+                unavailable_fields.discard("hardware.gpu")
 
         elif topic == "ephemeral_disk":
             disk = hardware["ephemeral_disk"]
-            if "free_bytes" in p:
-                disk["free_bytes"] = p["free_bytes"]
-            if "used_bytes" in p:
-                disk["used_bytes"] = p["used_bytes"]
-            if "total_bytes" in p:
-                disk["total_bytes"] = p["total_bytes"]
-            if "used_ratio" in p:
-                disk["used_ratio"] = p["used_ratio"]
+            derivation_prov.setdefault("hardware.ephemeral_disk", []).append(ev_id)
+            unavailable_fields.discard("hardware.ephemeral_disk")
+            for k in ["free_bytes", "used_bytes", "total_bytes", "used_ratio"]:
+                if k in p:
+                    disk[k] = p[k]
 
         elif topic == "tool_span":
             tool_id = p["tool_id"]
+            prov_key = f"tools.{tool_id}"
+            derivation_prov.setdefault(prov_key, []).append(ev_id)
+
             if tool_id not in tools:
                 tools[tool_id] = {
                     "window_n": 0,
                     "successes": 0,
+                    "failures": 0,
+                    "history": [],
                     "consecutive_failures": 0,
                     "latency_ewma_ms": float(p.get("latency_ms", 100.0)),
                     "circuit": "CLOSED",
                     "last_error": "NONE",
                 }
             t_state = tools[tool_id]
-            success = p.get("success", True)
+            success = bool(p.get("success", True))
             latency = float(p.get("latency_ms", 0.0))
 
-            t_state["window_n"] = min(10, t_state["window_n"] + 1)
+            # Maintain true sliding window history
+            history: list[bool] = list(t_state.get("history", []))
+            history.append(success)
+            if len(history) > self.max_tool_window:
+                history = history[-self.max_tool_window:]
+            t_state["history"] = history
+
+            # Calculate window stats strictly from sliding history
+            t_state["window_n"] = len(history)
+            t_state["successes"] = history.count(True)
+            t_state["failures"] = history.count(False)
+
+            # Count trailing consecutive failures
+            consec_fail = 0
+            for item in reversed(history):
+                if not item:
+                    consec_fail += 1
+                else:
+                    break
+            t_state["consecutive_failures"] = consec_fail
+
             if success:
-                t_state["successes"] = min(t_state["window_n"], t_state["successes"] + 1)
-                t_state["consecutive_failures"] = 0
                 t_state["last_error"] = "NONE"
             else:
-                t_state["consecutive_failures"] += 1
                 t_state["last_error"] = p.get("error_class", "EXEC_ERROR")
                 if "retry_after_ms" in p and p["retry_after_ms"] is not None:
                     t_state["retry_after_ms"] = p["retry_after_ms"]
@@ -270,13 +294,23 @@ class DeterministicReducer:
             )
 
         elif topic == "runtime":
-            for k in ["wall_remaining_ms", "step", "pids_current", "pids_max", "threads_current", "network", "filesystem"]:
+            derivation_prov.setdefault("runtime", []).append(ev_id)
+            for k in [
+                "wall_remaining_ms",
+                "step",
+                "pids_current",
+                "pids_max",
+                "threads_current",
+                "network",
+                "filesystem",
+            ]:
                 if k in p:
                     runtime[k] = p[k]
             if "last_exit" in p:
                 runtime["last_exit"] = p["last_exit"]
 
         elif topic == "economics":
+            derivation_prov.setdefault("economics", []).append(ev_id)
             for k in [
                 "context_tokens_remaining",
                 "trajectory_tokens",
@@ -296,61 +330,84 @@ class DeterministicReducer:
             if field_name:
                 unavailable_fields.add(field_name)
 
-    def _finalize_hardware(self, hardware: dict[str, Any]) -> None:
+    def _finalize_hardware(
+        self, hardware: dict[str, Any], unavailable_fields: set[str], has_prior: bool
+    ) -> None:
         # Finalize Memory
         mem = hardware["memory"]
-        cur = mem.get("current_bytes", 0)
+        cur = mem.get("current_bytes")
         max_b = mem.get("max_bytes")
-        if max_b is not None and max_b > 0:
-            headroom = max(0.0, min(1.0, (max_b - cur) / max_b))
-            mem["headroom_ratio"] = round(headroom, 4)
-        else:
-            mem["headroom_ratio"] = 1.0
 
-        ev = mem.get("events_delta", {})
-        oom_count = ev.get("oom", 0) + ev.get("oom_kill", 0)
-        high_count = ev.get("high", 0)
-        psi_some = mem.get("psi_some_avg10", 0.0)
-
-        if oom_count > 0 or (max_b and cur >= max_b) or mem["headroom_ratio"] < 0.05:
-            mem["state"] = "CRITICAL"
-        elif high_count > 0 or mem["headroom_ratio"] < 0.20 or psi_some >= 2.0:
-            mem["state"] = "PRESSURED"
+        if cur is None and not has_prior:
+            mem["state"] = "UNKNOWN"
+            unavailable_fields.add("hardware.memory")
         else:
-            mem["state"] = "OK"
+            if max_b is not None and max_b > 0 and cur is not None:
+                headroom = max(0.0, min(1.0, (max_b - cur) / max_b))
+                mem["headroom_ratio"] = round(headroom, 4)
+            elif cur is not None:
+                mem["headroom_ratio"] = 1.0
+
+            ev = mem.get("events_delta", {})
+            oom_count = ev.get("oom", 0) + ev.get("oom_kill", 0)
+            high_count = ev.get("high", 0)
+            psi_some = mem.get("psi_some_avg10", 0.0) or 0.0
+            headroom_val = mem.get("headroom_ratio", 1.0) or 1.0
+
+            if oom_count > 0 or (max_b and cur and cur >= max_b) or headroom_val < 0.05:
+                mem["state"] = "CRITICAL"
+            elif high_count > 0 or headroom_val < 0.20 or psi_some >= 2.0:
+                mem["state"] = "PRESSURED"
+            elif cur is not None:
+                mem["state"] = "OK"
+            else:
+                mem["state"] = "UNKNOWN"
 
         # Finalize CPU
         cpu = hardware["cpu"]
-        nr_throttled = cpu.get("nr_throttled_delta", 0)
-        throttled_usec = cpu.get("throttled_usec_delta", 0)
-        if throttled_usec > 500000:
-            cpu["state"] = "CRITICAL"
-        elif nr_throttled > 0 or throttled_usec > 0:
-            cpu["state"] = "THROTTLED"
+        nr_throttled = cpu.get("nr_throttled_delta")
+        throttled_usec = cpu.get("throttled_usec_delta")
+        quota = cpu.get("quota_cores")
+
+        if quota is None and nr_throttled is None and throttled_usec is None and not has_prior:
+            cpu["state"] = "UNKNOWN"
+            unavailable_fields.add("hardware.cpu")
         else:
-            cpu["state"] = "OK"
+            nr_throttled = nr_throttled or 0
+            throttled_usec = throttled_usec or 0
+            if throttled_usec > 500000:
+                cpu["state"] = "CRITICAL"
+            elif nr_throttled > 0 or throttled_usec > 0:
+                cpu["state"] = "THROTTLED"
+            else:
+                cpu["state"] = "OK"
 
         # Finalize Disk
         disk = hardware["ephemeral_disk"]
-        free_b = disk.get("free_bytes", 0)
+        free_b = disk.get("free_bytes")
         tot_b = disk.get("total_bytes")
-        if tot_b and tot_b > 0:
-            used_b = tot_b - free_b
-            disk["used_bytes"] = used_b
-            disk["used_ratio"] = round(max(0.0, min(1.0, used_b / tot_b)), 4)
-        if free_b < 67108864:  # < 64 MiB
-            disk["state"] = "CRITICAL"
-        elif free_b < 268435456:  # < 256 MiB
-            disk["state"] = "PRESSURED"
+        if free_b is None and not has_prior:
+            disk["state"] = "UNKNOWN"
+            unavailable_fields.add("hardware.ephemeral_disk")
         else:
-            disk["state"] = "OK"
+            if tot_b and tot_b > 0 and free_b is not None:
+                used_b = tot_b - free_b
+                disk["used_bytes"] = used_b
+                disk["used_ratio"] = round(max(0.0, min(1.0, used_b / tot_b)), 4)
+            if free_b is not None:
+                if free_b < 67108864:  # < 64 MiB
+                    disk["state"] = "CRITICAL"
+                elif free_b < 268435456:  # < 256 MiB
+                    disk["state"] = "PRESSURED"
+                else:
+                    disk["state"] = "OK"
 
     def _finalize_tools(self, tools: dict[str, Any]) -> None:
         for tool_id, t_state in tools.items():
             consec = t_state.get("consecutive_failures", 0)
             win = t_state.get("window_n", 0)
             succ = t_state.get("successes", 0)
-            fail = win - succ
+            fail = t_state.get("failures", 0)
 
             if consec >= self.circuit_consecutive_failure_limit:
                 t_state["circuit"] = "OPEN"
@@ -362,23 +419,26 @@ class DeterministicReducer:
                 t_state["circuit"] = "CLOSED"
                 t_state["state"] = "OK"
 
-    def _finalize_runtime(self, runtime: dict[str, Any]) -> None:
+    def _finalize_runtime(self, runtime: dict[str, Any], unavailable_fields: set[str]) -> None:
         wall = runtime.get("wall_remaining_ms")
         if wall is not None:
             if wall < 5000:
                 runtime["state"] = "TERMINATING"
             else:
                 runtime["state"] = "RUNNING"
+        if runtime.get("network") == "UNKNOWN":
+            unavailable_fields.add("runtime.network")
 
-    def _finalize_economics(self, economics: dict[str, Any]) -> None:
+    def _finalize_economics(self, economics: dict[str, Any], unavailable_fields: set[str]) -> None:
         rem_quota = economics.get("rate_limit_remaining")
         budget = economics.get("budget_remaining_usd")
         if (rem_quota is not None and rem_quota == 0) or (budget is not None and budget <= 0.0):
             economics["state"] = "EXHAUSTED"
         elif (rem_quota is not None and rem_quota <= 5) or (budget is not None and budget <= 0.05):
             economics["state"] = "WARN"
-        else:
+        elif rem_quota is not None or budget is not None:
             economics["state"] = "OK"
+
 
     def _derive_constraints(
         self,
@@ -424,3 +484,32 @@ class DeterministicReducer:
             constraints.append("wall time budget low: prioritize immediate checkpoint or finalization")
 
         return constraints[:16]
+
+
+def rehydrate_snapshot(delta_snapshot: dict[str, Any], base_snapshot: dict[str, Any]) -> dict[str, Any]:
+    """Rehydrate a delta snapshot with its base checkpoint into a complete state snapshot."""
+    if delta_snapshot.get("kind") != "delta":
+        return copy.deepcopy(delta_snapshot)
+    if base_snapshot.get("snapshot_id") != delta_snapshot.get("base_snapshot_id"):
+        raise ValueError(
+            f"Base snapshot ID mismatch: delta expects '{delta_snapshot.get('base_snapshot_id')}', "
+            f"got base '{base_snapshot.get('snapshot_id')}'"
+        )
+    merged = copy.deepcopy(base_snapshot)
+    merged["seq"] = delta_snapshot["seq"]
+    merged["observed_at_ms"] = delta_snapshot["observed_at_ms"]
+    merged["fresh_for_ms"] = delta_snapshot["fresh_for_ms"]
+    merged["kind"] = "delta"
+    merged["base_snapshot_id"] = delta_snapshot["base_snapshot_id"]
+    merged["raw_event_hashes"] = delta_snapshot["raw_event_hashes"]
+
+    for ns in ["hardware", "tools", "runtime", "economics", "derivation_provenance"]:
+        if ns in delta_snapshot:
+            merged[ns] = copy.deepcopy(delta_snapshot[ns])
+    if "recommended_constraints" in delta_snapshot:
+        merged["recommended_constraints"] = copy.deepcopy(delta_snapshot["recommended_constraints"])
+    if "unavailable_fields" in delta_snapshot:
+        merged["unavailable_fields"] = copy.deepcopy(delta_snapshot["unavailable_fields"])
+
+    merged["snapshot_id"] = delta_snapshot["snapshot_id"]
+    return merged

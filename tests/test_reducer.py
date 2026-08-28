@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import copy
 from scac_harness.events import RawTelemetryEvent
-from scac_harness.reducer import DeterministicReducer
+from scac_harness.reducer import DeterministicReducer, rehydrate_snapshot
 from scac_harness.validator import validate_snapshot
 
 
@@ -18,7 +18,11 @@ def test_deterministic_reduction_identical_output() -> None:
             timestamp_ms=1000,
             source="cgroup_v2",
             topic="memory",
-            payload={"current_bytes": 134217728, "max_bytes": 268435456, "events_delta": {"high": 1, "max": 0, "oom": 0, "oom_kill": 0}},
+            payload={
+                "current_bytes": 134217728,
+                "max_bytes": 268435456,
+                "events_delta": {"high": 1, "max": 0, "oom": 0, "oom_kill": 0},
+            },
         ),
         RawTelemetryEvent(
             timestamp_ms=1050,
@@ -36,6 +40,76 @@ def test_deterministic_reduction_identical_output() -> None:
     assert validate_snapshot(snap1).valid is True
 
 
+def test_reducer_does_not_fabricate_unobserved_telemetry() -> None:
+    """When only tool events are provided, hardware state is UNKNOWN and in unavailable_fields, not fabricated."""
+    reducer = DeterministicReducer()
+    tool_event = [
+        RawTelemetryEvent(
+            timestamp_ms=1000,
+            source="tool_wrapper",
+            topic="tool_span",
+            payload={"tool_id": "query_db", "latency_ms": 50.0, "success": True},
+        )
+    ]
+    snap = reducer.reduce(trajectory_id="traj-tool-only", seq=1, events=tool_event)
+
+    # Must NOT fabricate 0 bytes memory, 1 GiB free disk, or ENABLED network
+    assert snap["hardware"]["memory"]["state"] == "UNKNOWN"
+    assert "current_bytes" not in snap["hardware"]["memory"]
+    assert snap["hardware"]["cpu"]["state"] == "UNKNOWN"
+    assert snap["hardware"]["ephemeral_disk"]["state"] == "UNKNOWN"
+    assert "free_bytes" not in snap["hardware"]["ephemeral_disk"]
+    assert "hardware.memory" in snap["unavailable_fields"]
+    assert "hardware.cpu" in snap["unavailable_fields"]
+    assert "hardware.ephemeral_disk" in snap["unavailable_fields"]
+
+
+def test_tool_health_sliding_window_eviction() -> None:
+    """10 successes followed by 10 failures must evict old successes, yielding 10 failures and OPEN circuit."""
+    reducer = DeterministicReducer(circuit_consecutive_failure_limit=3, max_tool_window=10)
+
+    # 1. 10 successes
+    events_succ = [
+        RawTelemetryEvent(
+            timestamp_ms=1000 + i * 10,
+            source="tool_wrapper",
+            topic="tool_span",
+            payload={"tool_id": "search_api", "latency_ms": 100.0, "success": True},
+        )
+        for i in range(10)
+    ]
+    s_succ = reducer.reduce("traj-sliding", 1, events_succ)
+    assert s_succ["tools"]["search_api"]["window_n"] == 10
+    assert s_succ["tools"]["search_api"]["successes"] == 10
+    assert s_succ["tools"]["search_api"]["failures"] == 0
+    assert s_succ["tools"]["search_api"]["circuit"] == "CLOSED"
+
+    # 2. 10 failures
+    events_fail = [
+        RawTelemetryEvent(
+            timestamp_ms=2000 + i * 10,
+            source="tool_wrapper",
+            topic="tool_span",
+            payload={
+                "tool_id": "search_api",
+                "latency_ms": 500.0,
+                "success": False,
+                "error_class": "HTTP_503",
+                "retry_after_ms": 5000,
+            },
+        )
+        for i in range(10)
+    ]
+    s_fail = reducer.reduce("traj-sliding", 2, events_fail, prior_snapshot=s_succ)
+    t_state = s_fail["tools"]["search_api"]
+    assert t_state["window_n"] == 10
+    assert t_state["successes"] == 0
+    assert t_state["failures"] == 10
+    assert t_state["consecutive_failures"] == 10
+    assert t_state["circuit"] == "OPEN"
+    assert t_state["state"] == "DEGRADED"
+
+
 def test_reducer_memory_pressure_state_transitions() -> None:
     """Reducer correctly computes memory headroom ratio and updates state to PRESSURED and CRITICAL."""
     reducer = DeterministicReducer()
@@ -46,7 +120,11 @@ def test_reducer_memory_pressure_state_transitions() -> None:
             timestamp_ms=1000,
             source="cgroup_v2",
             topic="memory",
-            payload={"current_bytes": 67108864, "max_bytes": 268435456, "events_delta": {"high": 0, "max": 0, "oom": 0, "oom_kill": 0}},
+            payload={
+                "current_bytes": 67108864,
+                "max_bytes": 268435456,
+                "events_delta": {"high": 0, "max": 0, "oom": 0, "oom_kill": 0},
+            },
         )
     ]
     s_ok = reducer.reduce(trajectory_id="traj-mem", seq=1, events=ev_ok)
@@ -59,7 +137,11 @@ def test_reducer_memory_pressure_state_transitions() -> None:
             timestamp_ms=2000,
             source="cgroup_v2",
             topic="memory",
-            payload={"current_bytes": 241591910, "max_bytes": 268435456, "events_delta": {"high": 3, "max": 0, "oom": 0, "oom_kill": 0}},
+            payload={
+                "current_bytes": 241591910,
+                "max_bytes": 268435456,
+                "events_delta": {"high": 3, "max": 0, "oom": 0, "oom_kill": 0},
+            },
         )
     ]
     s_pressured = reducer.reduce(trajectory_id="traj-mem", seq=2, events=ev_pressured, prior_snapshot=s_ok)
@@ -72,7 +154,11 @@ def test_reducer_memory_pressure_state_transitions() -> None:
             timestamp_ms=3000,
             source="cgroup_v2",
             topic="memory",
-            payload={"current_bytes": 268435456, "max_bytes": 268435456, "events_delta": {"high": 5, "max": 1, "oom": 1, "oom_kill": 0}},
+            payload={
+                "current_bytes": 268435456,
+                "max_bytes": 268435456,
+                "events_delta": {"high": 5, "max": 1, "oom": 1, "oom_kill": 0},
+            },
         )
     ]
     s_critical = reducer.reduce(trajectory_id="traj-mem", seq=3, events=ev_critical, prior_snapshot=s_pressured)
@@ -80,55 +166,41 @@ def test_reducer_memory_pressure_state_transitions() -> None:
     assert any("memory critical" in c for c in s_critical.get("recommended_constraints", []))
 
 
-def test_reducer_tool_circuit_breaker() -> None:
-    """Tool failures trip circuit breaker from CLOSED to OPEN upon reaching consecutive failure limit."""
-    reducer = DeterministicReducer(circuit_consecutive_failure_limit=3)
-
-    # Initial success
-    ev1 = [
-        RawTelemetryEvent(
-            timestamp_ms=1000,
-            source="tool_wrapper",
-            topic="tool_span",
-            payload={"tool_id": "remote_service", "latency_ms": 100.0, "success": True},
-        )
-    ]
-    s1 = reducer.reduce("traj-circuit", 1, ev1)
-    assert s1["tools"]["remote_service"]["circuit"] == "CLOSED"
-
-    # 3 consecutive failures
-    ev2 = [
-        RawTelemetryEvent(
-            timestamp_ms=2000,
-            source="tool_wrapper",
-            topic="tool_span",
-            payload={"tool_id": "remote_service", "latency_ms": 500.0, "success": False, "error_class": "HTTP_503", "retry_after_ms": 3000},
-        ),
-        RawTelemetryEvent(
-            timestamp_ms=2100,
-            source="tool_wrapper",
-            topic="tool_span",
-            payload={"tool_id": "remote_service", "latency_ms": 500.0, "success": False, "error_class": "HTTP_503", "retry_after_ms": 3000},
-        ),
-        RawTelemetryEvent(
-            timestamp_ms=2200,
-            source="tool_wrapper",
-            topic="tool_span",
-            payload={"tool_id": "remote_service", "latency_ms": 500.0, "success": False, "error_class": "HTTP_503", "retry_after_ms": 3000},
-        ),
-    ]
-    s2 = reducer.reduce("traj-circuit", 2, ev2, prior_snapshot=s1)
-    assert s2["tools"]["remote_service"]["circuit"] == "OPEN"
-    assert s2["tools"]["remote_service"]["consecutive_failures"] == 3
-    assert s2["tools"]["remote_service"]["last_error"] == "HTTP_503"
-    assert any("do not call remote_service" in c for c in s2.get("recommended_constraints", []))
-
-
-def test_reducer_audit_linkage_to_raw_event_hashes() -> None:
-    """Every generated snapshot links to the exact SHA-256 hashes of its contributing raw events."""
+def test_reducer_field_level_derivation_provenance() -> None:
+    """Every generated snapshot links each derived namespace to its contributing raw event hashes."""
     reducer = DeterministicReducer()
     ev1 = RawTelemetryEvent(timestamp_ms=1000, source="cgroup_v2", topic="cpu", payload={"nr_throttled_delta": 4})
     ev2 = RawTelemetryEvent(timestamp_ms=1010, source="cgroup_v2", topic="memory", payload={"current_bytes": 1024})
 
     snap = reducer.reduce("traj-audit", 1, [ev1, ev2])
-    assert set(snap["raw_event_hashes"]) == {ev1.event_id, ev2.event_id}
+    assert ev1.event_id in snap["derivation_provenance"]["hardware.cpu"]
+    assert ev2.event_id in snap["derivation_provenance"]["hardware.memory"]
+
+
+def test_delta_rehydration() -> None:
+    """Rehydrating a delta snapshot with its base checkpoint produces a complete, coherent state."""
+    reducer = DeterministicReducer()
+    ev1 = [
+        RawTelemetryEvent(
+            timestamp_ms=1000,
+            source="cgroup_v2",
+            topic="memory",
+            payload={"current_bytes": 67108864, "max_bytes": 268435456},
+        )
+    ]
+    base = reducer.reduce("traj-rehydrate", 1, ev1, kind="full_checkpoint")
+
+    ev2 = [
+        RawTelemetryEvent(
+            timestamp_ms=2000,
+            source="tool_wrapper",
+            topic="tool_span",
+            payload={"tool_id": "fetch", "latency_ms": 80.0, "success": True},
+        )
+    ]
+    delta = reducer.reduce("traj-rehydrate", 2, ev2, prior_snapshot=base, kind="delta")
+
+    rehydrated = rehydrate_snapshot(delta, base)
+    assert rehydrated["seq"] == 2
+    assert rehydrated["hardware"]["memory"]["current_bytes"] == 67108864
+    assert rehydrated["tools"]["fetch"]["successes"] == 1

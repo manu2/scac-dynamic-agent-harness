@@ -1,4 +1,4 @@
-"""Tests for deterministic canonical serialization and SHA-256 identity hashing."""
+"""Tests for strict RFC 8785 (JCS) canonical serialization and SHA-256 identity hashing."""
 
 from __future__ import annotations
 
@@ -8,8 +8,22 @@ from scac_harness.identity import (
     canonical_json_dumps,
     compute_content_hash,
     compute_snapshot_id,
+    rfc8785_canonical_dumps,
     verify_snapshot_id,
 )
+
+
+def test_rfc8785_negative_zero_normalization() -> None:
+    """RFC 8785 requires negative zero (-0.0) to be serialized as 0."""
+    assert rfc8785_canonical_dumps(-0.0) == "0"
+    assert rfc8785_canonical_dumps(0.0) == "0"
+    assert rfc8785_canonical_dumps({"zero": -0.0}) == '{"zero":0}'
+
+
+def test_rfc8785_integer_float_representation() -> None:
+    """RFC 8785 / ECMAScript standard serializes integer-valued floats without decimal point."""
+    assert rfc8785_canonical_dumps(10.0) == "10"
+    assert rfc8785_canonical_dumps(10.5) == "10.5"
 
 
 def test_canonical_json_ordering_and_compactness() -> None:

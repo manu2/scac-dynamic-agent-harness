@@ -13,6 +13,11 @@
   "raw_event_hashes": [
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   ],
+  "derivation_provenance": {
+    "hardware.memory": [
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    ]
+  },
   "hardware": {
     "memory": {
       "current_bytes": 67108864,
@@ -62,6 +67,18 @@
       "window_n": 10,
       "successes": 10,
       "failures": 0,
+      "history": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
       "consecutive_failures": 0,
       "latency_ewma_ms": 42.5,
       "last_error": "NONE",
@@ -99,5 +116,5 @@
   "recommended_constraints": [
     "cpu throttled: reduce concurrency or worker count"
   ],
-  "snapshot_id": "873e9524248683b72b7713f7b59cbd56338828fc51345dc45215d96eafc28a43"
+  "snapshot_id": "ac69be8bcaaf74ea6d64697604bc5755fd9184c32d1bc457d994fb3a4e1b3d2a"
 }
