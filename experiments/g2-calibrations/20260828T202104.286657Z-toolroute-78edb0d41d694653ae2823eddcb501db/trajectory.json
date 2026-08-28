@@ -1,0 +1,110 @@
+[
+  {
+    "action": "local_b",
+    "outcome": {
+      "action": "local_b",
+      "error_class": null,
+      "latency_ms": 100,
+      "policy_regret": 0.0,
+      "success": true,
+      "terminal": false,
+      "turn": 0
+    },
+    "state": {
+      "health": {
+        "local_b": {
+          "latency_ms": 100,
+          "retry_after_ms": null,
+          "success_probability": 0.98
+        },
+        "remote_a": {
+          "latency_ms": 100,
+          "retry_after_ms": null,
+          "success_probability": 0.98
+        }
+      },
+      "turn": 0
+    }
+  },
+  {
+    "action": "remote_a",
+    "outcome": {
+      "action": "remote_a",
+      "error_class": null,
+      "latency_ms": 180,
+      "policy_regret": 0.0,
+      "success": true,
+      "terminal": false,
+      "turn": 1
+    },
+    "state": {
+      "health": {
+        "local_b": {
+          "latency_ms": 4200,
+          "retry_after_ms": 2000,
+          "success_probability": 0.2
+        },
+        "remote_a": {
+          "latency_ms": 180,
+          "retry_after_ms": null,
+          "success_probability": 0.99
+        }
+      },
+      "turn": 1
+    }
+  },
+  {
+    "action": "local_b",
+    "outcome": {
+      "action": "local_b",
+      "error_class": null,
+      "latency_ms": 180,
+      "policy_regret": 0.0,
+      "success": true,
+      "terminal": false,
+      "turn": 2
+    },
+    "state": {
+      "health": {
+        "local_b": {
+          "latency_ms": 180,
+          "retry_after_ms": null,
+          "success_probability": 0.99
+        },
+        "remote_a": {
+          "latency_ms": 800,
+          "retry_after_ms": null,
+          "success_probability": 0.8
+        }
+      },
+      "turn": 2
+    }
+  },
+  {
+    "action": "remote_a",
+    "outcome": {
+      "action": "remote_a",
+      "error_class": null,
+      "latency_ms": 180,
+      "policy_regret": 0.0,
+      "success": true,
+      "terminal": true,
+      "turn": 3
+    },
+    "state": {
+      "health": {
+        "local_b": {
+          "latency_ms": 4200,
+          "retry_after_ms": 2000,
+          "success_probability": 0.2
+        },
+        "remote_a": {
+          "latency_ms": 180,
+          "retry_after_ms": null,
+          "success_probability": 0.99
+        }
+      },
+      "turn": 3
+    }
+  }
+]

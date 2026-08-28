@@ -22,7 +22,7 @@
 | G0.7 | Implement compact model-visible renderer | Complete | `src/scac_harness/renderer.py`, `tests/test_renderer.py` |
 | G0.8 | Complete threat model & representation semantics | Complete | `docs/01_threat_model_and_trust_boundaries.md`, `docs/02_representation_semantics.md` |
 | G1 | Collectors and fail-closed enforcement | In progress | `collectors.py`, `enforcement.py`, and immutable `experiments/g1-controls/` records; Linux cgroup-v2 memory proof pending |
-| G2 | Deterministic scenarios and oracles | Pending | calibration artifacts |
+| G2 | Deterministic scenarios and oracles | In progress | `scac_harness.scenarios.toolroute`; immutable `experiments/g2-calibrations/` records |
 | G3 | One-model pilot | Blocked by G0–G2 | frozen pilot manifest |
 
 ## Execution log
@@ -54,3 +54,14 @@
 - Revalidated G0 with the vetted `jcs` implementation, immutable raw event
   payloads, sparse deltas, and 52 pre-G1 tests passing. The combined local suite
   now has 58 passing tests.
+
+### 2026-08-29 — G2 local ToolRoute calibration start
+
+- Implemented a seeded, model-free ToolRoute simulator and external expected-cost
+  oracle. Tool health schedules are exogenous; the agent-facing action interface
+  is limited to a named equivalent tool or `wait`.
+- Added a swapped-tool-name control and immutable calibration archival before the
+  first action. A local oracle-following calibration completed four turns with
+  zero policy regret.
+- This begins G2 and supports local design/calibration work; it neither enables
+  provider calls nor substitutes for the Linux cgroup-v2 memory control.
