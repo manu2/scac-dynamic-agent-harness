@@ -33,10 +33,11 @@ Every snapshot enforces:
   controls are implemented. Timeout and deterministic tool-fault controls pass
   locally; the cgroup-v2 memory OOM-kill positive control is blocked pending a
   delegated Linux cgroup-v2 runner and cannot be substituted with a host limit.
-- **G2 — scenarios (In progress):** ToolRoute's seeded local simulator and
-  expected-cost oracle are implemented and calibrated without model calls.
-  MemoryGovernor and RetryBudget, clean-container reproduction, and
-  context-isolated reviews remain pending.
+- **G2 — scenarios (In progress):** seeded, model-free ToolRoute,
+  MemoryGovernor, and RetryBudget simulators plus external oracles are locally
+  calibrated without model calls. The local MemoryGovernor is explicitly virtual
+  and makes no cgroup-enforcement claim. Clean-container reproduction and
+  context-isolated leakage/evaluator-defeat reviews remain pending.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
 - **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,

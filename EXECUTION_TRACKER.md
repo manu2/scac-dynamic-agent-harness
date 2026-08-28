@@ -22,7 +22,7 @@
 | G0.7 | Implement compact model-visible renderer | Complete | `src/scac_harness/renderer.py`, `tests/test_renderer.py` |
 | G0.8 | Complete threat model & representation semantics | Complete | `docs/01_threat_model_and_trust_boundaries.md`, `docs/02_representation_semantics.md` |
 | G1 | Collectors and fail-closed enforcement | In progress | `collectors.py`, `enforcement.py`, and immutable `experiments/g1-controls/` records; Linux cgroup-v2 memory proof pending |
-| G2 | Deterministic scenarios and oracles | In progress | `scac_harness.scenarios.toolroute`; immutable `experiments/g2-calibrations/` records |
+| G2 | Deterministic scenarios and oracles | In progress | all three local simulators/oracles and immutable `experiments/g2-calibrations/` records; clean-container and review gates pending |
 | G3 | One-model pilot | Blocked by G0–G2 | frozen pilot manifest |
 
 ## Execution log
@@ -65,3 +65,15 @@
   zero policy regret.
 - This begins G2 and supports local design/calibration work; it neither enables
   provider calls nor substitutes for the Linux cgroup-v2 memory control.
+
+### 2026-08-29 — G2 complete local scenario calibration
+
+- Added deterministic RetryBudget and virtual-only MemoryGovernor simulators
+  with host-owned, predeclared action oracles. The MemoryGovernor calibration is
+  labelled `virtual_only_no_cgroup_claim` in its manifest.
+- Archived four-turn oracle-following calibrations for ToolRoute, MemoryGovernor,
+  and RetryBudget. Each has zero policy regret by construction; these artifacts
+  validate simulator/oracle mechanics, not adaptation by a model.
+- The combined local suite has 67 passing tests. G2 remains open for clean Linux
+  container reproduction, context-isolated leakage review, and evaluator-defeat
+  testing.

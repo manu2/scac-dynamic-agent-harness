@@ -1,0 +1,27 @@
+"""Write-once archival for deterministic, no-provider G2 calibrations."""
+
+from __future__ import annotations
+
+from datetime import datetime, timezone
+import json
+from pathlib import Path
+from uuid import uuid4
+
+
+def archive_calibration(
+    experiments_root: Path,
+    scenario: str,
+    manifest: dict[str, object],
+    trajectory: list[dict[str, object]],
+) -> Path:
+    """Atomically reserve and archive one deterministic calibration trajectory."""
+    parent = Path(experiments_root) / "g2-calibrations"
+    parent.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
+    directory = parent / f"{stamp}-{scenario}-{uuid4().hex}"
+    directory.mkdir(mode=0o700)
+    for filename, value in (("manifest.json", manifest), ("trajectory.json", trajectory)):
+        with (directory / filename).open("x", encoding="utf-8") as handle:
+            json.dump(value, handle, indent=2, sort_keys=True)
+            handle.write("\n")
+    return directory

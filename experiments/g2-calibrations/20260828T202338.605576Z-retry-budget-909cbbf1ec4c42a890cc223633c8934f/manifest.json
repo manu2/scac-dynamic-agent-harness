@@ -1,0 +1,4 @@
+{
+  "scenario": "RetryBudget-v0.1",
+  "schedule": "fixed"
+}
