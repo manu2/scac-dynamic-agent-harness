@@ -77,3 +77,19 @@
 - The combined local suite has 67 passing tests. G2 remains open for clean Linux
   container reproduction, context-isolated leakage review, and evaluator-defeat
   testing.
+
+### 2026-08-29 — Offline fresh-context ToolRoute development smoke
+
+- Added a host-owned offline A/B/C trial runner with pre-generated,
+  action-independent potential outcomes, host-monitor raw events, reducer and
+  renderer use for C, byte-matched B neutral padding, constrained action capture,
+  and write-once per-turn artifacts.
+- Ran one matched development-only A/C smoke decision using fresh-context Codex
+  subagents. Against the same hidden turn-1 tape, A selected `tool_alpha`
+  (regret 11,920 ms-equivalent) and C selected `tool_beta` (regret 0). These
+  observations are not empirical study data: subagents share workspace access,
+  the sample is one per condition, and no blinding or frozen pilot manifest
+  exists.
+- The combined local suite has 70 passing tests. Next hardening: isolate hidden
+  schedules from the action agent's filesystem and add an evaluator-defeat test
+  suite before collecting additional development smoke trajectories.

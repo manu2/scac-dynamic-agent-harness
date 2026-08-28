@@ -1,0 +1,73 @@
+{
+  "condition": "C",
+  "message": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Choose exactly one action: tool_alpha, tool_beta, or wait. Return only the action label.\n=== HOST TELEMETRY [seq=1 kind=delta base=145e066f id=4064649e obs=2001ms fresh=2000ms] ===\n[TOOLS]\n  tool_alpha: window=2 succ=1 consec_fail=1 latency_ewma=984.0ms last_err=HTTP_503 circuit=CLOSED retry_after=2000ms\n  tool_beta: window=2 succ=2 consec_fail=0 latency_ewma=116.0ms last_err=NONE circuit=CLOSED\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "message_bytes": 628,
+  "visible_snapshot": {
+    "base_snapshot_id": "145e066fd7b6c622fb1d99487821378d4bf272e7767eedc9784c0f3c31d594b2",
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "efe24ad720f2aa542bc8d9a77cc5e69d4b81c07225ea382f11c8fc36ee92e764",
+        "21030640956ea4e679fe4470aa3c53e71b2d84b5d9d3f63a44794790cf0c337c"
+      ],
+      "tools.tool_beta": [
+        "89a05b69b10d242a1875d2790ac8a5fd7e5a6b382331dab1e021f5cbadb2bfb2",
+        "6e3e3d898bd5dc4ed619d52a717076162bb75d385a597a1a58813d334b713a66"
+      ]
+    },
+    "fresh_for_ms": 2000,
+    "kind": "delta",
+    "observed_at_ms": 2001,
+    "raw_event_hashes": [
+      "21030640956ea4e679fe4470aa3c53e71b2d84b5d9d3f63a44794790cf0c337c",
+      "6e3e3d898bd5dc4ed619d52a717076162bb75d385a597a1a58813d334b713a66"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 1,
+    "snapshot_id": "4064649e488f5d13b3f597495bd417c1710570f133e6848d7efd4be94cf60f29",
+    "subsystem_observed_at_ms": {
+      "tool_span": 2001
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 1,
+        "failures": 1,
+        "history": [
+          true,
+          false
+        ],
+        "last_error": "HTTP_503",
+        "latency_ewma_ms": 984.0,
+        "retry_after_ms": 2000,
+        "state": "OK",
+        "successes": 1,
+        "window_n": 2
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 116.0,
+        "state": "OK",
+        "successes": 2,
+        "window_n": 2
+      }
+    },
+    "trajectory_id": "dev-smoke-314159",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}

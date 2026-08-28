@@ -38,6 +38,10 @@ Every snapshot enforces:
   calibrated without model calls. The local MemoryGovernor is explicitly virtual
   and makes no cgroup-enforcement claim. Clean-container reproduction and
   context-isolated leakage/evaluator-defeat reviews remain pending.
+- **Development smoke path:** offline A/B/C ToolRoute messages may be supplied to
+  fresh-context Codex subagents after complete host-side capture. These are
+  engineering smoke tests only: shared workspace access prevents them from being
+  blinded empirical trials or inclusion in a study denominator.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
 - **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,

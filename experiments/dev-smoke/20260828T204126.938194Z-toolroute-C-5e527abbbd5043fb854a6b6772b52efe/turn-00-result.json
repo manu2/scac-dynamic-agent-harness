@@ -1,0 +1,8 @@
+{
+  "action": "wait",
+  "error_class": null,
+  "latency_ms": 500,
+  "policy_regret": 780.0000000000001,
+  "success": false,
+  "terminal": false
+}
