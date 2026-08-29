@@ -1,0 +1,24 @@
+{
+  "manifest_status": "FROZEN_TRANSPORT_SMOKE_NOT_PAPER_DATA",
+  "scenario": "ToolRoute-v0.6-api-transport-smoke",
+  "purpose": "One condition-C isolated transport/provenance diagnostic per provider before any balanced cohort.",
+  "state_delivery": "independent_full_checkpoint_only",
+  "conditions": ["C"],
+  "tokenizer": {
+    "name": "diagnostic_whitespace_tokenizer",
+    "scope": "Condition C only; no B control or paper inference is authorized"
+  },
+  "provider_parameters": {
+    "temperature": 0.0,
+    "max_output_tokens": 1024,
+    "tools": "none",
+    "request_retry_policy": "no retry"
+  },
+  "authorized_episodes": [
+    {"seed": 0, "turn": 1, "condition": "C", "model_id": "gemini-3.7-flash", "provider_label": "google"},
+    {"seed": 0, "turn": 1, "condition": "C", "model_id": "gpt-5.6-terra", "provider_label": "openai"},
+    {"seed": 0, "turn": 1, "condition": "C", "model_id": "claude-opus-5", "provider_label": "anthropic"}
+  ],
+  "inclusion": "No episode in this manifest enters the paper denominator.",
+  "post_run_rule": "Audit raw request/response, provider-reported model and usage, action parsing, result, and all finalization hashes before authorizing any subsequent provider request."
+}

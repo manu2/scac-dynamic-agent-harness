@@ -118,6 +118,14 @@ class ToolRouteAuthorization:
         if current_digest != self.pilot_manifest_sha256 or provenance.get("toolroute_pilot_manifest_sha256") != current_digest:
             raise PermissionError("frozen ToolRoute pilot manifest changed before provider request")
 
+    def verify_episode(self, *, seed: int, turn: int, condition: Condition, model_id: str, provider_label: str) -> None:
+        """Fail closed unless this exact paid episode is declared in the manifest."""
+        manifest = json.loads(self.pilot_manifest_path.read_text(encoding="utf-8"))
+        episodes = manifest.get("authorized_episodes")
+        target = {"seed": seed, "turn": turn, "condition": condition, "model_id": model_id, "provider_label": provider_label}
+        if not isinstance(episodes, list) or target not in episodes:
+            raise PermissionError("episode is not explicitly authorized by the frozen manifest")
+
 
 class OpenAICompatibleProvider:
     """Small dependency-free chat-completions adapter for a later authorized run."""
@@ -377,6 +385,7 @@ class ToolRouteAPIEpisode:
         if not authorization.pilot_manifest_path.is_file() or not authorization.provenance_path.is_file():
             raise PermissionError("authorization source disappeared before provider request")
         authorization.verify_live()
+        authorization.verify_episode(seed=self.seed, turn=self.turn, condition=self.condition, model_id=self.model_id, provider_label=self.provider_label)
         request_record = getattr(provider, "request_record", None)
         if not callable(request_record):
             raise TypeError("provider must expose a sanitized request_record")

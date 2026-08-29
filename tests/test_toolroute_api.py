@@ -42,7 +42,10 @@ def _tokenizer() -> Tokenizer:
 
 def _authorization(tmp_path: Path) -> ToolRouteAuthorization:
     manifest = tmp_path / "frozen-pilot-manifest.json"
-    manifest.write_text('{"pilot":"toolroute"}\n')
+    manifest.write_text(json.dumps({"pilot": "toolroute", "authorized_episodes": [
+        {"seed": 50, "turn": 1, "condition": condition, "model_id": "mock", "provider_label": "mock"}
+        for condition in ("A", "B", "C")
+    ]}) + "\n")
     provenance = tmp_path / "provenance.json"
     provenance.write_text(json.dumps({
         "toolroute_provider_trials_authorized": True,
@@ -143,6 +146,16 @@ def test_api_episode_rechecks_revoked_authorization_before_provider_request(tmp_
     else:
         raise AssertionError("revoked authorization was accepted")
     assert provider.prompts == []
+
+
+def test_api_episode_rejects_an_undeclared_paid_episode(tmp_path: Path) -> None:
+    episode = ToolRouteAPIEpisode(seed=51, turn=1, condition="C", experiments_root=tmp_path, tokenizer=_tokenizer(), model_id="mock", provider_label="mock")
+    try:
+        episode.run(RecordingProvider("tool_beta"), authorization=_authorization(tmp_path))
+    except PermissionError as exc:
+        assert "explicitly authorized" in str(exc)
+    else:
+        raise AssertionError("undeclared episode was authorized")
 
 
 def test_observation_model_is_versioned_and_supports_nonzero_noise(tmp_path: Path) -> None:

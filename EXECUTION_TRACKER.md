@@ -360,3 +360,16 @@
   and output usage. No adapter was invoked against a remote endpoint.
 - Full verification passed: 96 tests, including the two loopback-only adapter
   tests. No provider/API calls were made and authorization remains false.
+
+### 2026-08-30 — Scoped ToolRoute transport-smoke authorization
+
+- Added a frozen, non-paper transport manifest that enumerates exactly three
+  independent condition-C episodes: Gemini 3.7 Flash, GPT-5.6 Terra, and
+  Claude Opus 5. Its purpose is request/response, parser, usage, and
+  finalization validation before any balanced cohort.
+- The authorization verifier now checks the exact seed, turn, condition, model,
+  and provider against the manifest; a manifest hash alone cannot authorize an
+  undeclared paid request.
+- `PROVENANCE.json` binds the manifest SHA-256 and authorizes only those three
+  diagnostic calls. Gemini must run first; inspect its terminal artifacts before
+  the OpenAI or Anthropic diagnostic. None enters a paper denominator.
