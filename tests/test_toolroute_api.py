@@ -156,23 +156,16 @@ def test_api_episode_rechecks_revoked_authorization_before_provider_request(tmp_
     }))
     provider = RecordingProvider("tool_beta")
     episode = ToolRouteAPIEpisode(seed=50, turn=1, condition="C", experiments_root=tmp_path, tokenizer=_tokenizer(), model_id="mock", provider_label="mock")
-    try:
-        episode.run(provider, authorization=authorization)
-    except PermissionError as exc:
-        assert "revoked" in str(exc)
-    else:
-        raise AssertionError("revoked authorization was accepted")
+    result = episode.run(provider, authorization=authorization)
+    assert result["classification"] == "REJECTED_MANIFEST_SCOPE"
     assert provider.prompts == []
 
 
 def test_api_episode_rejects_an_undeclared_paid_episode(tmp_path: Path) -> None:
     episode = ToolRouteAPIEpisode(seed=51, turn=1, condition="C", experiments_root=tmp_path, tokenizer=_tokenizer(), model_id="mock", provider_label="mock")
-    try:
-        episode.run(RecordingProvider("tool_beta"), authorization=_authorization(tmp_path))
-    except PermissionError as exc:
-        assert "explicitly authorized" in str(exc)
-    else:
-        raise AssertionError("undeclared episode was authorized")
+    result = episode.run(RecordingProvider("tool_beta"), authorization=_authorization(tmp_path))
+    assert result["classification"] == "REJECTED_MANIFEST_SCOPE"
+    assert (episode.directory / "finalization.json").exists()
 
 
 def test_observation_model_is_versioned_and_supports_nonzero_noise(tmp_path: Path) -> None:

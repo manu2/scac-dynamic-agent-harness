@@ -427,8 +427,13 @@ class ToolRouteAPIEpisode:
             return result
         if not authorization.pilot_manifest_path.is_file() or not authorization.provenance_path.is_file():
             raise PermissionError("authorization source disappeared before provider request")
-        authorization.verify_live()
-        authorization.verify_episode(seed=self.seed, turn=self.turn, condition=self.condition, model_id=self.model_id, provider_label=self.provider_label)
+        try:
+            authorization.verify_live()
+            authorization.verify_episode(seed=self.seed, turn=self.turn, condition=self.condition, model_id=self.model_id, provider_label=self.provider_label)
+        except PermissionError as exc:
+            result = {"accepted": False, "classification": "REJECTED_MANIFEST_SCOPE", "reason": str(exc)}
+            self._write_once("result.json", result); self._finalize(result["classification"])
+            return result
         request_record = getattr(provider, "request_record", None)
         if not callable(request_record):
             raise TypeError("provider must expose a sanitized request_record")

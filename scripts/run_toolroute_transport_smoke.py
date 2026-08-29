@@ -49,13 +49,15 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--provider", choices=("google", "openai", "anthropic"), required=True)
     parser.add_argument("--model", required=True)
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--turn", type=int, default=1)
     parser.add_argument("--dotenv", type=Path, default=Path(".env"))
     parser.add_argument("--manifest", type=Path, default=Path("manifests/toolroute_api_transport_smoke.v0.6.json"))
     parser.add_argument("--provenance", type=Path, default=Path("PROVENANCE.json"))
     args = parser.parse_args()
     _load_dotenv(args.dotenv)
     authorization = ToolRouteAuthorization.load(provenance_path=args.provenance, pilot_manifest_path=args.manifest)
-    episode = ToolRouteAPIEpisode(seed=0, turn=1, condition="C", experiments_root=Path("experiments/api-transport-smoke"),
+    episode = ToolRouteAPIEpisode(seed=args.seed, turn=args.turn, condition="C", experiments_root=Path("experiments/api-transport-smoke"),
                                   tokenizer=Tokenizer(WhitespaceTokenizer.name, WhitespaceTokenizer.count),
                                   model_id=args.model, provider_label=args.provider)
     result = episode.run(_provider(args.provider, args.model), authorization=authorization)

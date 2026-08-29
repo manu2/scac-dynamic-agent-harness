@@ -408,3 +408,14 @@
   regression coverage, and froze a new two-episode C-only diagnostic manifest:
   seed 1 / turn 1 for GPT-5.6 Terra first, then Claude Opus 5. The manifest
   hash is bound in provenance; neither attempt is paper evidence.
+
+### 2026-08-30 — Pre-request manifest-scope rejection repair
+
+- The first invocation of the sampling-fix runner passed its stale hard-coded
+  seed 0 while the new manifest declared seed 1. Authorization rejected it
+  before the provider adapter was invoked; the reserved directory is finalized
+  `REJECTED_MANIFEST_SCOPE` and is not a provider request.
+- Repaired the CLI to accept/pass `--seed` and `--turn`, and repaired the API
+  episode to terminally finalize all revoked or undeclared-scope rejections.
+  Regression tests cover both cases. The pending authorized Terra diagnostic
+  remains seed 1 / turn 1 and has not yet been submitted.
