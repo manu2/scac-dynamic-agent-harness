@@ -396,3 +396,15 @@
   valid Gemini diagnostic and two pre-inference failures, authorizations,
   immutable-artifact rules, exact next sequence, and a ready-to-paste handover
   prompt for a fresh agent.
+
+### 2026-08-30 — Sampling-control transport repair authorization
+
+- Compared failed ToolRoute requests against the successful static-study API
+  code. Claude Opus 5's prior manifest explicitly records that it rejects
+  supplied sampling controls; the failed ToolRoute request had sent
+  `temperature: 0.0`. GPT-5.6 Terra likewise received an explicit 0.0 control,
+  unlike the successful OpenAI patterns which used provider defaults or 1.0.
+- Updated both provider adapters to omit `temperature` when unset, added
+  regression coverage, and froze a new two-episode C-only diagnostic manifest:
+  seed 1 / turn 1 for GPT-5.6 Terra first, then Claude Opus 5. The manifest
+  hash is bound in provenance; neither attempt is paper evidence.

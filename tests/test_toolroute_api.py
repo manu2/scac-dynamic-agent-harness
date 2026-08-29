@@ -120,6 +120,13 @@ def test_provider_request_records_never_include_credentials() -> None:
         assert "max" in encoded
 
 
+def test_openai_and_opus_default_requests_omit_sampling_controls() -> None:
+    openai = OpenAICompatibleProvider(endpoint="https://api.openai.example/v1/chat/completions", api_key="key", model="gpt-5.6-terra")
+    opus = AnthropicMessagesProvider(api_key="key", model="claude-opus-5", api_version="2023-06-01")
+    assert "temperature" not in openai.request_record("x")["body"]
+    assert "temperature" not in opus.request_record("x")["body"]
+
+
 def test_safe_provider_error_retains_structured_detail_but_redacts_key() -> None:
     exc = HTTPError("https://example.invalid", 400, "Bad Request", {}, io.BytesIO(b'{"error":{"message":"bad sk-secret"}}'))
     record = _safe_provider_error(exc, "sk-secret")

@@ -132,13 +132,16 @@ class ToolRouteAuthorization:
 class OpenAICompatibleProvider:
     """Small dependency-free chat-completions adapter for a later authorized run."""
 
-    def __init__(self, *, endpoint: str, api_key: str, model: str, temperature: float = 0.0, max_output_tokens: int = 1024) -> None:
+    def __init__(self, *, endpoint: str, api_key: str, model: str, temperature: float | None = None, max_output_tokens: int = 1024) -> None:
         self.endpoint, self._api_key, self.model, self.temperature = endpoint, api_key, model, temperature
         self.max_output_tokens = max_output_tokens
 
     def _body(self, prompt: str) -> dict[str, object]:
-        return {"model": self.model, "temperature": self.temperature, "max_completion_tokens": self.max_output_tokens,
-                "messages": [{"role": "user", "content": prompt}]}
+        body: dict[str, object] = {"model": self.model, "max_completion_tokens": self.max_output_tokens,
+                                   "messages": [{"role": "user", "content": prompt}]}
+        if self.temperature is not None:
+            body["temperature"] = self.temperature
+        return body
 
     def request_record(self, prompt: str) -> Mapping[str, object]:
         return {"adapter": "openai_chat_completions_v1", "endpoint": self.endpoint, "body": self._body(prompt)}
@@ -165,13 +168,16 @@ class AnthropicMessagesProvider:
 
     endpoint = "https://api.anthropic.com/v1/messages"
 
-    def __init__(self, *, api_key: str, model: str, api_version: str, temperature: float = 0.0, max_output_tokens: int = 1024) -> None:
+    def __init__(self, *, api_key: str, model: str, api_version: str, temperature: float | None = None, max_output_tokens: int = 1024) -> None:
         self._api_key, self.model, self.api_version = api_key, model, api_version
         self.temperature, self.max_output_tokens = temperature, max_output_tokens
 
     def _body(self, prompt: str) -> dict[str, object]:
-        return {"model": self.model, "max_tokens": self.max_output_tokens, "temperature": self.temperature,
-                "messages": [{"role": "user", "content": prompt}]}
+        body: dict[str, object] = {"model": self.model, "max_tokens": self.max_output_tokens,
+                                   "messages": [{"role": "user", "content": prompt}]}
+        if self.temperature is not None:
+            body["temperature"] = self.temperature
+        return body
 
     def request_record(self, prompt: str) -> Mapping[str, object]:
         return {"adapter": "anthropic_messages_v1", "endpoint": self.endpoint, "anthropic_version": self.api_version, "body": self._body(prompt)}
