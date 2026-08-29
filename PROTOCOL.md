@@ -45,7 +45,7 @@ success count, latency EWMA, and circuit state. A latent-health expected-cost
 oracle is retained only as a diagnostic ceiling. Every primary scored state must
 pass a predeclared observable-margin calibration before a subject receives it;
 ambiguous states are retained but are not eligible for exact action-agreement
-claims. This development contract does not change the provider pre-pilot gates.
+claims.
 The v0.4 probes are a controlled synthetic observation model, not live host
 telemetry; results must be framed accordingly unless a separately frozen,
 calibrated live-monitor protocol is used. Before an API pilot, the observation
@@ -77,9 +77,31 @@ contract; the condition message itself remains unmodified.
   minimum effect of interest; 10 trials are a pilot, not paper-grade evidence.
 - Keep enforcement and the external oracle outside model control.
 
-## Gate requirements
+## ToolRoute API-pilot gate
 
-No provider call is allowed until:
+ToolRoute is a narrow synthetic tool-health experiment. Its API pilot may be
+authorized without MemoryGovernor's Linux cgroup-v2 memory proof, but only when
+all of the following are frozen and passing:
+
+- the independent full-checkpoint episode mode is used (no sparse deltas and no
+  persistent model history in this cohort);
+- the model has no filesystem, shell, network-tool, schedule, oracle, or
+  artifact access beyond its one assigned prompt;
+- the reservation-first API runner passes mock-provider, malformed-response,
+  redaction, finalization, and evaluator-defeat tests;
+- B is matched by the pinned provider tokenizer, not merely UTF-8 byte length;
+- the synthetic observation model's accuracy, freshness, missingness, and
+  noise/staleness sensitivity are calibrated and retained; and
+- a ToolRoute pilot manifest and analysis plan are committed, with the
+  scenario-specific authorization field in `PROVENANCE.json` set to `true`.
+
+The generic `provider_trials_authorized` field remains false until all scenarios
+meet the global gates. This narrower authorization applies only to ToolRoute
+and cannot be reused by MemoryGovernor or RetryBudget.
+
+## Global gate requirements
+
+No MemoryGovernor or cross-scenario provider call is allowed until:
 
 - schema fixtures and trust-boundary tests pass;
 - memory, timeout, and tool-fault positive controls pass;

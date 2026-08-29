@@ -1,0 +1,308 @@
+{
+  "cumulative_snapshot": {
+    "base_snapshot_id": "5221b88e0c43c681137092e5065f9d31c5fdcc8d56bb73b4837d99740729812b",
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "2f9a74567a294dd960f9db22533d6224a9c56f7a4d436a466283556b38c11779",
+        "1c6dcd4922ece6d613aeb76c9b1873012e3805abf8bb3f6d167b1265b80c71c6",
+        "cc1c5ab4db4d2c2c5ad9d1bf79335378830eb594e1167e03ebcc250e9c22a385",
+        "f793f18cbb425f494662c5c8931c42231f653df7ebf8b9b89c9bf60b3968241f",
+        "ac07dacfd127e9c5a6eb198cfd66a81e1cb02f0033b686d79cf14e6ed97d62b9",
+        "dae23585be70f026d1a7397a945b67c5bd016fa54e441d5d3bc582aa1d29a691",
+        "5bf764a657113cf6734da2f9ec639126817310a2ce622f214426a66551fb0eb4",
+        "f16793ba19dbd9d0a3ecc35e648712ff86772f4598ee05070ac3e52194ebb0a3",
+        "d066732d0e4c55916c3717eeca8316393241b5a6af60f1537f2cbe8d06cd6cf1"
+      ],
+      "tools.tool_beta": [
+        "26565dc19177ad81b98448c87f3e764b0d9774831e086b477b433a557e764e1f",
+        "11d26bd81c416a26ccf0e8afb27a1ea2eb130e9418ee3d82869298fd3824abff",
+        "715893e5255240836890ac9e3e53aacd060bab8ca7c768250d337ee5cb8eabb9",
+        "3fbff3980e7b1f413ca3c8f184aa48ff02e3f1751f2590182bab9a3b15103aaa",
+        "a37df27de334305fc4bc24ae3212e9a8cc1a972cc88874345b45dbd67ab295eb",
+        "4b14d73da3c82d5f9fe204a64fedbd239f22ec8e07c9a68c8ea3b8129556c087",
+        "975f1f79177fe54823692f1b5dcb5a9ba041cd91f99f5ca33b581299b84af57c",
+        "7a5eeab166cb4c6f85f0654ad96779872266b04fe8fd095abd6c44ea287d4b49",
+        "13a79cb1646e10cda91282a87513ec22974eb6f449c006e05ea80fbc7202cc1a"
+      ]
+    },
+    "economics": {},
+    "fresh_for_ms": 2000,
+    "hardware": {
+      "cpu": {
+        "state": "UNKNOWN"
+      },
+      "ephemeral_disk": {
+        "state": "UNKNOWN"
+      },
+      "gpu": {
+        "available": false,
+        "state": "UNAVAILABLE"
+      },
+      "memory": {
+        "state": "UNKNOWN"
+      }
+    },
+    "kind": "delta",
+    "observed_at_ms": 3022,
+    "raw_event_hashes": [
+      "5bf764a657113cf6734da2f9ec639126817310a2ce622f214426a66551fb0eb4",
+      "f16793ba19dbd9d0a3ecc35e648712ff86772f4598ee05070ac3e52194ebb0a3",
+      "d066732d0e4c55916c3717eeca8316393241b5a6af60f1537f2cbe8d06cd6cf1",
+      "975f1f79177fe54823692f1b5dcb5a9ba041cd91f99f5ca33b581299b84af57c",
+      "7a5eeab166cb4c6f85f0654ad96779872266b04fe8fd095abd6c44ea287d4b49",
+      "13a79cb1646e10cda91282a87513ec22974eb6f449c006e05ea80fbc7202cc1a"
+    ],
+    "recommended_constraints": [
+      "do not call tool_alpha before circuit closes (wait 2000ms)"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "runtime": {
+      "network": "UNKNOWN"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 2,
+    "snapshot_id": "9702615fc33699310e8a66a6831838d979b48214eec090102dc2e97c7d8f98cb",
+    "subsystem_observed_at_ms": {
+      "tool_span": 3012
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "OPEN",
+        "consecutive_failures": 6,
+        "failures": 6,
+        "history": [
+          true,
+          true,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "last_error": "HTTP_503",
+        "latency_ewma_ms": 3146.18,
+        "retry_after_ms": 2000,
+        "state": "DEGRADED",
+        "successes": 3,
+        "window_n": 9
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 159.02,
+        "state": "OK",
+        "successes": 9,
+        "window_n": 9
+      }
+    },
+    "trajectory_id": "dev-smoke-52",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  },
+  "raw_events": [
+    {
+      "event_id": "5bf764a657113cf6734da2f9ec639126817310a2ce622f214426a66551fb0eb4",
+      "payload": {
+        "error_class": "HTTP_503",
+        "latency_ms": 4200,
+        "retry_after_ms": 2000,
+        "success": false,
+        "tool_id": "tool_alpha"
+      },
+      "source": "synthetic_host_probe_v0.4",
+      "timestamp_ms": 3000,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "f16793ba19dbd9d0a3ecc35e648712ff86772f4598ee05070ac3e52194ebb0a3",
+      "payload": {
+        "error_class": "HTTP_503",
+        "latency_ms": 4200,
+        "retry_after_ms": 2000,
+        "success": false,
+        "tool_id": "tool_alpha"
+      },
+      "source": "synthetic_host_probe_v0.4",
+      "timestamp_ms": 3001,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "d066732d0e4c55916c3717eeca8316393241b5a6af60f1537f2cbe8d06cd6cf1",
+      "payload": {
+        "error_class": "HTTP_503",
+        "latency_ms": 4200,
+        "retry_after_ms": 2000,
+        "success": false,
+        "tool_id": "tool_alpha"
+      },
+      "source": "synthetic_host_probe_v0.4",
+      "timestamp_ms": 3002,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "975f1f79177fe54823692f1b5dcb5a9ba041cd91f99f5ca33b581299b84af57c",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 180,
+        "retry_after_ms": null,
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "synthetic_host_probe_v0.4",
+      "timestamp_ms": 3010,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "7a5eeab166cb4c6f85f0654ad96779872266b04fe8fd095abd6c44ea287d4b49",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 180,
+        "retry_after_ms": null,
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "synthetic_host_probe_v0.4",
+      "timestamp_ms": 3011,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "13a79cb1646e10cda91282a87513ec22974eb6f449c006e05ea80fbc7202cc1a",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 180,
+        "retry_after_ms": null,
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "synthetic_host_probe_v0.4",
+      "timestamp_ms": 3012,
+      "topic": "tool_span"
+    }
+  ],
+  "rendered_telemetry": "=== HOST TELEMETRY [seq=2 kind=delta base=5221b88e id=9702615f obs=3022ms fresh=2000ms] ===\n[TOOLS]\n  tool_alpha: window=9 succ=3 consec_fail=6 latency_ewma=3146.18ms last_err=HTTP_503 circuit=OPEN retry_after=2000ms\n  tool_beta: window=9 succ=9 consec_fail=0 latency_ewma=159.02ms last_err=NONE circuit=CLOSED\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "snapshot": {
+    "base_snapshot_id": "5221b88e0c43c681137092e5065f9d31c5fdcc8d56bb73b4837d99740729812b",
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "2f9a74567a294dd960f9db22533d6224a9c56f7a4d436a466283556b38c11779",
+        "1c6dcd4922ece6d613aeb76c9b1873012e3805abf8bb3f6d167b1265b80c71c6",
+        "cc1c5ab4db4d2c2c5ad9d1bf79335378830eb594e1167e03ebcc250e9c22a385",
+        "f793f18cbb425f494662c5c8931c42231f653df7ebf8b9b89c9bf60b3968241f",
+        "ac07dacfd127e9c5a6eb198cfd66a81e1cb02f0033b686d79cf14e6ed97d62b9",
+        "dae23585be70f026d1a7397a945b67c5bd016fa54e441d5d3bc582aa1d29a691",
+        "5bf764a657113cf6734da2f9ec639126817310a2ce622f214426a66551fb0eb4",
+        "f16793ba19dbd9d0a3ecc35e648712ff86772f4598ee05070ac3e52194ebb0a3",
+        "d066732d0e4c55916c3717eeca8316393241b5a6af60f1537f2cbe8d06cd6cf1"
+      ],
+      "tools.tool_beta": [
+        "26565dc19177ad81b98448c87f3e764b0d9774831e086b477b433a557e764e1f",
+        "11d26bd81c416a26ccf0e8afb27a1ea2eb130e9418ee3d82869298fd3824abff",
+        "715893e5255240836890ac9e3e53aacd060bab8ca7c768250d337ee5cb8eabb9",
+        "3fbff3980e7b1f413ca3c8f184aa48ff02e3f1751f2590182bab9a3b15103aaa",
+        "a37df27de334305fc4bc24ae3212e9a8cc1a972cc88874345b45dbd67ab295eb",
+        "4b14d73da3c82d5f9fe204a64fedbd239f22ec8e07c9a68c8ea3b8129556c087",
+        "975f1f79177fe54823692f1b5dcb5a9ba041cd91f99f5ca33b581299b84af57c",
+        "7a5eeab166cb4c6f85f0654ad96779872266b04fe8fd095abd6c44ea287d4b49",
+        "13a79cb1646e10cda91282a87513ec22974eb6f449c006e05ea80fbc7202cc1a"
+      ]
+    },
+    "fresh_for_ms": 2000,
+    "kind": "delta",
+    "observed_at_ms": 3022,
+    "raw_event_hashes": [
+      "5bf764a657113cf6734da2f9ec639126817310a2ce622f214426a66551fb0eb4",
+      "f16793ba19dbd9d0a3ecc35e648712ff86772f4598ee05070ac3e52194ebb0a3",
+      "d066732d0e4c55916c3717eeca8316393241b5a6af60f1537f2cbe8d06cd6cf1",
+      "975f1f79177fe54823692f1b5dcb5a9ba041cd91f99f5ca33b581299b84af57c",
+      "7a5eeab166cb4c6f85f0654ad96779872266b04fe8fd095abd6c44ea287d4b49",
+      "13a79cb1646e10cda91282a87513ec22974eb6f449c006e05ea80fbc7202cc1a"
+    ],
+    "recommended_constraints": [
+      "do not call tool_alpha before circuit closes (wait 2000ms)"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 2,
+    "snapshot_id": "9702615fc33699310e8a66a6831838d979b48214eec090102dc2e97c7d8f98cb",
+    "subsystem_observed_at_ms": {
+      "tool_span": 3012
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "OPEN",
+        "consecutive_failures": 6,
+        "failures": 6,
+        "history": [
+          true,
+          true,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "last_error": "HTTP_503",
+        "latency_ewma_ms": 3146.18,
+        "retry_after_ms": 2000,
+        "state": "DEGRADED",
+        "successes": 3,
+        "window_n": 9
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 159.02,
+        "state": "OK",
+        "successes": 9,
+        "window_n": 9
+      }
+    },
+    "trajectory_id": "dev-smoke-52",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}

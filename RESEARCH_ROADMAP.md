@@ -33,6 +33,12 @@ Every snapshot enforces:
   controls are implemented. Timeout and deterministic tool-fault controls pass
   locally; the cgroup-v2 memory OOM-kill positive control is blocked pending a
   delegated Linux cgroup-v2 runner and cannot be substituted with a host limit.
+- **ToolRoute API readiness (In progress):** independent full-checkpoint
+  episodes, isolated remote-model access, provider-tokenizer-matched B control,
+  mock-provider capture/finalization, and an observation-model/evaluator-defeat
+  packet are the scenario-specific prerequisites. The Linux cgroup-v2 proof is
+  a MemoryGovernor requirement, not a blocker for this narrow synthetic
+  ToolRoute pilot.
 - **G2 — scenarios (In progress):** seeded, model-free ToolRoute,
   MemoryGovernor, and RetryBudget simulators plus external oracles are locally
   calibrated without model calls. The local MemoryGovernor is explicitly virtual

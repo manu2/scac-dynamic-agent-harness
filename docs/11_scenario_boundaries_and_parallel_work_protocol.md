@@ -21,7 +21,7 @@ review in one scenario must never be reported as a pass for another.
 
 | Scenario | Current state | Explicit boundary | Next permitted work |
 |---|---|---|---|
-| ToolRoute v0.4 | Local fresh-subagent engineering smoke only; no empirical data | Synthetic probes; shared-workspace subjects; B is byte- not tokenizer-matched | One handoff-artifact smoke if useful; then G1/G2 and isolated API-pilot preparation |
+| ToolRoute v0.4 | Local fresh-subagent engineering smoke only; no empirical data | Synthetic probes; shared-workspace subjects; B is byte- not tokenizer-matched | ToolRoute-specific API gate: full checkpoints, isolated provider runner, tokenizer B control, mock/evaluator tests, frozen manifest |
 | RetryBudget v0.1 | Deterministic model-free calibration only | No fresh-subagent or provider run is authorized | Repair/freeze causal transition and utility/oracle design; add evaluator-defeat tests and a scenario issue ledger |
 | MemoryGovernor | Virtual deterministic calibration only | Makes no cgroup-enforcement claim | Run only after Linux G1; then create a separately frozen observation/oracle contract |
 
@@ -51,8 +51,10 @@ that no telemetry-blind baseline nearly matches the oracle by construction.
    overwrite, migrate, rename, or pool historical records. Historical paths
    remain valid; all new G2 records use `g2-calibrations/<scenario>/`.
 5. Each scenario keeps its own issue ledger and readiness note. Its provider
-   manifest may be frozen only after global G1/G2 gates and that scenario's
-   own observation, oracle, and evaluator-defeat gates pass.
+   manifest may be frozen only after its stated protocol gates and that
+   scenario's own observation, oracle, and evaluator-defeat gates pass.
+   ToolRoute's narrow synthetic API exception is defined only in `PROTOCOL.md`;
+   it does not close global G1/G2 or authorize either other scenario.
 6. No provider call is authorized by this document. `PROVENANCE.json` and the
    global protocol remain controlling.
 

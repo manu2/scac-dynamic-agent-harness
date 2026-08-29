@@ -54,6 +54,11 @@ unblinded development diagnostics—not empirical evidence—and do not establis
 telemetry effect. Gate G1 collector and positive-control code is implemented.
 Timeout and deterministic tool-fault controls pass locally; cgroup-v2 memory
 enforcement must be demonstrated on a delegated Linux cgroup-v2 runner before
-G1 can close. Provider trials remain unauthorized until G1, G2, and the
-protocol's remaining pre-pilot requirements pass. The current ToolRoute risks
-and next actions are in `docs/10_toolroute_v0_4_status_and_next_gate.md`.
+G1 can close. Provider trials remain unauthorized. A narrow ToolRoute-only API
+pilot may proceed before that Linux proof only after its full-checkpoint,
+isolated-runner, tokenizer, observation-calibration, evaluator-defeat,
+frozen-manifest, and provenance-binding requirements pass; this exception does
+not apply to MemoryGovernor, RetryBudget, or a combined study. The current
+ToolRoute risks and next actions are in
+`docs/10_toolroute_v0_4_status_and_next_gate.md` and
+`docs/13_toolroute_api_and_toxiproxy_preflight.md`.

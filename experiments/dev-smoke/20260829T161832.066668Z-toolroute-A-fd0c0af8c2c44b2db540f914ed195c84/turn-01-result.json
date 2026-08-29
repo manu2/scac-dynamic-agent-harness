@@ -1,0 +1,15 @@
+{
+  "action": "tool_alpha",
+  "clairvoyant_regret_diagnostic": 12920.0,
+  "error_class": "HTTP_503",
+  "latency_ms": 4200,
+  "policy_regret": 16920.8,
+  "records_completed": 1,
+  "records_required": 3,
+  "response_text": "tool_alpha",
+  "subject_id": "subagent-8d43b376",
+  "success": false,
+  "task_completed": false,
+  "terminal": false,
+  "terminal_classification": "RUNNING"
+}

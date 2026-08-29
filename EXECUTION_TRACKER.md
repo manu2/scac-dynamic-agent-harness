@@ -214,3 +214,53 @@
   after `wait`, permits a high-utility unconditional fallback, and uses a
   coarse binary regret oracle. Those semantics require a separate design review
   and evaluator-defeat tests before any fresh-subagent or provider trajectory.
+
+### 2026-08-29 — ToolRoute v0.4 post-fix development audit (seeds 50–54)
+
+- Retained 15 terminal development trajectories (A/B/C for each seed 50–54).
+  All finalization hashes verify; 51/51 decision records have distinct subject
+  identifiers; each submitted turn has a `turn-XX-handoff.json`; and every B/C
+  turn is UTF-8 byte matched. These are capture/provenance facts only.
+- The raw outcomes are strongly patterned: C completed 5/5 trajectories in
+  three turns with zero primary observable regret; A and B each completed 4/5,
+  with identical aggregate outcomes (mean regret 13,426.92; mean latency
+  4,620 ms). This is a useful end-to-end diagnostic: fresh subjects can react
+  to the rendered synthetic monitor and the evaluator records the expected
+  difference.
+- This is **not** a matched or isolated empirical cohort. The 51 generations
+  are independent; fresh Codex subagents share the repository workspace; B is
+  byte- but not tokenizer-matched; and seeds 50–54 omit the sixth permutation
+  required by the six-seed development block. Consequently, do not calculate
+  significance, claim zero attention tax, or describe these trajectories as a
+  treatment effect or paper evidence.
+- The misframing and corrective disposition are recorded as TR-020. No provider
+  calls were made; `PROVENANCE.json` remains `provider_trials_authorized: false`.
+
+### 2026-08-30 — ToolRoute delta-delivery boundary
+
+- Recorded TR-021: fresh-subagent smoke decisions receive only the current
+  delta-labelled prompt, not the prior base snapshot. This does not affect the
+  current ToolRoute action oracle because each emitted tool entry contains the
+  complete rolling facts it uses. It does mean the smoke path is not a test of
+  persistent-agent delta rehydration. The provider pilot must freeze either a
+  persistent-history delta mode or independent full-checkpoint episodes.
+
+### 2026-08-30 — ToolRoute isolated API preflight and optional HTTP adapter
+
+- Added a reservation-first, tool-less `ToolRouteAPIEpisode` path under
+  `experiments/api-preflight/toolroute/`. Each prospective provider decision
+  receives an independent full checkpoint (`base_snapshot_id: null`), while the
+  local harness retains schedule, raw monitor events, evaluator, exact prompt,
+  raw response, result, and terminal hashes.
+- Provider invocation is fail-closed: `ToolRouteAuthorization` verifies the
+  scenario-specific provenance flag and a frozen manifest SHA-256. Current
+  provenance is deliberately false with a null hash. No provider call issued.
+- Added versioned observation-model fields plus tests for noise/freshness
+  recording, malformed response capture, finalization, tokenizer-matched B
+  control, fixed-policy evaluator defeat, and local HTTP span capture. The full
+  suite passed 90 tests after an approved host-only run enabled loopback test
+  server binding.
+- Implemented but did not execute the optional `ToxiproxyClient` adapter.
+  Homebrew installation failed because `/opt/homebrew` is not user-writable;
+  no system ownership/permission change occurred. Recorded as TR-023; it does
+  not change synthetic ToolRoute readiness.
