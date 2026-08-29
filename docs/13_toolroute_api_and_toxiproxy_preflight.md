@@ -67,3 +67,15 @@ first failed closed on an invalid error label, the second exposed a validator
 script finalization bug after completing its telemetry work, and the third is
 the clean completed run. All three are finalized and hash-valid. Homebrew was
 not used and no system ownership or permission was changed.
+
+## Fresh-subagent end-to-end smoke
+
+`scripts/toxiproxy_subagent_smoke.py` is a separate development-only,
+one-decision transport-strategy smoke. `start` launches two loopback proxy
+routes, precommits a 300 ms alpha latency versus a healthy beta route, captures
+three real monitor spans per route, and freezes the exact A/B/C subject prompt.
+`submit` accepts a fresh subject's exact action label, executes that action
+through the same still-running proxy, retains its action span, closes the local
+processes, and finalizes the artifact. `abort` closes a setup-only start without
+inventing a subject response. Artifacts are under
+`experiments/dev-smoke-toxiproxy/` and are never paper or API-cohort evidence.

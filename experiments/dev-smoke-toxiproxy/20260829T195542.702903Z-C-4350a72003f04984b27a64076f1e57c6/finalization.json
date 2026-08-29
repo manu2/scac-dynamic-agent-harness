@@ -1,0 +1,9 @@
+{
+  "artifact_sha256": {
+    "host.json": "54291cc14dc3e17163002f6f93e789ab8f7ced4a57db8f3363f43eda2c953dbe",
+    "input.json": "aaba28d74256b72638b6faa23d5c6a8395e3a22566736d0ac4fcb7ebf8a64108",
+    "manifest.json": "2a9f862fe63a03546d2a4217a12ced4b19d75c91a258dc6ba5e9bda9cc764a0f",
+    "result.json": "c5f742a106e6dac335ab49c27cd36b33e732803b87656ed9c6b4acbe17e1740b"
+  },
+  "classification": "ABORTED_DEVELOPMENT"
+}

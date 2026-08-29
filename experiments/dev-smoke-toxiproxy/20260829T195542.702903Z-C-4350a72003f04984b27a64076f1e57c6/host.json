@@ -1,0 +1,171 @@
+{
+  "raw_events": [
+    {
+      "event_id": "a423f3d31643c8065ea047069c84514444c6b0d1b7c268580545fba68dd18073",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 303,
+        "success": true,
+        "tool_id": "tool_alpha"
+      },
+      "source": "host_http_span_v1",
+      "timestamp_ms": 1000,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "88a9246e258040249f92b210b94c12d38774aa5f9ccbdebde8a3243d1e52ed37",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 303,
+        "success": true,
+        "tool_id": "tool_alpha"
+      },
+      "source": "host_http_span_v1",
+      "timestamp_ms": 1001,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "ad0f72ee51a928a354a69275491a9d047ffd139742b43eda3b8b2c972b1fd1fc",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 304,
+        "success": true,
+        "tool_id": "tool_alpha"
+      },
+      "source": "host_http_span_v1",
+      "timestamp_ms": 1002,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "b4763170cc36466a4138250f52809b2aece11b0a044a06501306fee1279d8dbd",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 2,
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "host_http_span_v1",
+      "timestamp_ms": 1100,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "1c512606ae88dad6de53a7b71bd9993cec5042e71613dc7f785f00a809477f6f",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 1,
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "host_http_span_v1",
+      "timestamp_ms": 1101,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "62a80b99a5c91910728c1baf64019dc3b64654da9e61f1d0729a207ec1d284e8",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 1,
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "host_http_span_v1",
+      "timestamp_ms": 1102,
+      "topic": "tool_span"
+    }
+  ],
+  "rendered_telemetry": "=== HOST TELEMETRY [seq=0 kind=full_checkpoint id=1265ad51 obs=1300ms fresh=2000ms] ===\n[HARDWARE]\n  memory: cur=UNAVAILABLE max=UNLIMITED headroom=UNAVAILABLE state=UNKNOWN psi_some_avg10=UNAVAILABLE events_delta=UNAVAILABLE\n  cpu: quota=UNLIMITED throttled_usec_delta=UNAVAILABLE psi_some_avg10=UNAVAILABLE state=UNKNOWN\n  disk: free=UNAVAILABLE used_ratio=UNAVAILABLE state=UNKNOWN\n  gpu: available=false (UNAVAILABLE)\n[TOOLS]\n  tool_alpha: window=3 succ=3 consec_fail=0 latency_ewma=303.2ms last_err=NONE circuit=CLOSED\n  tool_beta: window=3 succ=3 consec_fail=0 latency_ewma=1.64ms last_err=NONE circuit=CLOSED\n[RUNTIME]\n  step=UNAVAILABLE wall_remaining=UNLIMITED pids=UNAVAILABLE/UNLIMITED network=UNKNOWN last_exit=UNAVAILABLE\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "snapshot": {
+    "base_snapshot_id": null,
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "a423f3d31643c8065ea047069c84514444c6b0d1b7c268580545fba68dd18073",
+        "88a9246e258040249f92b210b94c12d38774aa5f9ccbdebde8a3243d1e52ed37",
+        "ad0f72ee51a928a354a69275491a9d047ffd139742b43eda3b8b2c972b1fd1fc"
+      ],
+      "tools.tool_beta": [
+        "b4763170cc36466a4138250f52809b2aece11b0a044a06501306fee1279d8dbd",
+        "1c512606ae88dad6de53a7b71bd9993cec5042e71613dc7f785f00a809477f6f",
+        "62a80b99a5c91910728c1baf64019dc3b64654da9e61f1d0729a207ec1d284e8"
+      ]
+    },
+    "economics": {},
+    "fresh_for_ms": 2000,
+    "hardware": {
+      "cpu": {
+        "state": "UNKNOWN"
+      },
+      "ephemeral_disk": {
+        "state": "UNKNOWN"
+      },
+      "gpu": {
+        "available": false,
+        "state": "UNAVAILABLE"
+      },
+      "memory": {
+        "state": "UNKNOWN"
+      }
+    },
+    "kind": "full_checkpoint",
+    "observed_at_ms": 1300,
+    "raw_event_hashes": [
+      "a423f3d31643c8065ea047069c84514444c6b0d1b7c268580545fba68dd18073",
+      "88a9246e258040249f92b210b94c12d38774aa5f9ccbdebde8a3243d1e52ed37",
+      "ad0f72ee51a928a354a69275491a9d047ffd139742b43eda3b8b2c972b1fd1fc",
+      "b4763170cc36466a4138250f52809b2aece11b0a044a06501306fee1279d8dbd",
+      "1c512606ae88dad6de53a7b71bd9993cec5042e71613dc7f785f00a809477f6f",
+      "62a80b99a5c91910728c1baf64019dc3b64654da9e61f1d0729a207ec1d284e8"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "runtime": {
+      "network": "UNKNOWN"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 0,
+    "snapshot_id": "1265ad5171edf1057c53db88386386e21d2e3d3ec6bdd4b49baa9a76c5b21cba",
+    "subsystem_observed_at_ms": {
+      "tool_span": 1102
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true,
+          true,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 303.2,
+        "state": "OK",
+        "successes": 3,
+        "window_n": 3
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true,
+          true,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 1.64,
+        "state": "OK",
+        "successes": 3,
+        "window_n": 3
+      }
+    },
+    "trajectory_id": "toxiproxy-subagent-smoke",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}

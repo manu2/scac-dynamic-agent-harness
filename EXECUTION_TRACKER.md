@@ -281,3 +281,14 @@
   subsequently finalized without changing its contents. The corrected third
   run completed. All three attempt hash sets verify. This validates the socket
   collection adapter only; it is not model behavior or paper outcome evidence.
+
+### 2026-08-30 — Toxiproxy fresh-subagent strategy smoke prepared
+
+- Added `ToolRouteTransportStrategy` and a Toxiproxy loopback implementation,
+  plus a separate start/submit/abort runner for one-decision fresh-subagent
+  smoke. It preserves the synthetic benchmark as the primary causal path and
+  namespaces socket-backed subagent records under `dev-smoke-toxiproxy/`.
+- A setup-only C start observed real alpha latency of about 303 ms versus beta
+  1.6 ms and rendered that projection correctly. It was finalized as
+  `ABORTED_DEVELOPMENT` before any subject was created; no fabricated choice was
+  submitted. The complete local test suite passed (94 tests).
