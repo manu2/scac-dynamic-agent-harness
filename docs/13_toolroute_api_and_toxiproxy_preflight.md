@@ -1,6 +1,7 @@
 # ToolRoute API and optional Toxiproxy preflight
 
-**Status:** implementation and local tests complete; provider use prohibited.
+**Status:** implementation and local verification complete; provider use awaits
+an explicit manifest/provenance authorization.
 
 ## Purpose and scope
 
@@ -32,9 +33,11 @@ pooled.
 - Unit tests defeat fixed alpha, fixed beta, and fixed wait policies over the
   six-seed/four-turn rotation.
 
-## Remaining ToolRoute pilot freeze work
+## Remaining authorization actions
 
-1. Select provider/model and obtain its exact tokenizer/version.
+1. Select provider/model and obtain its exact tokenizer/version. The run must
+   use an adapter that matches that provider's documented API; the currently
+   included dependency-free adapter is OpenAI-compatible only.
 2. Copy and complete `manifests/toolroute_api_pilot.template.json`, then freeze
    model/version, tokenizer/version, parameters, parser, no-retry policy,
    seeds/randomization, observation baseline/sensitivity grid,
@@ -49,6 +52,9 @@ pooled.
    shifting probe timestamps.
 4. Commit the manifest. Only explicit review may bind its SHA-256 in provenance
    and set `toolroute_provider_trials_authorized` true. That has not happened.
+5. Run the separately labelled six-seed canary, audit its provider-reported
+   token usage and all terminal hashes, then execute only the precommitted main
+   cohort. Submitted requests are retained and never silently replaced.
 
 ## Frozen optional Toxiproxy work
 

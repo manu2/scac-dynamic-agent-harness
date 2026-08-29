@@ -47,18 +47,16 @@ docs/                    design reviews and empirical reports
 ## Current status
 
 Gate G0 (Specification & Threat Model) is complete on branch
-`codex/g0-sst-schema`. ToolRoute v0.4 has passed local engineering checks with
-fresh-context subagents: independent monitor probes, an observable-only primary
-oracle, condition-input/output capture, and verified terminal hashes. These are
-unblinded development diagnostics—not empirical evidence—and do not establish a
-telemetry effect. Gate G1 collector and positive-control code is implemented.
-Timeout and deterministic tool-fault controls pass locally; cgroup-v2 memory
-enforcement must be demonstrated on a delegated Linux cgroup-v2 runner before
-G1 can close. Provider trials remain unauthorized. A narrow ToolRoute-only API
-pilot may proceed before that Linux proof only after its full-checkpoint,
-isolated-runner, tokenizer, observation-calibration, evaluator-defeat,
-frozen-manifest, and provenance-binding requirements pass; this exception does
-not apply to MemoryGovernor, RetryBudget, or a combined study. The current
-ToolRoute risks and next actions are in
-`docs/10_toolroute_v0_4_status_and_next_gate.md` and
-`docs/13_toolroute_api_and_toxiproxy_preflight.md`.
+`codex/g0-sst-schema`. ToolRoute v0.6 is run-ready as a narrow synthetic API
+study: independent full-checkpoint episodes, an observable-only primary oracle,
+precalibrated freshness/noise sensitivity, reservation-first artifact capture,
+and finalization hashes. Fresh-context subagent artifacts and the optional
+Toxiproxy adapter are retained development diagnostics—not empirical evidence.
+
+Provider trials remain deliberately unauthorized. The only remaining ToolRoute
+actions are to select the provider/model and its exact tokenizer, commit the
+completed pilot manifest and analysis plan, bind its hash in provenance through
+an explicit review, and run the separated canary then the frozen cohort. This
+narrow ToolRoute exception does not close G1 globally or apply to
+MemoryGovernor, RetryBudget, or a combined study. See
+`docs/14_toolroute_v0_6_api_run_readiness.md`.

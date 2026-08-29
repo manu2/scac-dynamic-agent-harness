@@ -330,3 +330,19 @@
   and excludes observations older than `fresh_for_ms`. The initial v0.5
   calibration remains preserved but is superseded; v0.6 is the candidate
   frozen observation model.
+
+### 2026-08-30 — ToolRoute v0.6 API-run readiness cleanup
+
+- Reconciled current source and operating documentation to the calibrated
+  ToolRoute v0.6 contract. The reservation-first API episode now records v0.6
+  scenario/oracle identifiers rather than stale v0.4 labels.
+- Added `docs/14_toolroute_v0_6_api_run_readiness.md` as the single operational
+  handoff: a separate six-seed canary, then two new six-seed blocks per chosen
+  model, with independent full-checkpoint decisions and no pooling with the
+  development or Toxiproxy artifacts.
+- Full local verification passed: 95 tests. The two socket-adapter tests were
+  run with local loopback permission only; no external network or provider/API
+  call was made.
+- Provider authorization remains false. Before the first request, select the
+  provider/model and exact tokenizer, commit the completed manifest/analysis
+  plan, and explicitly bind its SHA-256 in `PROVENANCE.json`.

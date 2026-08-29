@@ -12,7 +12,11 @@ state their cohort and measurement boundaries explicitly.
 - `11_scenario_boundaries_and_parallel_work_protocol.md`: scenario ownership,
   artifact isolation, and collaboration rules.
 - `07_toolroute_hardening_issue_ledger.md` and
-  `10_toolroute_v0_4_status_and_next_gate.md`: ToolRoute-specific state only.
+  `14_toolroute_v0_6_api_run_readiness.md`: current ToolRoute-specific state
+  and the authoritative API-run handoff.
+
+`10_toolroute_v0_4_status_and_next_gate.md` is retained as historical
+development context; its v0.4 status does not control the v0.6 API path.
 
 Documents 05 and 06 are preserved historical audit material. Their opening
 corrections control where they conflict with the authoritative documents above;

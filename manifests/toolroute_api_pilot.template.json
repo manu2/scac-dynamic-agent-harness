@@ -33,7 +33,7 @@
   },
   "sensitivity_grid": "FILL_ME",
   "eligible_state_margin_ms": 50.0,
-  "primary_outcome": "observable_monitor_cost_v0.4 policy regret",
+  "primary_outcome": "observable_monitor_cost_v0.6 policy regret",
   "secondary_outcome": "clairvoyant latent cost diagnostic only",
   "inclusion_exclusion": "FILL_ME",
   "analysis_and_power_plan": "FILL_ME"

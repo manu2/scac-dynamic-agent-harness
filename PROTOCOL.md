@@ -36,7 +36,7 @@ scenario's calibration or development artifacts never establish readiness for
 another scenario and are never pooled without an explicitly frozen
 cross-scenario synthesis protocol.
 
-## ToolRoute observation and scoring contract (v0.4 development)
+## ToolRoute observation and scoring contract (v0.6 candidate)
 
 ToolRoute separates latent environment state, independent host-monitor probes,
 and the model-visible SST projection. The primary ToolRoute oracle may use only
@@ -46,7 +46,7 @@ oracle is retained only as a diagnostic ceiling. Every primary scored state must
 pass a predeclared observable-margin calibration before a subject receives it;
 ambiguous states are retained but are not eligible for exact action-agreement
 claims.
-The v0.4 probes are a controlled synthetic observation model, not live host
+The v0.6 probes are a controlled synthetic observation model, not live host
 telemetry; results must be framed accordingly unless a separately frozen,
 calibrated live-monitor protocol is used. Before an API pilot, the observation
 model must specify and test measurement accuracy, latency/freshness, missingness,
