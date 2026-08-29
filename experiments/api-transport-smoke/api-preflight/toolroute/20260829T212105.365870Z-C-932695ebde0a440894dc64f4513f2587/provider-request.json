@@ -1,0 +1,16 @@
+{
+  "adapter": "anthropic_messages_v1",
+  "anthropic_version": "2023-06-01",
+  "body": {
+    "max_tokens": 1024,
+    "messages": [
+      {
+        "content": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: tool_beta, wait, tool_alpha\n=== HOST TELEMETRY [seq=1 kind=full_checkpoint id=6657a362 obs=2022ms fresh=2000ms] ===\n[HARDWARE]\n  memory: cur=UNAVAILABLE max=UNLIMITED headroom=UNAVAILABLE state=UNKNOWN psi_some_avg10=UNAVAILABLE events_delta=UNAVAILABLE\n  cpu: quota=UNLIMITED throttled_usec_delta=UNAVAILABLE psi_some_avg10=UNAVAILABLE state=UNKNOWN\n  disk: free=UNAVAILABLE used_ratio=UNAVAILABLE state=UNKNOWN\n  gpu: available=false (UNAVAILABLE)\n[TOOLS]\n  tool_alpha: window=6 succ=6 consec_fail=0 latency_ewma=139.04ms last_err=NONE circuit=CLOSED age=10ms\n  tool_beta: window=6 succ=4 consec_fail=0 latency_ewma=2141.76ms last_err=NONE circuit=CLOSED age=10ms retry_after=2000ms\n[RUNTIME]\n  step=UNAVAILABLE wall_remaining=UNLIMITED pids=UNAVAILABLE/UNLIMITED network=UNKNOWN last_exit=UNAVAILABLE\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+        "role": "user"
+      }
+    ],
+    "model": "claude-opus-5",
+    "temperature": 0.0
+  },
+  "endpoint": "https://api.anthropic.com/v1/messages"
+}

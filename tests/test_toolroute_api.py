@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 from pathlib import Path
+from urllib.error import HTTPError
 
 from scac_harness.toolroute_api import (
     AnthropicMessagesProvider,
@@ -14,6 +16,7 @@ from scac_harness.toolroute_api import (
     ToolRouteAuthorization,
     ToolRouteObservationModel,
     WhitespaceTokenizer,
+    _safe_provider_error,
     build_toolroute_observation_checkpoint,
 )
 
@@ -115,6 +118,13 @@ def test_provider_request_records_never_include_credentials() -> None:
         assert "secret" not in encoded
         assert "tools" not in encoded
         assert "max" in encoded
+
+
+def test_safe_provider_error_retains_structured_detail_but_redacts_key() -> None:
+    exc = HTTPError("https://example.invalid", 400, "Bad Request", {}, io.BytesIO(b'{"error":{"message":"bad sk-secret"}}'))
+    record = _safe_provider_error(exc, "sk-secret")
+    assert record["http_status"] == 400
+    assert record["provider_error"]["error"]["message"] == "bad [REDACTED]"
 
 
 def test_api_episode_rejects_manifest_not_bound_in_provenance(tmp_path: Path) -> None:

@@ -1,0 +1,5 @@
+{
+  "exception_type": "HTTPError",
+  "http_status": 400,
+  "reason": "Bad Request"
+}

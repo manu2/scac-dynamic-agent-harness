@@ -373,3 +373,18 @@
 - `PROVENANCE.json` binds the manifest SHA-256 and authorizes only those three
   diagnostic calls. Gemini must run first; inspect its terminal artifacts before
   the OpenAI or Anthropic diagnostic. None enters a paper denominator.
+
+### 2026-08-30 — Completed three-call ToolRoute transport smoke
+
+- Gemini 3.7 Flash completed the authorized seed-0/turn-1/C episode: it returned
+  `tool_alpha`, with zero observable and diagnostic regret, 343 input tokens,
+  179 output tokens, normal `STOP`, and six valid finalization hashes. This is
+  an API-path diagnostic, not paper evidence or an A/B/C comparison.
+- GPT-5.6 Terra and Claude Opus 5 each reached their provider endpoint but
+  returned HTTP 400 before a model response. Each attempt retained a sanitized
+  request, terminal `PROVIDER_ERROR`, and six valid hashes; neither is a model
+  behavior result. No retry was issued.
+- Revoked the consumed scoped authorization. Added structured, credential-redacted
+  HTTP error-body capture for a future revised manifest so provider request
+  incompatibilities can be diagnosed without exposing a key. The first smoke's
+  error bodies cannot be reconstructed and are retained unchanged.

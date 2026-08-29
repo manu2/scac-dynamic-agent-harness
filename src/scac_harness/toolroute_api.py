@@ -13,7 +13,7 @@ import json
 import os
 from pathlib import Path
 from typing import Callable, Literal, Mapping, Protocol
-from urllib import request
+from urllib import error, request
 from uuid import uuid4
 
 from scac_harness.events import RawTelemetryEvent
@@ -43,6 +43,8 @@ class Provider(Protocol):
     def complete(self, prompt: str) -> ProviderResponse: ...
 
     def request_record(self, prompt: str) -> Mapping[str, object]: ...
+
+    def error_record(self, exc: Exception) -> Mapping[str, object]: ...
 
 
 @dataclass(frozen=True)
@@ -141,6 +143,9 @@ class OpenAICompatibleProvider:
     def request_record(self, prompt: str) -> Mapping[str, object]:
         return {"adapter": "openai_chat_completions_v1", "endpoint": self.endpoint, "body": self._body(prompt)}
 
+    def error_record(self, exc: Exception) -> Mapping[str, object]:
+        return _safe_provider_error(exc, self._api_key)
+
     def complete(self, prompt: str) -> ProviderResponse:
         body = json.dumps(self._body(prompt)).encode("utf-8")
         req = request.Request(self.endpoint, data=body, method="POST", headers={
@@ -171,6 +176,9 @@ class AnthropicMessagesProvider:
     def request_record(self, prompt: str) -> Mapping[str, object]:
         return {"adapter": "anthropic_messages_v1", "endpoint": self.endpoint, "anthropic_version": self.api_version, "body": self._body(prompt)}
 
+    def error_record(self, exc: Exception) -> Mapping[str, object]:
+        return _safe_provider_error(exc, self._api_key)
+
     def complete(self, prompt: str) -> ProviderResponse:
         req = request.Request(self.endpoint, data=json.dumps(self._body(prompt)).encode("utf-8"), method="POST", headers={
             "x-api-key": self._api_key, "anthropic-version": self.api_version, "content-type": "application/json",
@@ -200,6 +208,9 @@ class GeminiGenerateContentProvider:
     def request_record(self, prompt: str) -> Mapping[str, object]:
         return {"adapter": "gemini_generate_content_v1", "endpoint": self.endpoint, "body": self._body(prompt)}
 
+    def error_record(self, exc: Exception) -> Mapping[str, object]:
+        return _safe_provider_error(exc, self._api_key)
+
     def complete(self, prompt: str) -> ProviderResponse:
         req = request.Request(f"{self.endpoint}?key={self._api_key}", data=json.dumps(self._body(prompt)).encode("utf-8"), method="POST", headers={"content-type": "application/json"})
         with request.urlopen(req, timeout=60) as response:  # nosec B310: explicit authorized provider path
@@ -212,6 +223,32 @@ class GeminiGenerateContentProvider:
         if isinstance(output, int) and isinstance(usage.get("promptTokenCount"), int):
             output -= usage["promptTokenCount"]
         return ProviderResponse(text=text, request_id=payload.get("responseId"), input_tokens=usage.get("promptTokenCount"), output_tokens=output, raw_response=payload)
+
+
+def _safe_provider_error(exc: Exception, api_key: str) -> dict[str, object]:
+    """Retain provider diagnostics while redacting an API key from every field."""
+    def redact(value: object) -> object:
+        if isinstance(value, str):
+            return value.replace(api_key, "[REDACTED]")
+        if isinstance(value, list):
+            return [redact(item) for item in value]
+        if isinstance(value, dict):
+            return {str(key): redact(item) for key, item in value.items()}
+        return value
+
+    record: dict[str, object] = {"exception_type": type(exc).__name__}
+    if isinstance(exc, error.HTTPError):
+        record["http_status"] = exc.code
+        try:
+            raw = exc.read().decode("utf-8", errors="replace")
+            record["provider_error"] = redact(json.loads(raw))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            record["reason"] = redact(str(exc.reason))
+    else:
+        reason = getattr(exc, "reason", None)
+        if isinstance(reason, str):
+            record["reason"] = redact(reason)
+    return record
 
 
 def _health_for(seed: int, turn: int) -> dict[str, ToolHealth]:
@@ -395,15 +432,10 @@ class ToolRouteAPIEpisode:
         except Exception as exc:
             # Do not archive a transport exception's text: some HTTP libraries
             # echo a request URL, and Gemini carries its API key in the query.
-            error = {"exception_type": type(exc).__name__}
-            status = getattr(exc, "code", None)
-            reason = getattr(exc, "reason", None)
-            if isinstance(status, int):
-                error["http_status"] = status
-            if isinstance(reason, str):
-                error["reason"] = reason
-            self._write_once("provider-error.json", error)
-            result = {"accepted": False, "classification": "PROVIDER_ERROR", "provider_error": error}
+            record_error = getattr(provider, "error_record", None)
+            provider_error = dict(record_error(exc)) if callable(record_error) else {"exception_type": type(exc).__name__}
+            self._write_once("provider-error.json", provider_error)
+            result = {"accepted": False, "classification": "PROVIDER_ERROR", "provider_error": provider_error}
             self._write_once("result.json", result); self._finalize(result["classification"])
             return result
         response_record = asdict(response)

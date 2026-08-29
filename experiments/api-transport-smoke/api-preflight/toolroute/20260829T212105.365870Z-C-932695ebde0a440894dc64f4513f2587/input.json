@@ -1,0 +1,117 @@
+{
+  "condition": "C",
+  "option_order": [
+    "tool_beta",
+    "wait",
+    "tool_alpha"
+  ],
+  "prompt": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: tool_beta, wait, tool_alpha\n=== HOST TELEMETRY [seq=1 kind=full_checkpoint id=6657a362 obs=2022ms fresh=2000ms] ===\n[HARDWARE]\n  memory: cur=UNAVAILABLE max=UNLIMITED headroom=UNAVAILABLE state=UNKNOWN psi_some_avg10=UNAVAILABLE events_delta=UNAVAILABLE\n  cpu: quota=UNLIMITED throttled_usec_delta=UNAVAILABLE psi_some_avg10=UNAVAILABLE state=UNKNOWN\n  disk: free=UNAVAILABLE used_ratio=UNAVAILABLE state=UNKNOWN\n  gpu: available=false (UNAVAILABLE)\n[TOOLS]\n  tool_alpha: window=6 succ=6 consec_fail=0 latency_ewma=139.04ms last_err=NONE circuit=CLOSED age=10ms\n  tool_beta: window=6 succ=4 consec_fail=0 latency_ewma=2141.76ms last_err=NONE circuit=CLOSED age=10ms retry_after=2000ms\n[RUNTIME]\n  step=UNAVAILABLE wall_remaining=UNLIMITED pids=UNAVAILABLE/UNLIMITED network=UNKNOWN last_exit=UNAVAILABLE\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "prompt_tokens": 85,
+  "visible_snapshot": {
+    "base_snapshot_id": null,
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "835058060d5738dd57e50c868d5aea7c6904d1a4a23ef664e3ee28d4e75a5ce0",
+        "83951138869546e55be72ef22ca6bd085708103fe0cc5146b1948138f77f9e1b",
+        "1b69ac2f1ae30a09fe72915eaea1d6124253f3786ea65e893502c15e1c8084ea",
+        "45345cc89b997805bd610a5ebc83e5ef9b2df49a687fd54c070b2d3420fa16c3",
+        "89a383ec29bf34c1b9cf6f608782e00bad295bffd7ef72228b3e3ec7aca5a374",
+        "d529d020ea427f0de14ccacc4d4e2d12ed277199ec3d2404874ccc0485738112"
+      ],
+      "tools.tool_beta": [
+        "961b99e990f0ef40f7c3ead97751032d3cb8a482ccaaca53d9c402e924fe2d90",
+        "a8319eb08e995a4853fb30c81e7447c932cd353636d2958e88f6ba1865227d46",
+        "1891fbf230abf920e51f8c64aba3f93419f938b122a4bf90dc12e6f048319179",
+        "066bb1856dc4bcf1d7388fba5464a472cfccbacf84a258b11b3cee60e9d8a0f1",
+        "38a01c87462aad3ae4ee0d805f9d097867dce2332d837654adb0712974d24581",
+        "051a5ce1a164213e530353ef0ca782533cb777c581435243fcb970240704d734"
+      ]
+    },
+    "economics": {},
+    "fresh_for_ms": 2000,
+    "hardware": {
+      "cpu": {
+        "state": "UNKNOWN"
+      },
+      "ephemeral_disk": {
+        "state": "UNKNOWN"
+      },
+      "gpu": {
+        "available": false,
+        "state": "UNAVAILABLE"
+      },
+      "memory": {
+        "state": "UNKNOWN"
+      }
+    },
+    "kind": "full_checkpoint",
+    "observed_at_ms": 2022,
+    "raw_event_hashes": [
+      "45345cc89b997805bd610a5ebc83e5ef9b2df49a687fd54c070b2d3420fa16c3",
+      "89a383ec29bf34c1b9cf6f608782e00bad295bffd7ef72228b3e3ec7aca5a374",
+      "d529d020ea427f0de14ccacc4d4e2d12ed277199ec3d2404874ccc0485738112",
+      "066bb1856dc4bcf1d7388fba5464a472cfccbacf84a258b11b3cee60e9d8a0f1",
+      "38a01c87462aad3ae4ee0d805f9d097867dce2332d837654adb0712974d24581",
+      "051a5ce1a164213e530353ef0ca782533cb777c581435243fcb970240704d734"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "runtime": {
+      "network": "UNKNOWN"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 1,
+    "snapshot_id": "6657a36271f1c701281c658524167e4092606805bc2401067c5afb7b329e7af5",
+    "subsystem_observed_at_ms": {
+      "tool_span": 2012
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 139.04,
+        "state": "OK",
+        "successes": 6,
+        "window_n": 6
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 2,
+        "history": [
+          true,
+          true,
+          true,
+          false,
+          false,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 2141.76,
+        "retry_after_ms": 2000,
+        "state": "OK",
+        "successes": 4,
+        "window_n": 6
+      }
+    },
+    "trajectory_id": "toolroute-observation-0-1",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}
