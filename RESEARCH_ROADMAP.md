@@ -62,6 +62,13 @@ Every snapshot enforces:
   with a frozen delimiter. Open limitations and the next gate are retained in
   `docs/07_toolroute_hardening_issue_ledger.md` and
   `docs/10_toolroute_v0_4_status_and_next_gate.md`.
+- **Toxiproxy development diagnostic (Frozen optional):** one condition-C fresh-subagent action
+  selected the route whose three pre-decision monitor spans were healthy and
+  low-latency, but the later real proxied action returned a connection error
+  while the observable snapshot oracle assigned zero regret. This retained
+  local result tests socket-backed end-to-end capture only; it does not alter
+  ToolRoute API readiness or provide paper evidence. Its cross-session
+  lifecycle defect is TR-025; do not spend further first-paper effort there.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
 - **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,

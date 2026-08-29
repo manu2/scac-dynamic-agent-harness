@@ -41,10 +41,16 @@ pooled.
    inclusion/exclusion rules, and analysis/power plan in a pilot manifest.
 3. Retain model-free calibration for the frozen baseline and each declared
    sensitivity point; verify the observable-oracle margin for eligible states.
+   The v0.6 calibration has now done this across six seeds and four turns:
+   baseline, 10% label error, 10% event loss, and 500 ms delivery age each
+   retain all 24 states with an 80 ms minimum margin; 2.5 s delivery age
+   excludes all 24 states rather than scoring stale telemetry. The earlier
+   v0.5 calibration is retained but superseded because it hid delivery age by
+   shifting probe timestamps.
 4. Commit the manifest. Only explicit review may bind its SHA-256 in provenance
    and set `toolroute_provider_trials_authorized` true. That has not happened.
 
-## Optional local Toxiproxy validation
+## Frozen optional Toxiproxy work
 
 Toxiproxy is a realism/adapter validation, not a prerequisite or substitute for
 the causal synthetic cohort. It places real local HTTP services behind local
@@ -53,10 +59,8 @@ the same host event the reducer consumes. It tests collection over sockets, not
 whether the model sees different information than from a correctly rendered
 synthetic monitor.
 
-Once available locally: start two loopback services and `toxiproxy-server`,
-precommit a proxy schedule, capture no-fault and injected-fault spans, retain
-the proxy schedule/spans/checkpoint/final hashes, and verify reducer-renderer
-agreement. Do not combine these adapter records with synthetic API outcomes.
+No further Toxiproxy work is planned for the first paper. Do not combine these
+adapter records with synthetic API outcomes.
 
 The first completed local validation used Shopify Toxiproxy v2.12.0 for macOS
 ARM, downloaded to a temporary directory and SHA-256-verified against the
@@ -68,7 +72,7 @@ script finalization bug after completing its telemetry work, and the third is
 the clean completed run. All three are finalized and hash-valid. Homebrew was
 not used and no system ownership or permission was changed.
 
-## Fresh-subagent end-to-end smoke
+## Frozen fresh-subagent end-to-end smoke
 
 `scripts/toxiproxy_subagent_smoke.py` is a separate development-only,
 one-decision transport-strategy smoke. `start` launches two loopback proxy
@@ -76,6 +80,7 @@ routes, precommits a 300 ms alpha latency versus a healthy beta route, captures
 three real monitor spans per route, and freezes the exact A/B/C subject prompt.
 `submit` accepts a fresh subject's exact action label, executes that action
 through the same still-running proxy, retains its action span, closes the local
-processes, and finalizes the artifact. `abort` closes a setup-only start without
-inventing a subject response. Artifacts are under
+processes, and finalizes the artifact. A cross-session run exposed backend
+lifecycle reaping between start and submit (TR-025), so this path is frozen
+rather than repaired for the first paper. Artifacts are under
 `experiments/dev-smoke-toxiproxy/` and are never paper or API-cohort evidence.

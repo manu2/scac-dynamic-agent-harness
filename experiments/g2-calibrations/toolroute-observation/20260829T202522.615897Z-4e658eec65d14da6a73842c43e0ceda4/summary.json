@@ -1,0 +1,46 @@
+{
+  "baseline": {
+    "eligible_states": 24,
+    "excluded_states": 0,
+    "mean_fixed_policy_regret": {
+      "tool_alpha": 5894.218194444445,
+      "tool_beta": 5236.012731481482,
+      "wait": 8948.05912037037
+    },
+    "minimum_margin_ms": 80.0,
+    "states": 24
+  },
+  "delivery_delay_500ms": {
+    "eligible_states": 24,
+    "excluded_states": 0,
+    "mean_fixed_policy_regret": {
+      "tool_alpha": 5894.218194444445,
+      "tool_beta": 5236.012731481482,
+      "wait": 8948.05912037037
+    },
+    "minimum_margin_ms": 80.0,
+    "states": 24
+  },
+  "event_drop_10pct": {
+    "eligible_states": 24,
+    "excluded_states": 0,
+    "mean_fixed_policy_regret": {
+      "tool_alpha": 3685.150886243386,
+      "tool_beta": 5424.676203703704,
+      "wait": 9113.359636243385
+    },
+    "minimum_margin_ms": 80.0,
+    "states": 24
+  },
+  "label_error_10pct": {
+    "eligible_states": 24,
+    "excluded_states": 0,
+    "mean_fixed_policy_regret": {
+      "tool_alpha": 4254.647638888889,
+      "tool_beta": 5485.331064814815,
+      "wait": 8396.451527777777
+    },
+    "minimum_margin_ms": 80.0,
+    "states": 24
+  }
+}

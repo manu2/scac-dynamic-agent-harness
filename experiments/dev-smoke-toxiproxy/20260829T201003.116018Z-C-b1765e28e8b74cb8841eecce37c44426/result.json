@@ -1,0 +1,20 @@
+{
+  "action": "tool_beta",
+  "action_event": {
+    "event_id": "cb36a47e399a665476b0786b519939345548073770cc58f9249fa3aebb1191cf",
+    "payload": {
+      "error_class": "CONNECTION_ERROR",
+      "latency_ms": 22,
+      "success": false,
+      "tool_id": "tool_beta"
+    },
+    "source": "host_http_span_v1",
+    "timestamp_ms": 2000,
+    "topic": "tool_span"
+  },
+  "classification": "COMPLETED",
+  "policy_regret": 0.0,
+  "response_text": "tool_beta",
+  "subject_id": "/root/toxiproxy_c_subject",
+  "success": false
+}

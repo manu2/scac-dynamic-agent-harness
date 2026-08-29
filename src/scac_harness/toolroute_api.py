@@ -58,7 +58,7 @@ class ToolRouteObservationModel:
     must remain outside the primary cohort unless predeclared there.
     """
 
-    version: str = "synthetic_host_probe_v0.5"
+    version: str = "synthetic_host_probe_v0.6"
     probes_per_tool: int = 3
     success_label_error_probability: float = 0.0
     event_drop_probability: float = 0.0
@@ -169,6 +169,44 @@ def _task(options: tuple[Action, ...]) -> str:
     )
 
 
+def build_toolroute_observation_checkpoint(
+    *, seed: int, turn: int, observation_model: ToolRouteObservationModel,
+) -> tuple[dict[str, object], list[RawTelemetryEvent]]:
+    """Build a side-effect-free full checkpoint for model-free calibration."""
+    if turn not in range(4):
+        raise ValueError("ToolRoute observation turn must be in [0, 3]")
+    reducer, prior = DeterministicReducer(), None
+    all_events: list[RawTelemetryEvent] = []
+    snapshot: dict[str, object] | None = None
+    for observed_turn in range(turn + 1):
+        events: list[RawTelemetryEvent] = []
+        for index, (tool, health) in enumerate(sorted(_health_for(seed, observed_turn).items())):
+            for probe in range(observation_model.probes_per_tool):
+                draw = int(hashlib.sha256(f"{seed}:monitor:{observed_turn}:{tool}:{probe}".encode()).hexdigest(), 16) / 2**256
+                success = draw < health.success_probability
+                flip = int(hashlib.sha256(f"{seed}:monitor-label:{observed_turn}:{tool}:{probe}".encode()).hexdigest(), 16) / 2**256
+                if flip < observation_model.success_label_error_probability:
+                    success = not success
+                drop = int(hashlib.sha256(f"{seed}:monitor-drop:{observed_turn}:{tool}:{probe}".encode()).hexdigest(), 16) / 2**256
+                if drop < observation_model.event_drop_probability:
+                    continue
+                events.append(RawTelemetryEvent(
+                    timestamp_ms=(observed_turn + 1) * 1000 + index * 10 + probe,
+                    source=observation_model.version, topic="tool_span",
+                    payload={"tool_id": tool, "latency_ms": health.latency_ms, "success": success,
+                             "error_class": "HTTP_503" if not success else "NONE", "retry_after_ms": health.retry_after_ms},
+                ))
+        all_events.extend(events)
+        snapshot = reducer.reduce(
+            trajectory_id=f"toolroute-observation-{seed}-{turn}", seq=observed_turn, events=events,
+            prior_snapshot=prior, kind="full_checkpoint",
+            observed_at_ms=(observed_turn + 1) * 1000 + 22 + observation_model.delivery_delay_ms,
+        )
+        prior = snapshot
+    assert snapshot is not None
+    return snapshot, all_events
+
+
 class ToolRouteAPIEpisode:
     """One independent, full-checkpoint provider decision episode."""
 
@@ -223,36 +261,9 @@ class ToolRouteAPIEpisode:
             temporary.unlink(missing_ok=True)
 
     def _full_checkpoint(self) -> tuple[dict[str, object], list[RawTelemetryEvent]]:
-        reducer, prior = DeterministicReducer(), None
-        all_events: list[RawTelemetryEvent] = []
-        snapshot: dict[str, object] | None = None
-        for observed_turn in range(self.turn + 1):
-            events: list[RawTelemetryEvent] = []
-            for index, (tool, health) in enumerate(sorted(_health_for(self.seed, observed_turn).items())):
-                for probe in range(self.observation_model.probes_per_tool):
-                    draw = int(hashlib.sha256(f"{self.seed}:monitor:{observed_turn}:{tool}:{probe}".encode()).hexdigest(), 16) / 2**256
-                    success = draw < health.success_probability
-                    flip = int(hashlib.sha256(f"{self.seed}:monitor-label:{observed_turn}:{tool}:{probe}".encode()).hexdigest(), 16) / 2**256
-                    if flip < self.observation_model.success_label_error_probability:
-                        success = not success
-                    drop = int(hashlib.sha256(f"{self.seed}:monitor-drop:{observed_turn}:{tool}:{probe}".encode()).hexdigest(), 16) / 2**256
-                    if drop < self.observation_model.event_drop_probability:
-                        continue
-                    events.append(RawTelemetryEvent(
-                        timestamp_ms=(observed_turn + 1) * 1000 + index * 10 + probe + self.observation_model.delivery_delay_ms,
-                        source=self.observation_model.version, topic="tool_span",
-                        payload={"tool_id": tool, "latency_ms": health.latency_ms, "success": success,
-                                 "error_class": "HTTP_503" if not success else "NONE", "retry_after_ms": health.retry_after_ms},
-                    ))
-            all_events.extend(events)
-            snapshot = reducer.reduce(
-                trajectory_id=f"toolroute-api-{self.seed}-{self.turn}", seq=observed_turn, events=events,
-                prior_snapshot=prior, kind="full_checkpoint",
-                observed_at_ms=(observed_turn + 1) * 1000 + 22 + self.observation_model.delivery_delay_ms,
-            )
-            prior = snapshot
-        assert snapshot is not None
-        return snapshot, all_events
+        return build_toolroute_observation_checkpoint(
+            seed=self.seed, turn=self.turn, observation_model=self.observation_model,
+        )
 
     def _neutral_prompt(self, task: str, target_tokens: int) -> str:
         prefix = task + "[NEUTRAL STRUCTURAL CONTROL]\n"

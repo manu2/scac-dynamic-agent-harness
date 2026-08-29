@@ -292,3 +292,41 @@
   1.6 ms and rendered that projection correctly. It was finalized as
   `ABORTED_DEVELOPMENT` before any subject was created; no fabricated choice was
   submitted. The complete local test suite passed (94 tests).
+
+### 2026-08-30 — One-decision Toxiproxy fresh-subagent smoke
+
+- Ran exactly one development-only condition-C Toxiproxy attempt with one
+  context-free subject and no provider/API call. The initial sandboxed launch
+  was denied loopback binding before trial reservation; the same command then
+  started with local loopback permission.
+- The retained monitor spans observed alpha latencies of 304, 304, and 303 ms
+  and beta latencies of 1, 1, and 1 ms. The subject selected `tool_beta`.
+- The subsequent real proxied beta action did not succeed: it produced a 22 ms
+  `CONNECTION_ERROR`. The finalized result classified the attempt `COMPLETED`
+  with `success: false` and observable `policy_regret: 0.0`.
+- `host.json`, `input.json`, `manifest.json`, and `result.json` all match their
+  hashes in `finalization.json`. This socket-backed smoke remains development
+  evidence only and is not a paper or provider-cohort result.
+
+### 2026-08-30 — Toxiproxy scope frozen
+
+- Reviewed the cross-session C smoke: backend logs contain the six monitor
+  requests but no beta action request, establishing that the connection error
+  was caused by child-process lifecycle reaping, not an exogenous route fault.
+- Recorded TR-025 and froze Toxiproxy as an optional adapter prototype. Its
+  code and retained attempts remain for provenance, but no repair or further
+  collection is in scope for the first ToolRoute paper.
+
+### 2026-08-30 — ToolRoute v0.6 synthetic observation calibration
+
+- Added retained model-free six-seed × four-turn calibration under
+  `experiments/g2-calibrations/toolroute-observation/`, covering baseline,
+  10% monitor-label error, 10% event loss, 500 ms delivery age, and 2.5 s
+  stale delivery. Fixed alpha, fixed beta, and fixed wait policies all retain
+  positive mean observable regret in every eligible configuration.
+- Corrected a discovered v0.5 freshness semantic error: delivery delay had
+  shifted both event and checkpoint timestamps, concealing age. v0.6 preserves
+  the probe timestamp, advances checkpoint delivery time, renders tool age,
+  and excludes observations older than `fresh_for_ms`. The initial v0.5
+  calibration remains preserved but is superseded; v0.6 is the candidate
+  frozen observation model.

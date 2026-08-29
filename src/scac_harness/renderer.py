@@ -107,6 +107,9 @@ def render_tier2_envelope(snapshot: dict[str, Any], max_chars: int = 2000) -> st
     tools = snapshot.get("tools", {})
     if tools:
         tool_lines: list[str] = ["[TOOLS]"]
+        tool_observed = snapshot.get("subsystem_observed_at_ms", {}).get("tool_span")
+        tool_age_ms = (obs_ms - tool_observed) if isinstance(obs_ms, int) and isinstance(tool_observed, int) else None
+        tool_age_str = f" age={tool_age_ms}ms" if tool_age_ms is not None else " age=UNAVAILABLE"
         for tool_id in sorted(tools.keys()):
             t = tools[tool_id]
             win = t.get("window_n")
@@ -123,7 +126,7 @@ def render_tier2_envelope(snapshot: dict[str, Any], max_chars: int = 2000) -> st
             retry_str = f" retry_after={retry_ms}ms" if retry_ms is not None else ""
             tool_lines.append(
                 f"  {tool_id}: window={win_str} succ={succ_str} consec_fail={consec_str} "
-                f"latency_ewma={ewma_str} last_err={last_err} circuit={circuit}{retry_str}"
+                f"latency_ewma={ewma_str} last_err={last_err} circuit={circuit}{tool_age_str}{retry_str}"
             )
         lines.extend(tool_lines)
 

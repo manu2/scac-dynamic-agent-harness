@@ -11,6 +11,7 @@ from scac_harness.toolroute_api import (
     ToolRouteAuthorization,
     ToolRouteObservationModel,
     WhitespaceTokenizer,
+    build_toolroute_observation_checkpoint,
 )
 
 
@@ -112,6 +113,15 @@ def test_observation_model_is_versioned_and_supports_nonzero_noise(tmp_path: Pat
     manifest = json.loads((episode.directory / "manifest.json").read_text())
     assert manifest["observation_model"]["success_label_error_probability"] == 0.25
     assert episode.snapshot["observed_at_ms"] == 2122
+    assert episode.snapshot["subsystem_observed_at_ms"]["tool_span"] == 2012
+
+
+def test_side_effect_free_checkpoint_builder_matches_episode_snapshot(tmp_path: Path) -> None:
+    model = ToolRouteObservationModel(delivery_delay_ms=100)
+    expected, events = build_toolroute_observation_checkpoint(seed=50, turn=1, observation_model=model)
+    episode = ToolRouteAPIEpisode(seed=50, turn=1, condition="C", experiments_root=tmp_path, tokenizer=_tokenizer(), model_id="mock", provider_label="mock", observation_model=model)
+    assert episode.snapshot == expected
+    assert [event.to_dict() for event in episode.raw_events] == [event.to_dict() for event in events]
 
 
 def test_fixed_actions_are_defeated_by_the_balanced_schedule(tmp_path: Path) -> None:
