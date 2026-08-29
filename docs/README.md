@@ -12,7 +12,7 @@ state their cohort and measurement boundaries explicitly.
 - `11_scenario_boundaries_and_parallel_work_protocol.md`: scenario ownership,
   artifact isolation, and collaboration rules.
 - `07_toolroute_hardening_issue_ledger.md` and
-  `14_toolroute_v0_6_api_run_readiness.md`: current ToolRoute-specific state
+  `15_toolroute_api_handover_2026-08-30.md`: current ToolRoute-specific state
   and the authoritative API-run handoff.
 
 `10_toolroute_v0_4_status_and_next_gate.md` is retained as historical

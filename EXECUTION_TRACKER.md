@@ -388,3 +388,11 @@
   HTTP error-body capture for a future revised manifest so provider request
   incompatibilities can be diagnosed without exposing a key. The first smoke's
   error bodies cannot be reconstructed and are retained unchanged.
+
+### 2026-08-30 — Handover freeze
+
+- Added `docs/15_toolroute_api_handover_2026-08-30.md` as the controlling
+  self-contained handoff. It names each attempted API artifact, records the
+  valid Gemini diagnostic and two pre-inference failures, authorizations,
+  immutable-artifact rules, exact next sequence, and a ready-to-paste handover
+  prompt for a fresh agent.

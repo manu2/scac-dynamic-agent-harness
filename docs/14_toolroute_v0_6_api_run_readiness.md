@@ -1,7 +1,8 @@
 # ToolRoute v0.6 API Run Readiness
 
-**Status:** code and synthetic calibration verified; no provider request has
-been made or authorized.
+**Status:** superseded as the live handoff by
+`docs/15_toolroute_api_handover_2026-08-30.md`. One C-only transport smoke per
+provider has been attempted and finalized; no paper cohort is authorized.
 
 ## What is complete
 
