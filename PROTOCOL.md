@@ -29,6 +29,13 @@ Only model-visible state changes.
 3. RetryBudget: seeded outage/quota state with retry/wait/fallback/checkpoint
    actions; score utility, dominated retries, violations, and premature exit.
 
+Scenario-specific action semantics, oracle assumptions, artifact namespaces,
+and readiness must be maintained separately under the scenario-boundary
+protocol in `docs/11_scenario_boundaries_and_parallel_work_protocol.md`. A
+scenario's calibration or development artifacts never establish readiness for
+another scenario and are never pooled without an explicitly frozen
+cross-scenario synthesis protocol.
+
 ## ToolRoute observation and scoring contract (v0.4 development)
 
 ToolRoute separates latent environment state, independent host-monitor probes,

@@ -200,3 +200,17 @@
   ledger and the complete decision record are in
   `docs/07_toolroute_hardening_issue_ledger.md` and
   `docs/10_toolroute_v0_4_status_and_next_gate.md`.
+
+### 2026-08-29 — Scenario-isolation protocol for parallel work
+
+- Established `docs/11_scenario_boundaries_and_parallel_work_protocol.md` as
+  the authoritative separation between common harness invariants and
+  scenario-owned design. ToolRoute evidence and open items do not transfer to
+  RetryBudget or MemoryGovernor.
+- New G2 calibration artifacts are now written below
+  `experiments/g2-calibrations/<scenario>/`; existing artifacts were preserved
+  in place and are not migrated or rewritten.
+- RetryBudget remains **calibration-only**. Its current v0.1 simulator advances
+  after `wait`, permits a high-utility unconditional fallback, and uses a
+  coarse binary regret oracle. Those semantics require a separate design review
+  and evaluator-defeat tests before any fresh-subagent or provider trajectory.

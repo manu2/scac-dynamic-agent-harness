@@ -83,16 +83,22 @@ Injected immediately before a model reasoning step:
   step=3 wall_remaining=54000ms pids=4/64 network=ENABLED last_exit=NONE(code=0)
 [ECONOMICS]
   context_tokens_rem=118000 traj_tokens=3400 cost_usd=$0.0125 budget_rem_usd=$9.9875 rate_limit_rem=96 rate_limit_reset_ms=54000ms state=OK
-[HOST_CONSTRAINTS]
-  - avoid new allocations above 16 MiB
 =========================================
 ```
 
 ---
 
-## 4. Deterministic Severity Classification and Constraint Rules
+`recommended_constraints` may exist in a host-side snapshot for enforcement or
+audit, but must never be rendered into a model-visible Tier 2 envelope. The
+renderer is descriptive-only: it may state measured values, freshness, and
+state labels, but must not tell the model which action to take.
 
-All severity classifications and host constraints are derived strictly through frozen deterministic logic within the host reducer. **Under no circumstances may an LLM generate or alter severity labels.**
+## 4. Deterministic Severity Classification Rules
+
+All severity classifications and host-side constraints are derived strictly
+through frozen deterministic logic within the host reducer. **Under no
+circumstances may an LLM generate or alter severity labels.** Host-side
+constraints are not model-visible evidence.
 
 ### 4.1 Memory State Rules
 - `CRITICAL`: \(H_{headroom} < 0.05\) OR \(\Delta(\text{oom}) + \Delta(\text{oom\_kill}) > 0\) OR \(\text{current\_bytes} \ge \text{max\_bytes}\).

@@ -218,7 +218,7 @@ def record_calibration(
     The directory is reserved before the first action. The caller receives the
     artifact path only after its manifest and complete action log are written.
     """
-    parent = Path(experiments_root) / "g2-calibrations"
+    parent = Path(experiments_root) / "g2-calibrations" / "toolroute"
     parent.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     from uuid import uuid4

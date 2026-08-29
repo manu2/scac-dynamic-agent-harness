@@ -38,6 +38,12 @@ Every snapshot enforces:
   calibrated without model calls. The local MemoryGovernor is explicitly virtual
   and makes no cgroup-enforcement claim. Clean-container reproduction and
   context-isolated leakage/evaluator-defeat reviews remain pending.
+- **Scenario isolation:** each scenario has an independent action/oracle,
+  calibration, development, and provider-readiness contract. ToolRoute v0.4
+  hardening does not close RetryBudget or MemoryGovernor readiness. New
+  artifacts are namespaced under `experiments/<stage>/<scenario>/`; historical
+  records remain immutable in their original paths. The collaboration contract
+  is `docs/11_scenario_boundaries_and_parallel_work_protocol.md`.
 - **Development smoke path:** offline A/B/C ToolRoute messages may be supplied
   to fresh-context Codex subagents after complete host-side capture. These are
   engineering smoke tests only: shared workspace access prevents them from

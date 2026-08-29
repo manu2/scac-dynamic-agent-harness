@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+import re
 from uuid import uuid4
 
 
@@ -15,7 +16,9 @@ def archive_calibration(
     trajectory: list[dict[str, object]],
 ) -> Path:
     """Atomically reserve and archive one deterministic calibration trajectory."""
-    parent = Path(experiments_root) / "g2-calibrations"
+    if not re.fullmatch(r"[a-z0-9][a-z0-9_-]*", scenario):
+        raise ValueError("scenario must be a lowercase artifact namespace")
+    parent = Path(experiments_root) / "g2-calibrations" / scenario
     parent.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     directory = parent / f"{stamp}-{scenario}-{uuid4().hex}"
