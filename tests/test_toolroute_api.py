@@ -5,6 +5,9 @@ import json
 from pathlib import Path
 
 from scac_harness.toolroute_api import (
+    AnthropicMessagesProvider,
+    GeminiGenerateContentProvider,
+    OpenAICompatibleProvider,
     ProviderResponse,
     Tokenizer,
     ToolRouteAPIEpisode,
@@ -22,6 +25,15 @@ class RecordingProvider:
     def complete(self, prompt: str) -> ProviderResponse:
         self.prompts.append(prompt)
         return ProviderResponse(self.response, request_id="mock-1", input_tokens=9, output_tokens=1)
+
+    def request_record(self, prompt: str) -> dict[str, object]:
+        return {"adapter": "test", "endpoint": "https://example.invalid", "body": {"prompt": prompt}}
+
+
+class FailingProvider(RecordingProvider):
+    def complete(self, prompt: str) -> ProviderResponse:
+        self.prompts.append(prompt)
+        raise RuntimeError("simulated provider outage")
 
 
 def _tokenizer() -> Tokenizer:
@@ -63,6 +75,7 @@ def test_api_episode_captures_raw_response_and_scores_visible_oracle(tmp_path: P
     assert result["accepted"] is True
     assert result["policy_regret"] == 0
     assert json.loads((episode.directory / "provider-response.json").read_text())["text"] == "tool_beta\n"
+    assert json.loads((episode.directory / "provider-request.json").read_text())["body"]["prompt"] == episode.prompt
     finalization = json.loads((episode.directory / "finalization.json").read_text())
     assert finalization["classification"] == "COMPLETED"
     for filename, digest in finalization["artifact_sha256"].items():
@@ -74,6 +87,31 @@ def test_api_episode_archives_malformed_provider_response(tmp_path: Path) -> Non
     result = episode.run(RecordingProvider("choose tool_beta"), authorization=_authorization(tmp_path))
     assert result["classification"] == "MALFORMED_PROVIDER_RESPONSE"
     assert (episode.directory / "finalization.json").exists()
+
+
+def test_api_episode_finalizes_provider_exception_with_request_provenance(tmp_path: Path) -> None:
+    episode = ToolRouteAPIEpisode(seed=50, turn=1, condition="A", experiments_root=tmp_path, tokenizer=_tokenizer(), model_id="mock", provider_label="mock")
+    result = episode.run(FailingProvider("unused"), authorization=_authorization(tmp_path))
+    assert result["classification"] == "PROVIDER_ERROR"
+    assert (episode.directory / "provider-request.json").exists()
+    assert (episode.directory / "provider-error.json").exists()
+    finalization = json.loads((episode.directory / "finalization.json").read_text())
+    assert "provider-error.json" in finalization["artifact_sha256"]
+    assert "message" not in result["provider_error"]
+
+
+def test_provider_request_records_never_include_credentials() -> None:
+    prompt = "choose tool_alpha"
+    providers = (
+        OpenAICompatibleProvider(endpoint="https://api.openai.example/v1/chat/completions", api_key="openai-secret", model="model"),
+        AnthropicMessagesProvider(api_key="anthropic-secret", model="model", api_version="2023-06-01"),
+        GeminiGenerateContentProvider(api_key="gemini-secret", model="model"),
+    )
+    for provider in providers:
+        encoded = json.dumps(provider.request_record(prompt))
+        assert "secret" not in encoded
+        assert "tools" not in encoded
+        assert "max" in encoded
 
 
 def test_api_episode_rejects_manifest_not_bound_in_provenance(tmp_path: Path) -> None:

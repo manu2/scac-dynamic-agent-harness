@@ -36,8 +36,10 @@ pooled.
 ## Remaining authorization actions
 
 1. Select provider/model and obtain its exact tokenizer/version. The run must
-   use an adapter that matches that provider's documented API; the currently
-   included dependency-free adapter is OpenAI-compatible only.
+   use an adapter that matches that provider's documented API. Dependency-free,
+   tool-less adapters for OpenAI Chat Completions, Anthropic Messages, and
+   Gemini GenerateContent are implemented and locally tested; credentials and
+   model selection remain external to the repository.
 2. Copy and complete `manifests/toolroute_api_pilot.template.json`, then freeze
    model/version, tokenizer/version, parameters, parser, no-retry policy,
    seeds/randomization, observation baseline/sensitivity grid,

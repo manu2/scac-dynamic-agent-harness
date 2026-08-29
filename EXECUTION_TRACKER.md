@@ -346,3 +346,17 @@
 - Provider authorization remains false. Before the first request, select the
   provider/model and exact tokenizer, commit the completed manifest/analysis
   plan, and explicitly bind its SHA-256 in `PROVENANCE.json`.
+
+### 2026-08-30 — ToolRoute API provenance and provider-adapter hardening
+
+- Closed TR-027: an API transport exception now writes a terminal
+  `PROVIDER_ERROR` result and finalization hashes rather than leaving a reserved
+  directory incomplete. The runner records the sanitized provider request and
+  raw provider JSON response; exception text is deliberately excluded to avoid
+  credential-bearing URL leakage.
+- Added local, tool-less protocol adapters for OpenAI Chat Completions,
+  Anthropic Messages, and Gemini GenerateContent. Each exposes its full
+  request metadata without credentials and captures provider-reported input
+  and output usage. No adapter was invoked against a remote endpoint.
+- Full verification passed: 96 tests, including the two loopback-only adapter
+  tests. No provider/API calls were made and authorization remains false.

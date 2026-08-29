@@ -34,12 +34,15 @@ class ProviderResponse:
     request_id: str | None = None
     input_tokens: int | None = None
     output_tokens: int | None = None
+    raw_response: Mapping[str, object] | None = None
 
 
 class Provider(Protocol):
     """A deliberately tool-less provider interface."""
 
     def complete(self, prompt: str) -> ProviderResponse: ...
+
+    def request_record(self, prompt: str) -> Mapping[str, object]: ...
 
 
 @dataclass(frozen=True)
@@ -119,15 +122,19 @@ class ToolRouteAuthorization:
 class OpenAICompatibleProvider:
     """Small dependency-free chat-completions adapter for a later authorized run."""
 
-    def __init__(self, *, endpoint: str, api_key: str, model: str, temperature: float = 0.0) -> None:
+    def __init__(self, *, endpoint: str, api_key: str, model: str, temperature: float = 0.0, max_output_tokens: int = 1024) -> None:
         self.endpoint, self._api_key, self.model, self.temperature = endpoint, api_key, model, temperature
+        self.max_output_tokens = max_output_tokens
+
+    def _body(self, prompt: str) -> dict[str, object]:
+        return {"model": self.model, "temperature": self.temperature, "max_completion_tokens": self.max_output_tokens,
+                "messages": [{"role": "user", "content": prompt}]}
+
+    def request_record(self, prompt: str) -> Mapping[str, object]:
+        return {"adapter": "openai_chat_completions_v1", "endpoint": self.endpoint, "body": self._body(prompt)}
 
     def complete(self, prompt: str) -> ProviderResponse:
-        body = json.dumps({
-            "model": self.model,
-            "temperature": self.temperature,
-            "messages": [{"role": "user", "content": prompt}],
-        }).encode("utf-8")
+        body = json.dumps(self._body(prompt)).encode("utf-8")
         req = request.Request(self.endpoint, data=body, method="POST", headers={
             "Authorization": f"Bearer {self._api_key}", "Content-Type": "application/json",
         })
@@ -136,8 +143,67 @@ class OpenAICompatibleProvider:
         usage = payload.get("usage", {})
         return ProviderResponse(
             text=str(payload["choices"][0]["message"]["content"]),
-            request_id=payload.get("id"), input_tokens=usage.get("prompt_tokens"), output_tokens=usage.get("completion_tokens"),
+            request_id=payload.get("id"), input_tokens=usage.get("prompt_tokens"), output_tokens=usage.get("completion_tokens"), raw_response=payload,
         )
+
+
+class AnthropicMessagesProvider:
+    """Dependency-free Anthropic Messages adapter; tools are never supplied."""
+
+    endpoint = "https://api.anthropic.com/v1/messages"
+
+    def __init__(self, *, api_key: str, model: str, api_version: str, temperature: float = 0.0, max_output_tokens: int = 1024) -> None:
+        self._api_key, self.model, self.api_version = api_key, model, api_version
+        self.temperature, self.max_output_tokens = temperature, max_output_tokens
+
+    def _body(self, prompt: str) -> dict[str, object]:
+        return {"model": self.model, "max_tokens": self.max_output_tokens, "temperature": self.temperature,
+                "messages": [{"role": "user", "content": prompt}]}
+
+    def request_record(self, prompt: str) -> Mapping[str, object]:
+        return {"adapter": "anthropic_messages_v1", "endpoint": self.endpoint, "anthropic_version": self.api_version, "body": self._body(prompt)}
+
+    def complete(self, prompt: str) -> ProviderResponse:
+        req = request.Request(self.endpoint, data=json.dumps(self._body(prompt)).encode("utf-8"), method="POST", headers={
+            "x-api-key": self._api_key, "anthropic-version": self.api_version, "content-type": "application/json",
+        })
+        with request.urlopen(req, timeout=60) as response:  # nosec B310: explicit authorized provider path
+            payload = json.loads(response.read().decode("utf-8"))
+        content = payload.get("content", [])
+        text = "".join(str(block.get("text", "")) for block in content if isinstance(block, Mapping) and block.get("type") == "text")
+        usage = payload.get("usage", {})
+        return ProviderResponse(text=text, request_id=payload.get("id"), input_tokens=usage.get("input_tokens"), output_tokens=usage.get("output_tokens"), raw_response=payload)
+
+
+class GeminiGenerateContentProvider:
+    """Dependency-free Gemini REST adapter; tools and server-side state are omitted."""
+
+    def __init__(self, *, api_key: str, model: str, temperature: float = 0.0, max_output_tokens: int = 1024) -> None:
+        self._api_key, self.model, self.temperature, self.max_output_tokens = api_key, model, temperature, max_output_tokens
+
+    @property
+    def endpoint(self) -> str:
+        return f"https://generativelanguage.googleapis.com/v1beta/models/{self.model}:generateContent"
+
+    def _body(self, prompt: str) -> dict[str, object]:
+        return {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
+                "generationConfig": {"temperature": self.temperature, "maxOutputTokens": self.max_output_tokens}}
+
+    def request_record(self, prompt: str) -> Mapping[str, object]:
+        return {"adapter": "gemini_generate_content_v1", "endpoint": self.endpoint, "body": self._body(prompt)}
+
+    def complete(self, prompt: str) -> ProviderResponse:
+        req = request.Request(f"{self.endpoint}?key={self._api_key}", data=json.dumps(self._body(prompt)).encode("utf-8"), method="POST", headers={"content-type": "application/json"})
+        with request.urlopen(req, timeout=60) as response:  # nosec B310: explicit authorized provider path
+            payload = json.loads(response.read().decode("utf-8"))
+        candidates = payload.get("candidates", [])
+        parts = candidates[0].get("content", {}).get("parts", []) if candidates and isinstance(candidates[0], Mapping) else []
+        text = "".join(str(part.get("text", "")) for part in parts if isinstance(part, Mapping) and not part.get("thought", False))
+        usage = payload.get("usageMetadata", {})
+        output = usage.get("totalTokenCount")
+        if isinstance(output, int) and isinstance(usage.get("promptTokenCount"), int):
+            output -= usage["promptTokenCount"]
+        return ProviderResponse(text=text, request_id=payload.get("responseId"), input_tokens=usage.get("promptTokenCount"), output_tokens=output, raw_response=payload)
 
 
 def _health_for(seed: int, turn: int) -> dict[str, ToolHealth]:
@@ -311,7 +377,26 @@ class ToolRouteAPIEpisode:
         if not authorization.pilot_manifest_path.is_file() or not authorization.provenance_path.is_file():
             raise PermissionError("authorization source disappeared before provider request")
         authorization.verify_live()
-        response = provider.complete(self.prompt)
+        request_record = getattr(provider, "request_record", None)
+        if not callable(request_record):
+            raise TypeError("provider must expose a sanitized request_record")
+        self._write_once("provider-request.json", dict(request_record(self.prompt)))
+        try:
+            response = provider.complete(self.prompt)
+        except Exception as exc:
+            # Do not archive a transport exception's text: some HTTP libraries
+            # echo a request URL, and Gemini carries its API key in the query.
+            error = {"exception_type": type(exc).__name__}
+            status = getattr(exc, "code", None)
+            reason = getattr(exc, "reason", None)
+            if isinstance(status, int):
+                error["http_status"] = status
+            if isinstance(reason, str):
+                error["reason"] = reason
+            self._write_once("provider-error.json", error)
+            result = {"accepted": False, "classification": "PROVIDER_ERROR", "provider_error": error}
+            self._write_once("result.json", result); self._finalize(result["classification"])
+            return result
         response_record = asdict(response)
         self._write_once("provider-response.json", response_record)
         cleaned = response.text.strip()
