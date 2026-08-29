@@ -419,3 +419,17 @@
   episode to terminally finalize all revoked or undeclared-scope rejections.
   Regression tests cover both cases. The pending authorized Terra diagnostic
   remains seed 1 / turn 1 and has not yet been submitted.
+
+### 2026-08-30 — Completed sampling-control transport smoke
+
+- GPT-5.6 Terra completed its fresh seed-1/turn-1/C diagnostic after sampling
+  controls were omitted: `tool_alpha`, zero observable regret, 304 input and
+  27 output tokens, and all terminal hashes valid. This confirms the former
+  OpenAI HTTP 400 was request-configuration related, not a ToolRoute failure.
+- Claude Opus 5 reached the model after the same repair but returned an explicit
+  provider `refusal`, with empty content and zero output tokens (613 input
+  tokens). It was correctly finalized as `MALFORMED_PROVIDER_RESPONSE`; do not
+  coerce a choice from it or classify it as a route decision.
+- Revoked the two-call authorization. A future Opus inclusion requires a
+  separately frozen, non-paper prompt-acceptance diagnostic; no model or prompt
+  substitution is authorized by this record.
