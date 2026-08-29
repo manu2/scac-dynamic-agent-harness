@@ -6,7 +6,8 @@ artifact is modified or removed.
 
 | ID | Status | Finding | Effect on interpretation | Disposition |
 | TR-022 | Fixed | API preflight could have been enabled by a caller-supplied boolean, which was not an auditable authorization boundary. | A local caller could bypass the intended approval record. | Replaced with provenance- and frozen-manifest-hash-bound `ToolRouteAuthorization`; default provenance remains false/null. |
-| TR-023 | Open operational | Homebrew cannot install optional Toxiproxy because `/opt/homebrew` is not writable by the user. | Socket-level adapter validation cannot run in the current environment. | Adapter and loopback contract tests pass; no sudo or ownership mutation attempted. Does not block synthetic ToolRoute preflight. |
+| TR-023 | Resolved | Homebrew cannot install optional Toxiproxy because `/opt/homebrew` is not writable by the user. | Initially blocked socket-level adapter validation. | Downloaded Shopify v2.12.0 ARM binary to a temporary directory, verified its SHA-256 against the official release checksum, and completed retained local validation without sudo or system mutation. |
+| TR-024 | Fixed | The HTTP span adapter emitted `NETWORK_ERROR`, which is outside the SST schema's allowed tool-error taxonomy. | Real proxy-failure telemetry could not be reduced and the first adapter attempt failed closed. | Map no-status socket failures to canonical `CONNECTION_ERROR`; preserve and finalize the failed attempt, then rerun successfully. |
 |---|---|---|---|---|
 | TR-001 | Fixed | Tier-2 rendering projected imperative host constraints. | Confounds telemetry with direct policy advice. | Tier-2 now excludes `recommended_constraints`; retain host-side only. |
 | TR-002 | Fixed | Cross-process continuation supplied a sparse delta as the reducer prior. | Could erase unobserved state namespaces. | Persist a private cumulative rehydrated snapshot and resume from it. |

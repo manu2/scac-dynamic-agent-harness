@@ -29,7 +29,7 @@ def capture_http_tool_span(*, tool_id: str, url: str, timestamp_ms: int, timeout
         status = None
     latency_ms = max(0, round((time.monotonic() - started) * 1000))
     success = status is not None and 200 <= status < 300
-    error_class = "NONE" if success else (f"HTTP_{status}" if status is not None else "NETWORK_ERROR")
+    error_class = "NONE" if success else (f"HTTP_{status}" if status is not None else "CONNECTION_ERROR")
     return HTTPToolResult(status, RawTelemetryEvent(
         timestamp_ms=timestamp_ms, source="host_http_span_v1", topic="tool_span",
         payload={"tool_id": tool_id, "latency_ms": latency_ms, "success": success, "error_class": error_class},
@@ -57,3 +57,6 @@ class ToxiproxyClient:
 
     def set_enabled(self, *, proxy: str, enabled: bool) -> dict[str, object]:
         return self._request("POST", f"/proxies/{proxy}", {"enabled": enabled})
+
+    def delete_proxy(self, *, proxy: str) -> dict[str, object]:
+        return self._request("DELETE", f"/proxies/{proxy}")

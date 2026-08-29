@@ -264,3 +264,20 @@
   Homebrew installation failed because `/opt/homebrew` is not user-writable;
   no system ownership/permission change occurred. Recorded as TR-023; it does
   not change synthetic ToolRoute readiness.
+
+### 2026-08-30 — completed local Toxiproxy socket-adapter validation
+
+- Downloaded the official Shopify Toxiproxy v2.12.0 macOS ARM server to a
+  temporary directory and verified it against the release checksum; no
+  Homebrew repair, sudo, system install, provider call, or subagent was used.
+- Ran a retained real-loopback schedule under
+  `experiments/adapter-validation/toolroute/`: alpha/beta baseline HTTP 200,
+  alpha 150 ms injected latency (observed 152 ms), then disabled beta proxy
+  (observed `CONNECTION_ERROR`). The reducer accepted the real host spans and
+  emitted a checkpoint/rendered telemetry record.
+- The first run failed closed because `NETWORK_ERROR` was not a schema-valid
+  SST error class (TR-024); it was finalized as failed. A second successful
+  telemetry run exposed an uninitialized failure-finalization variable and was
+  subsequently finalized without changing its contents. The corrected third
+  run completed. All three attempt hash sets verify. This validates the socket
+  collection adapter only; it is not model behavior or paper outcome evidence.

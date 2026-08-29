@@ -1,0 +1,8 @@
+{
+  "checks": {
+    "baseline_success": true,
+    "disabled_proxy_is_failure": true,
+    "latency_injected": true
+  },
+  "classification": "COMPLETED"
+}

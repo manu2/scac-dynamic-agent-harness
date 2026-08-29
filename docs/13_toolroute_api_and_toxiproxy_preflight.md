@@ -58,5 +58,12 @@ precommit a proxy schedule, capture no-fault and injected-fault spans, retain
 the proxy schedule/spans/checkpoint/final hashes, and verify reducer-renderer
 agreement. Do not combine these adapter records with synthetic API outcomes.
 
-Homebrew could not install Toxiproxy because `/opt/homebrew` is not writable by
-the user. No system ownership or permission was changed.
+The first completed local validation used Shopify Toxiproxy v2.12.0 for macOS
+ARM, downloaded to a temporary directory and SHA-256-verified against the
+official release checksum. It retained two successful baseline spans, a 152 ms
+injected-latency alpha span, and a disabled-proxy beta `CONNECTION_ERROR` span
+under `experiments/adapter-validation/toolroute/`. Three attempts exist: the
+first failed closed on an invalid error label, the second exposed a validator
+script finalization bug after completing its telemetry work, and the third is
+the clean completed run. All three are finalized and hash-valid. Homebrew was
+not used and no system ownership or permission was changed.

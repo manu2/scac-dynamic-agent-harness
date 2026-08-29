@@ -1,0 +1,52 @@
+{
+  "events": [
+    {
+      "event_id": "87b07f27bc948c42ae50262bcb2cd8b632983d303f4ba3a0dc74e3331447d4cd",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 1,
+        "success": true,
+        "tool_id": "tool_alpha"
+      },
+      "source": "host_http_span_v1",
+      "timestamp_ms": 1000,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "054a372d64214eb82279e2ace3b81a2bbd71efeb5ea6ebdd306a1b5e1eec7833",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 1,
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "host_http_span_v1",
+      "timestamp_ms": 1010,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "d1f398e7d15b3abadc7737475349386b258dd47087f8f961683d50c3c94228ac",
+      "payload": {
+        "error_class": "NONE",
+        "latency_ms": 152,
+        "success": true,
+        "tool_id": "tool_alpha"
+      },
+      "source": "host_http_span_v1",
+      "timestamp_ms": 2000,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "8e70bbc40abaa7c02d147a878b5b54c38db0d9f8497cdd5e173cdec3481ab306",
+      "payload": {
+        "error_class": "NETWORK_ERROR",
+        "latency_ms": 0,
+        "success": false,
+        "tool_id": "tool_beta"
+      },
+      "source": "host_http_span_v1",
+      "timestamp_ms": 3000,
+      "topic": "tool_span"
+    }
+  ]
+}

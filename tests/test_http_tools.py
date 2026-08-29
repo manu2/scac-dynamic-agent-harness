@@ -24,6 +24,14 @@ class _Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b"{}")
 
+    def do_DELETE(self) -> None:  # noqa: N802
+        self.__class__.calls.append((self.command, self.path))
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", "2")
+        self.end_headers()
+        self.wfile.write(b"{}")
+
     def log_message(self, *_: object) -> None:
         return
 
@@ -47,6 +55,12 @@ def test_capture_http_tool_span_records_real_status() -> None:
     assert failed.status_code == 503 and failed.event.payload["error_class"] == "HTTP_503"
 
 
+def test_capture_http_tool_span_uses_schema_error_taxonomy_for_connection_failure() -> None:
+    result = capture_http_tool_span(tool_id="alpha", url="http://127.0.0.1:1/", timestamp_ms=3, timeout_s=0.1)
+    assert result.status_code is None
+    assert result.event.payload["error_class"] == "CONNECTION_ERROR"
+
+
 def test_toxiproxy_client_uses_expected_local_api_paths() -> None:
     _Handler.calls.clear()
     server, _ = _server()
@@ -55,6 +69,7 @@ def test_toxiproxy_client_uses_expected_local_api_paths() -> None:
         client.create_proxy(name="alpha", listen="127.0.0.1:19000", upstream="127.0.0.1:19001")
         client.add_latency(proxy="alpha", latency_ms=50)
         client.set_enabled(proxy="alpha", enabled=False)
+        client.delete_proxy(proxy="alpha")
     finally:
         server.shutdown()
-    assert _Handler.calls == [("POST", "/proxies"), ("POST", "/proxies/alpha/toxics"), ("POST", "/proxies/alpha")]
+    assert _Handler.calls == [("POST", "/proxies"), ("POST", "/proxies/alpha/toxics"), ("POST", "/proxies/alpha"), ("DELETE", "/proxies/alpha")]

@@ -1,0 +1,88 @@
+{
+  "base_snapshot_id": null,
+  "derivation_provenance": {
+    "tools.tool_alpha": [
+      "87b07f27bc948c42ae50262bcb2cd8b632983d303f4ba3a0dc74e3331447d4cd",
+      "d1f398e7d15b3abadc7737475349386b258dd47087f8f961683d50c3c94228ac"
+    ],
+    "tools.tool_beta": [
+      "054a372d64214eb82279e2ace3b81a2bbd71efeb5ea6ebdd306a1b5e1eec7833",
+      "cff4c8e4bacb4127d5f6fc075b2f40e8b0d25cf607425ecf42a51335a52eb55d"
+    ]
+  },
+  "economics": {},
+  "fresh_for_ms": 2000,
+  "hardware": {
+    "cpu": {
+      "state": "UNKNOWN"
+    },
+    "ephemeral_disk": {
+      "state": "UNKNOWN"
+    },
+    "gpu": {
+      "available": false,
+      "state": "UNAVAILABLE"
+    },
+    "memory": {
+      "state": "UNKNOWN"
+    }
+  },
+  "kind": "full_checkpoint",
+  "observed_at_ms": 3020,
+  "raw_event_hashes": [
+    "87b07f27bc948c42ae50262bcb2cd8b632983d303f4ba3a0dc74e3331447d4cd",
+    "054a372d64214eb82279e2ace3b81a2bbd71efeb5ea6ebdd306a1b5e1eec7833",
+    "d1f398e7d15b3abadc7737475349386b258dd47087f8f961683d50c3c94228ac",
+    "cff4c8e4bacb4127d5f6fc075b2f40e8b0d25cf607425ecf42a51335a52eb55d"
+  ],
+  "reducer": {
+    "name": "scac-deterministic-reducer",
+    "version": "0.1.0"
+  },
+  "runtime": {
+    "network": "UNKNOWN"
+  },
+  "schema": "scac-sst-v0.1",
+  "seq": 0,
+  "snapshot_id": "f59a66b67e6774f3dc1e507780686607edd7711a12b8288defaa65a313d905b1",
+  "subsystem_observed_at_ms": {
+    "tool_span": 3000
+  },
+  "tools": {
+    "tool_alpha": {
+      "circuit": "CLOSED",
+      "consecutive_failures": 0,
+      "failures": 0,
+      "history": [
+        true,
+        true
+      ],
+      "last_error": "NONE",
+      "latency_ewma_ms": 31.2,
+      "state": "OK",
+      "successes": 2,
+      "window_n": 2
+    },
+    "tool_beta": {
+      "circuit": "CLOSED",
+      "consecutive_failures": 1,
+      "failures": 1,
+      "history": [
+        true,
+        false
+      ],
+      "last_error": "CONNECTION_ERROR",
+      "latency_ewma_ms": 1.0,
+      "state": "OK",
+      "successes": 1,
+      "window_n": 2
+    }
+  },
+  "trajectory_id": "toolroute-toxiproxy-validation",
+  "unavailable_fields": [
+    "hardware.cpu",
+    "hardware.ephemeral_disk",
+    "hardware.memory",
+    "runtime.network"
+  ]
+}
