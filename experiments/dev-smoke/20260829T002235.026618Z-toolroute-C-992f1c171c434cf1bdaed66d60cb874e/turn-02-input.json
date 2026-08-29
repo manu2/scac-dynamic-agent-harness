@@ -1,0 +1,82 @@
+{
+  "condition": "C",
+  "message": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: tool_beta, tool_alpha, wait\n=== HOST TELEMETRY [seq=2 kind=delta base=2014ac40 id=4815fd37 obs=3001ms fresh=2000ms] ===\n[TOOLS]\n  tool_alpha: window=3 succ=1 consec_fail=2 latency_ewma=947.2ms last_err=HTTP_503 circuit=DEGRADED retry_after=2000ms\n  tool_beta: window=3 succ=3 consec_fail=0 latency_ewma=128.8ms last_err=NONE circuit=CLOSED\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "message_bytes": 636,
+  "option_order": [
+    "tool_beta",
+    "tool_alpha",
+    "wait"
+  ],
+  "visible_snapshot": {
+    "base_snapshot_id": "2014ac40c25b6e5b84f8ea8f59d83d641c0e31ce9f2ed86281e6c7abe1d8d307",
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "26517aa0d9163fb372e6a9248a480accbdb8289f2806c5b7d6f72f4924d27cc3",
+        "6241090835884190e1feec4833bcdad94b89da4b7eec31fb6829404a04c59800",
+        "8865442ffb56c6cddd33331ffbefee07ae6e72647043820f91c77b72b9d9938d"
+      ],
+      "tools.tool_beta": [
+        "1ffde545ee241b4471225ca3a358c1e76f235e97fda6810f0408f552618c7647",
+        "bdd89d606ad6a9018912e53566a2ba7ff9e1476d765c26dbbe468252d692a4ce",
+        "73367a0884dfb6b70f4d3d903b15af07cd530406dd8a5b939e86412cd7741979"
+      ]
+    },
+    "fresh_for_ms": 2000,
+    "kind": "delta",
+    "observed_at_ms": 3001,
+    "raw_event_hashes": [
+      "8865442ffb56c6cddd33331ffbefee07ae6e72647043820f91c77b72b9d9938d",
+      "73367a0884dfb6b70f4d3d903b15af07cd530406dd8a5b939e86412cd7741979"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 2,
+    "snapshot_id": "4815fd37bb84cdcb152e0e98b274e4128cc69d7813c214eb0f7502156c1836c1",
+    "subsystem_observed_at_ms": {
+      "tool_span": 3001
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "DEGRADED",
+        "consecutive_failures": 2,
+        "failures": 2,
+        "history": [
+          true,
+          false,
+          false
+        ],
+        "last_error": "HTTP_503",
+        "latency_ewma_ms": 947.2,
+        "retry_after_ms": 2000,
+        "state": "DEGRADED",
+        "successes": 1,
+        "window_n": 3
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true,
+          true,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 128.8,
+        "state": "OK",
+        "successes": 3,
+        "window_n": 3
+      }
+    },
+    "trajectory_id": "dev-smoke-17",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}

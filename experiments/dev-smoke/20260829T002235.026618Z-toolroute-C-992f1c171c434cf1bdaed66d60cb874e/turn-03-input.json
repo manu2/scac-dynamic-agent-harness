@@ -1,0 +1,89 @@
+{
+  "condition": "C",
+  "message": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: tool_beta, wait, tool_alpha\n=== HOST TELEMETRY [seq=3 kind=delta base=4815fd37 id=cfbd83d6 obs=4001ms fresh=2000ms] ===\n[TOOLS]\n  tool_alpha: window=4 succ=1 consec_fail=3 latency_ewma=1597.76ms last_err=HTTP_503 circuit=OPEN retry_after=2000ms\n  tool_beta: window=4 succ=4 consec_fail=0 latency_ewma=139.04ms last_err=NONE circuit=CLOSED\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "message_bytes": 635,
+  "option_order": [
+    "tool_beta",
+    "wait",
+    "tool_alpha"
+  ],
+  "visible_snapshot": {
+    "base_snapshot_id": "4815fd37bb84cdcb152e0e98b274e4128cc69d7813c214eb0f7502156c1836c1",
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "26517aa0d9163fb372e6a9248a480accbdb8289f2806c5b7d6f72f4924d27cc3",
+        "6241090835884190e1feec4833bcdad94b89da4b7eec31fb6829404a04c59800",
+        "8865442ffb56c6cddd33331ffbefee07ae6e72647043820f91c77b72b9d9938d",
+        "b69a4222249d8bb8d49e5c33ae5998309266f27f6172263b5ace928ff61aea05"
+      ],
+      "tools.tool_beta": [
+        "1ffde545ee241b4471225ca3a358c1e76f235e97fda6810f0408f552618c7647",
+        "bdd89d606ad6a9018912e53566a2ba7ff9e1476d765c26dbbe468252d692a4ce",
+        "73367a0884dfb6b70f4d3d903b15af07cd530406dd8a5b939e86412cd7741979",
+        "4b90465cedead727bba63ef523058860aae0ba867db7b8336971657294449752"
+      ]
+    },
+    "fresh_for_ms": 2000,
+    "kind": "delta",
+    "observed_at_ms": 4001,
+    "raw_event_hashes": [
+      "b69a4222249d8bb8d49e5c33ae5998309266f27f6172263b5ace928ff61aea05",
+      "4b90465cedead727bba63ef523058860aae0ba867db7b8336971657294449752"
+    ],
+    "recommended_constraints": [
+      "do not call tool_alpha before circuit closes (wait 2000ms)"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 3,
+    "snapshot_id": "cfbd83d681bb179dd537d88a788560e8da5e2e25ad7f6511f1b34b14e95797e0",
+    "subsystem_observed_at_ms": {
+      "tool_span": 4001
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "OPEN",
+        "consecutive_failures": 3,
+        "failures": 3,
+        "history": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "last_error": "HTTP_503",
+        "latency_ewma_ms": 1597.76,
+        "retry_after_ms": 2000,
+        "state": "DEGRADED",
+        "successes": 1,
+        "window_n": 4
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 139.04,
+        "state": "OK",
+        "successes": 4,
+        "window_n": 4
+      }
+    },
+    "trajectory_id": "dev-smoke-17",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}

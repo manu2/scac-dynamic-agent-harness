@@ -29,6 +29,24 @@ Only model-visible state changes.
 3. RetryBudget: seeded outage/quota state with retry/wait/fallback/checkpoint
    actions; score utility, dominated retries, violations, and premature exit.
 
+## ToolRoute observation and scoring contract (v0.4 development)
+
+ToolRoute separates latent environment state, independent host-monitor probes,
+and the model-visible SST projection. The primary ToolRoute oracle may use only
+canonical monitor facts that are rendered to Condition C: probe window size,
+success count, latency EWMA, and circuit state. A latent-health expected-cost
+oracle is retained only as a diagnostic ceiling. Every primary scored state must
+pass a predeclared observable-margin calibration before a subject receives it;
+ambiguous states are retained but are not eligible for exact action-agreement
+claims. This development contract does not change the provider pre-pilot gates.
+The v0.4 probes are a controlled synthetic observation model, not live host
+telemetry; results must be framed accordingly unless a separately frozen,
+calibrated live-monitor protocol is used. Before an API pilot, the observation
+model must specify and test measurement accuracy, latency/freshness, missingness,
+and noise/staleness sensitivity. The exact coordinator-to-subject handoff must
+be recorded with the frozen `subject_prompt_v1_double_newline_delimiter`
+contract; the condition message itself remains unmodified.
+
 ## Primary outcomes
 
 - correct completion without a hard operational violation;

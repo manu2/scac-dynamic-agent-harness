@@ -6,18 +6,22 @@ repository filesystem and therefore are not blinded to hidden schedules.
 
 ## One trajectory
 
-1. Start exactly one condition and save the emitted `trial_dir` and `message`:
+1. Start exactly one condition and save the emitted `trial_dir` and
+   `subject_prompt`:
 
    ```sh
    .venv/bin/python -m scac_harness.smoke_cli start --seed 101 --condition C
    ```
 
 2. Spawn a fresh subagent with `fork_turns="none"`. Give it only the emitted
-   `message` and this instruction: “Do not inspect the workspace or use tools.
-   Reply with exactly one action label and nothing else.”
+   `subject_prompt`, verbatim. Do not concatenate, trim, reformat, or add an
+   instruction. The CLI freezes the exact condition message plus a constant
+   double-newline delimiter and subject-only instruction in
+   `turn-XX-handoff.json`.
 
 3. Submit its exact, unedited response. The command rejects extra prose or an
-   invalid action:
+   invalid action, archives the malformed response as a rejection artifact, and
+   leaves the turn pending for a fresh replacement subagent:
 
    ```sh
    .venv/bin/python -m scac_harness.smoke_cli submit \
@@ -35,10 +39,10 @@ repository filesystem and therefore are not blinded to hidden schedules.
 ## Required development matrix
 
 Run complete trajectories for A, B, and C at each seed. Use the same seed once
-per condition; do not compare different seeds as matched trajectories. Start
-with 8–12 seeds, counterbalance the condition order, and record every malformed
-or refused response as-is. Do not edit or delete any `experiments/dev-smoke/`
-directory.
+per condition; do not compare different seeds as matched trajectories. Run
+whole six-seed blocks (`0–5`, `6–11`, and so on) so all option permutations are
+balanced. Record every malformed or refused response as-is. Do not edit or
+delete any `experiments/dev-smoke/` directory.
 
 ## Interpretation boundary
 

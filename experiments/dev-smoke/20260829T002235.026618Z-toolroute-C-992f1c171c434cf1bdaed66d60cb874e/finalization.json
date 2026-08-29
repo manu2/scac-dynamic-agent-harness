@@ -1,0 +1,18 @@
+{
+  "artifact_sha256": {
+    "manifest.json": "3ffe920c53e631a8044df882c962c732e0b92f931232e77aafa2d72939ff00b4",
+    "turn-00-host.json": "e312c9bde02b364badd2896f4917d4a3d8fbf1e8383da9410715d3ff79095632",
+    "turn-00-input.json": "2fdf24adb6fc6effc2ef9d9b99b4ff3934c47ae8bbd41603d1018674ecad6f5f",
+    "turn-00-result.json": "84b3c700682f34ac62ccc6a0972147bbe2877ba7101128be64bc7298f7bf8ecd",
+    "turn-01-host.json": "50c0409aca10360a9754cefd56bdda165e6bb4a5807c99c2fe0b2f19768d9f5e",
+    "turn-01-input.json": "79d2b1263c7cb3866f3eb380ad5f8075329968b8fb9a1e071a086cbc0347d7b6",
+    "turn-01-result.json": "57accb41e2b7d8b3301cca6e93cdfd7b531fef7004105f560d1829d64d34a8c9",
+    "turn-02-host.json": "d7146503cedc4e1ea2c35e23f019b64f14573eedc038bce0bd54c6fdaf202ed1",
+    "turn-02-input.json": "8398d5c4963222c1b4d4fd0c03acea966c0128cce029d27704fc66ad4e1c6993",
+    "turn-02-result.json": "0aefb9fa4d22c612e7861853bb9b62f3a456552b6ea9899937421af25954de3d",
+    "turn-03-host.json": "5663d29398e73b87659088eaa43c7deb542bc3ce371b3f8c119658820b642746",
+    "turn-03-input.json": "1390c1498896fa11fb006f6a7d66b6bf99e94b3e5a4b409fa911781f6f056bdc",
+    "turn-03-result.json": "cb8e6ed746f8df7734028796891c317b2f80aa46def9d9a31053d345022fabe2"
+  },
+  "terminal_turn": 3
+}

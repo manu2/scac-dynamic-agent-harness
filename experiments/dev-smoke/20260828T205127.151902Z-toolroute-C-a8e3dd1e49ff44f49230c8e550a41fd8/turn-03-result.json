@@ -1,0 +1,10 @@
+{
+  "action": "wait",
+  "error_class": null,
+  "latency_ms": 500,
+  "policy_regret": 780.0000000000001,
+  "response_text": "wait",
+  "subject_id": "subagent-d624ea0a",
+  "success": false,
+  "terminal": true
+}

@@ -52,6 +52,8 @@ class ToolRouteOracle:
     """External expected-cost oracle for functionally equivalent tools."""
 
     FAILURE_PENALTY_MS = 10_000
+    MISSED_RECORD_PENALTY_MS = 10_000
+    WAIT_LATENCY_MS = 500
 
     @classmethod
     def expected_cost(cls, health: ToolHealth) -> float:
@@ -69,11 +71,60 @@ class ToolRouteOracle:
     def regret(cls, state: ToolRouteState, action: Action) -> float:
         best = min(cls.expected_cost(health) for health in state.health.values())
         if action == "wait":
-            # Waiting is allowed but has a frozen, deliberately nonzero cost.
-            return float(500 + best)
+            # ToolRoute has one required record per decision interval. Waiting
+            # intentionally does not retrieve it, so it incurs the predeclared
+            # missed-record penalty rather than being treated as a free escape.
+            return float(cls.WAIT_LATENCY_MS + cls.MISSED_RECORD_PENALTY_MS - best)
         if action not in state.health:
             raise ValueError(f"unknown ToolRoute action: {action}")
         return cls.expected_cost(state.health[action]) - best
+
+    @classmethod
+    def observable_expected_cost(cls, tool: dict[str, object]) -> float:
+        """Cost estimate from canonical monitor facts, never latent health.
+
+        These are precisely the fields rendered in Tier 2: window size,
+        successes, latency EWMA, and circuit state.  It is the primary oracle
+        for ToolRoute v0.4; ``expected_cost`` remains a clairvoyant diagnostic.
+        """
+        window = int(tool.get("window_n", 0))
+        successes = int(tool.get("successes", 0))
+        failure_rate = 0.5 if window == 0 else (window - successes) / window
+        latency = float(tool.get("latency_ewma_ms", 0.0))
+        cost = latency + failure_rate * cls.FAILURE_PENALTY_MS
+        if tool.get("circuit") == "OPEN":
+            cost += cls.MISSED_RECORD_PENALTY_MS
+        return cost
+
+    @classmethod
+    def observable_best_actions(cls, snapshot: dict[str, object]) -> frozenset[str]:
+        tools = snapshot.get("tools")
+        if not isinstance(tools, dict) or not tools:
+            raise ValueError("observable ToolRoute oracle requires monitor tool state")
+        costs = {str(name): cls.observable_expected_cost(value) for name, value in tools.items() if isinstance(value, dict)}
+        minimum = min(costs.values())
+        return frozenset(name for name, cost in costs.items() if cost == minimum)
+
+    @classmethod
+    def observable_regret(cls, snapshot: dict[str, object], action: Action) -> float:
+        tools = snapshot["tools"]
+        assert isinstance(tools, dict)
+        costs = {str(name): cls.observable_expected_cost(value) for name, value in tools.items() if isinstance(value, dict)}
+        best = min(costs.values())
+        if action == "wait":
+            return float(cls.WAIT_LATENCY_MS + cls.MISSED_RECORD_PENALTY_MS - best)
+        if action not in costs:
+            raise ValueError(f"unknown ToolRoute action: {action}")
+        return costs[action] - best
+
+    @classmethod
+    def observable_margin(cls, snapshot: dict[str, object]) -> float:
+        tools = snapshot["tools"]
+        assert isinstance(tools, dict)
+        costs = sorted(cls.observable_expected_cost(value) for value in tools.values() if isinstance(value, dict))
+        if len(costs) < 2:
+            raise ValueError("observable ToolRoute oracle requires two tools")
+        return costs[1] - costs[0]
 
 
 class ToolRouteSimulator:

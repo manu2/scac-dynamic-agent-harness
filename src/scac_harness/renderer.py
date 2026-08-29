@@ -182,13 +182,6 @@ def render_tier2_envelope(snapshot: dict[str, Any], max_chars: int = 2000) -> st
     if unavail:
         lines.append(f"[UNAVAILABLE_FIELDS] {', '.join(sorted(unavail))}")
 
-    # 6. Recommended constraints (deterministic host policy)
-    constraints = snapshot.get("recommended_constraints", [])
-    if constraints:
-        lines.append("[HOST_CONSTRAINTS]")
-        for c in constraints:
-            lines.append(f"  - {c}")
-
     lines.append("=========================================")
     rendered = "\n".join(lines)
 

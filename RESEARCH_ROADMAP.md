@@ -38,12 +38,18 @@ Every snapshot enforces:
   calibrated without model calls. The local MemoryGovernor is explicitly virtual
   and makes no cgroup-enforcement claim. Clean-container reproduction and
   context-isolated leakage/evaluator-defeat reviews remain pending.
-- **Development smoke path:** offline A/B/C ToolRoute messages may be supplied to
-  fresh-context Codex subagents after complete host-side capture. These are
-  engineering smoke tests only: shared workspace access prevents them from being
-  blinded empirical trials or inclusion in a study denominator.
-  The `smoke_cli` runbook provides deterministic handoff and complete per-turn
-  capture for these engineering checks.
+- **Development smoke path:** offline A/B/C ToolRoute messages may be supplied
+  to fresh-context Codex subagents after complete host-side capture. These are
+  engineering smoke tests only: shared workspace access prevents them from
+  being blinded empirical trials or inclusion in a study denominator. The
+  hardened ToolRoute v0.4 path uses independent host-monitor probes, an
+  observable-only primary oracle, descriptive-only C envelopes, cumulative
+  private resume state, UTF-8 byte-matched (not token-matched) B controls,
+  deterministic action-order rotation, completion records, and finalization
+  hashes. The v0.4 CLI also records the exact coordinator-to-subject prompt
+  with a frozen delimiter. Open limitations and the next gate are retained in
+  `docs/07_toolroute_hardening_issue_ledger.md` and
+  `docs/10_toolroute_v0_4_status_and_next_gate.md`.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
 - **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,

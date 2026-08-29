@@ -25,6 +25,22 @@ def test_toolroute_oracle_penalizes_degraded_route() -> None:
     assert ToolRouteOracle.regret(state, next(iter(best))) == 0
 
 
+def test_toolroute_wait_has_missed_record_cost() -> None:
+    sim = ToolRouteSimulator(seed=3)
+    assert ToolRouteOracle.regret(sim.state, "wait") > 0
+
+
+def test_observable_oracle_uses_only_monitor_fields() -> None:
+    snapshot = {"tools": {
+        "tool_alpha": {"window_n": 6, "successes": 1, "latency_ewma_ms": 4_200.0, "circuit": "OPEN"},
+        "tool_beta": {"window_n": 6, "successes": 6, "latency_ewma_ms": 180.0, "circuit": "CLOSED"},
+    }}
+    assert ToolRouteOracle.observable_best_actions(snapshot) == {"tool_beta"}
+    assert ToolRouteOracle.observable_regret(snapshot, "tool_beta") == 0
+    assert ToolRouteOracle.observable_regret(snapshot, "tool_alpha") > 0
+    assert ToolRouteOracle.observable_margin(snapshot) > 50
+
+
 def test_toolroute_tool_name_swap_does_not_change_regime_costs() -> None:
     first = ToolRouteSimulator(seed=11, tool_names=("remote_a", "local_b"))
     swapped = ToolRouteSimulator(seed=11, tool_names=("local_b", "remote_a"))

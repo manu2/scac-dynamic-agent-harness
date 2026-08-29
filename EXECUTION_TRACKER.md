@@ -104,3 +104,99 @@
   orchestrate A/B/C smoke trajectories using fresh-context subagents. The
   runbook preserves the non-blinded, development-only interpretation boundary.
 - Verified the complete command lifecycle and combined suite: 72 tests passing.
+
+### 2026-08-29 — ToolRoute development hardening
+
+- Audited the unblinded seed-202 smoke records and retained them as development
+  artifacts only; they are not matched empirical evidence and must not be used
+  to claim a treatment effect.
+- Fixed Tier-2 prompt-advice leakage, sparse-delta resume state loss, ambiguous
+  wait scoring, and missing terminal/finalization records in ToolRoute v0.2.
+- Added an explicit issue ledger at `docs/07_toolroute_hardening_issue_ledger.md`.
+  Open issues include perfect synthetic probes, shared-filesystem leakage, and
+  byte rather than tokenizer matching; these block empirical interpretation.
+- Ran a complete v0.2 seed-17 A/B/C development triad using fresh-context
+  subagents. All terminal finalization hashes verified. It is retained solely
+  as a capture and evaluator diagnostic: the then-hashed option ordering put
+  `tool_beta` first on every turn, so its descriptive A/B/C differences are
+  position-confounded and not evidence of a telemetry effect.
+- Replaced that ordering with a six-seed balanced block in ToolRoute v0.3.
+  The first v0.3 decision pass exposed a malformed `- tool_alpha` response;
+  the runner was amended to archive rejected responses rather than discarding
+  them. The three partial v0.3 directories were terminally finalized as
+  `ABORTED_DEVELOPMENT` after that protocol revision. v0.3 collection is
+  intentionally paused pending a fresh full block; all retained records remain
+  development-only.
+
+### 2026-08-29 — ToolRoute v0.3 fresh-subagent block (partial)
+
+- Completed and hash-verified seed 18 and seed 19 A/B/C trajectories using a
+  distinct no-context Codex subagent for each decision. These records are
+  strictly development diagnostics.
+- A seed-19 C decision selected the lower-latency route shown by telemetry but
+  incurred 20 oracle-regret because the oracle also prices latent reliability.
+  This is a required telemetry/oracle-alignment calibration issue, not a result
+  supporting the treatment.
+- Platform concurrency retained completed subagent threads and prevented fresh
+  subject creation for seeds 20–23. Seed 20/A has one captured decision; all
+  other reserved starts are untouched. They must be resumed in a fresh session
+  with fresh subjects; no existing subject may be reused.
+
+### 2026-08-29 — ToolRoute v0.4 observation/oracle alignment
+
+- Replaced direct thresholded latent-health projection with separately seeded
+  monitor probes. These probes are independent from the fixed action outcome
+  tape.
+- Made observable-monitor cost the primary ToolRoute oracle and retained the
+  latent expected-cost oracle only as a diagnostic ceiling. Added a fail-closed
+  minimum observable-margin calibration guard and v0.4 multi-seed calibration
+  tests. No v0.4 subject trajectory has been started at this entry.
+- Terminally finalized the 12 unsubmitted/partial v0.3 directories as
+  `ABORTED_DEVELOPMENT` with reason `superseded_by_toolroute_v0_4_observation_oracle_contract`.
+  A hash audit of every finalized development artifact passed.
+- Full v0.4 review passed: 82 tests, compilation, lifecycle/finalization audit,
+  no prompt-advice rendering, and observable-margin calibration. Attempted
+  seeds 32–33 A/B/C fresh-subagent triads, but platform child-thread capacity
+  failed before any response. The six empty starts were finalized as
+  `ABORTED_DEVELOPMENT`; new v0.4 subject trajectories require a fresh task.
+
+### 2026-08-29 — ToolRoute v0.4 fresh-subagent development block (seeds 34–35)
+
+- Preflight passed with 82 tests, zero failures, no `git diff --check` errors,
+  and `provider_trials_authorized: false`; no provider/API calls were made.
+- Completed terminal A/B/C trajectories for seeds 34 and 35 using a distinct
+  `fork_turns="none"` subagent for every decision. No response was malformed or
+  rejected. Seed 34/A and 34/B ended `DECISION_BUDGET_EXHAUSTED` at 2/3 records;
+  seed 35/B ended the same way at 1/3 records. Seed 34/C, 35/A, and 35/C ended
+  `COMPLETED` at 3/3 records.
+- All six finalization hash sets verified. Every result contained primary and
+  diagnostic oracle metrics; every prompt excluded `HOST_CONSTRAINTS`; and all
+  C host events identified `synthetic_host_probe_v0.4`.
+- On seed 34/B turn 0, the required subject-only suffix was concatenated
+  directly after the final byte of the emitted message because that B message
+  had no terminal newline. The emitted message and suffix were each preserved
+  byte-for-byte, but there was no separating newline; subsequent no-newline
+  messages used an explicit separator. This is retained as an operational
+  anomaly and the trajectory remains development-only.
+- These trajectories are local harness diagnostics only, are not blinded
+  empirical evidence, and support no treatment-effect claim.
+
+### 2026-08-29 — ToolRoute v0.4 preservation and next-gate freeze
+
+- Consolidated the local ToolRoute conclusion: the v0.4 harness can capture the
+  intended decision process, but the two fresh-subagent seed triads are neither
+  blinded nor powered and provide no empirical treatment-effect evidence.
+- Fixed the future-handoff defect observed in seed 34/B turn 0. `smoke_cli` now
+  emits a `subject_prompt` that is the unmodified condition message plus a
+  constant double-newline delimiter and universal subject instruction, and it
+  persists that exact prompt in `turn-XX-handoff.json`. Existing trajectories
+  are immutable and were not altered.
+- The next ToolRoute work is explicitly gated: one clean local post-fix smoke
+  triad may verify the handoff artifact only; no additional local smoke run is
+  evidence. Before any API call, complete Linux cgroup-v2 G1, clean-container
+  and context-isolated G2 reviews, freeze the observation model and provider
+  pilot manifest, then validate a reservation-first isolated API runner.
+- `PROVENANCE.json` remains `provider_trials_authorized: false`. The issue
+  ledger and the complete decision record are in
+  `docs/07_toolroute_hardening_issue_ledger.md` and
+  `docs/10_toolroute_v0_4_status_and_next_gate.md`.

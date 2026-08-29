@@ -1,0 +1,12 @@
+{
+  "condition": "B",
+  "decision_budget": 4,
+  "kind": "development_smoke_only",
+  "measurement_model": "independent_seeded_monitor_probes_v0.4",
+  "neutral_control": "utf8_byte_matched_opaque_structural_control_not_token_matched",
+  "primary_oracle": "observable_monitor_cost_v0.4",
+  "records_required": 3,
+  "scenario": "ToolRoute-v0.4",
+  "secondary_oracle": "clairvoyant_latent_cost_diagnostic_only",
+  "seed": 32
+}

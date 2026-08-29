@@ -102,3 +102,12 @@ def test_no_secrets_or_raw_headers_in_rendered_output() -> None:
     forbidden = ["bearer", "authorization", "secret", "cookie", "token gho_", "ghp_"]
     for word in forbidden:
         assert word not in rendered.lower()
+
+
+def test_renderer_never_projects_recommended_constraints() -> None:
+    """Tier 2 is descriptive; host policy advice cannot enter the treatment."""
+    fixture = json.loads((VALID_DIR / "tool_degraded_state.json").read_text(encoding="utf-8"))
+    fixture["recommended_constraints"] = ["do not call query_db"]
+    rendered = render_tier2_envelope(fixture)
+    assert "HOST_CONSTRAINTS" not in rendered
+    assert "do not call" not in rendered

@@ -1,0 +1,99 @@
+{
+  "raw_events": [
+    {
+      "event_id": "21030640956ea4e679fe4470aa3c53e71b2d84b5d9d3f63a44794790cf0c337c",
+      "payload": {
+        "error_class": "HTTP_503",
+        "latency_ms": 4200,
+        "retry_after_ms": 2000,
+        "success": false,
+        "tool_id": "tool_alpha"
+      },
+      "source": "host_health_monitor",
+      "timestamp_ms": 2000,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "6e3e3d898bd5dc4ed619d52a717076162bb75d385a597a1a58813d334b713a66",
+      "payload": {
+        "error_class": "HTTP_503",
+        "latency_ms": 180,
+        "retry_after_ms": null,
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "host_health_monitor",
+      "timestamp_ms": 2001,
+      "topic": "tool_span"
+    }
+  ],
+  "rendered_telemetry": "=== HOST TELEMETRY [seq=1 kind=delta base=17ee56aa id=46cc7962 obs=2001ms fresh=2000ms] ===\n[TOOLS]\n  tool_alpha: window=2 succ=1 consec_fail=1 latency_ewma=920.0ms last_err=HTTP_503 circuit=CLOSED retry_after=2000ms\n  tool_beta: window=2 succ=2 consec_fail=0 latency_ewma=180.0ms last_err=NONE circuit=CLOSED\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "snapshot": {
+    "base_snapshot_id": "17ee56aa77fe806668a4c4f983524daa3ac922e97143f74f989780ad06868b3e",
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "7d59e0ad8e2b25b08a196227590c6fe186aa6ce15a1d30b7c188226ef3cbb168",
+        "21030640956ea4e679fe4470aa3c53e71b2d84b5d9d3f63a44794790cf0c337c"
+      ],
+      "tools.tool_beta": [
+        "198616fe07f6912b2f3c2bff028c257608c6636f2b2b9e3a6387ae79d41b6073",
+        "6e3e3d898bd5dc4ed619d52a717076162bb75d385a597a1a58813d334b713a66"
+      ]
+    },
+    "fresh_for_ms": 2000,
+    "kind": "delta",
+    "observed_at_ms": 2001,
+    "raw_event_hashes": [
+      "21030640956ea4e679fe4470aa3c53e71b2d84b5d9d3f63a44794790cf0c337c",
+      "6e3e3d898bd5dc4ed619d52a717076162bb75d385a597a1a58813d334b713a66"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 1,
+    "snapshot_id": "46cc7962346a8f0b8e25df9281c19ae06ca02f9a0b10a8cf9db1f378f9deea2a",
+    "subsystem_observed_at_ms": {
+      "tool_span": 2001
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 1,
+        "failures": 1,
+        "history": [
+          true,
+          false
+        ],
+        "last_error": "HTTP_503",
+        "latency_ewma_ms": 920.0,
+        "retry_after_ms": 2000,
+        "state": "OK",
+        "successes": 1,
+        "window_n": 2
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 180.0,
+        "state": "OK",
+        "successes": 2,
+        "window_n": 2
+      }
+    },
+    "trajectory_id": "dev-smoke-101",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}

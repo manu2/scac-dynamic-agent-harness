@@ -1,0 +1,14 @@
+{
+  "action": "tool_alpha",
+  "error_class": null,
+  "latency_ms": 100,
+  "policy_regret": 20.000000000000057,
+  "records_completed": 1,
+  "records_required": 3,
+  "response_text": "tool_alpha",
+  "subject_id": "v3b0",
+  "success": true,
+  "task_completed": false,
+  "terminal": false,
+  "terminal_classification": "RUNNING"
+}
