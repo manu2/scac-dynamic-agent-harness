@@ -3,8 +3,11 @@
 ## Overall status
 
 - **Current stage:** G1 enforcement implementation and capability-gated controls (In progress; branch `codex/g0-sst-schema`).
-- **Provider calls:** not authorized.
-- **Empirical trials:** none.
+- **Provider calls:** not authorized for any further call. One seed-8 ToolRoute
+  paper-block attempt (36 completed decisions) is retained and under a recorded
+  manifest/execution-deviation review.
+- **Empirical trials:** 36 submitted ToolRoute paper-cohort attempts retained
+  under `experiments/api-paper-v1.0-seed8/`; not eligible to extend as v1.0.
 - **Upstream design basis:** `manu2/Context-Aware-Agent-Experiment` commit
   `f35173d29375216af88c708687efbcc51f36398a`.
 
@@ -577,3 +580,19 @@
   - Attention Tax ($B - A$) = **0.00 ms**; Epistemic Treatment Effect ($C - B$) = **-20.00 ms** (100% regret elimination).
 - Authorization immediately revoked in `PROVENANCE.json`.
 
+### 2026-08-30 — Independent Seed-8 artifact audit and cohort pause
+
+- Independently rechecked all 36 artifact directories: exact expected grid,
+  no duplicates, no missing cells, all completed with an exact action, all
+  finalization hashes valid, exact frozen-manifest hash binding, no API-native
+  tool/function fields, symmetric B tool rows, and provider-local execution
+  order matching the manifest-salted deterministic ordering.
+- The source test suite passed 102/102 tests. The loopback HTTP tests require
+  local socket permission and were rerun outside the filesystem sandbox; no
+  provider call was made by this audit.
+- Found TR-033: the frozen v1.0 manifest states that sampling controls are
+  omitted/provider-default, but every recorded Gemini request contains
+  `generationConfig.temperature: 0.0`. This is not a within-Gemini A/B/C
+  confound, but it is a material mismatch between the frozen protocol and the
+  executed request. The seed-8 artifacts remain immutable and readable; the
+  v1.0 cohort is closed rather than silently amended or extended.
