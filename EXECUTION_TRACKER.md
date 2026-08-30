@@ -433,3 +433,14 @@
 - Revoked the two-call authorization. A future Opus inclusion requires a
   separately frozen, non-paper prompt-acceptance diagnostic; no model or prompt
   substitution is authorized by this record.
+
+### 2026-08-30 — Scoped Claude Sonnet 5 prompt-acceptance diagnostic
+
+- Claude Opus 5's repaired request was API-successful but model-refused: the
+  raw response has `stop_reason: refusal`, an empty `content` array, and zero
+  output tokens. There is no hidden natural-language refusal message. This is
+  distinct from the earlier HTTP 400 transport failure.
+- Authorized one new seed-2/turn-1/C Claude Sonnet 5 diagnostic with the same
+  tool-less Anthropic Messages path and omitted sampling controls. It exists
+  solely to determine whether the refusal is Opus-specific or a Claude/prompt
+  compatibility issue; it is not paper data.

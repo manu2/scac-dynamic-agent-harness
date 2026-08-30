@@ -1,0 +1,14 @@
+{
+  "manifest_status": "FROZEN_TRANSPORT_SMOKE_NOT_PAPER_DATA",
+  "scenario": "ToolRoute-v0.6-api-transport-smoke-sonnet",
+  "purpose": "One fresh C-only Claude Sonnet 5 prompt-acceptance diagnostic after Claude Opus 5 returned a provider refusal.",
+  "state_delivery": "independent_full_checkpoint_only",
+  "conditions": ["C"],
+  "tokenizer": {"name": "diagnostic_whitespace_tokenizer", "scope": "Condition C only; no B control or paper inference is authorized"},
+  "provider_parameters": {"sampling_controls": "omitted; provider defaults", "max_output_tokens": 1024, "tools": "none", "request_retry_policy": "no retry"},
+  "authorized_episodes": [
+    {"seed": 2, "turn": 1, "condition": "C", "model_id": "claude-sonnet-5", "provider_label": "anthropic"}
+  ],
+  "inclusion": "No episode in this manifest enters the paper denominator.",
+  "post_run_rule": "Audit stop_reason, content blocks, parser result, usage, and terminal hashes. Do not issue a second request under this manifest."
+}
