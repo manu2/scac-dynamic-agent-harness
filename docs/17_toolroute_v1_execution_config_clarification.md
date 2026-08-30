@@ -41,3 +41,11 @@ manifest and must state that all remaining Gemini calls retain
 effective settings above and this clarification. This first continuation
 configuration intentionally permits only seeds 9–10 (72 decisions); seeds
 11–13 require a later, separately reviewed continuation configuration.
+
+The final reviewed continuation companion is
+`manifests/toolroute_api_paper.v1.0.execution-config.seeds11-13.json`. It has
+the same provider request expectations, but authorizes only seeds 11–13 (108
+decisions). Its SHA-256 is
+`0a12df01886f7e33f362cb7b23dba691efdbfea1bc11c98d44a409193f1bd35c` and
+must be independently verified and bound in `PROVENANCE.json` immediately
+before those calls; authorization remains false in the committed repository.

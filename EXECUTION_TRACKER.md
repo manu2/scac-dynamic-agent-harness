@@ -652,3 +652,14 @@
 - No new protocol or capture issue was identified. The sole nonzero Condition-C
   regret in seeds 9–10 is Gemini seed-9/turn-3 choosing `wait` (5816.47 ms);
   it is a valid completed observation, not an artifact anomaly or a retry case.
+
+### 2026-08-30 — Final ToolRoute continuation scope frozen
+
+- Added a separate immutable execution-config companion for the final seeds
+  11–13 only (SHA-256
+  `0a12df01886f7e33f362cb7b23dba691efdbfea1bc11c98d44a409193f1bd35c`). It preserves the completed blocks and the effective provider
+  settings (including Gemini `temperature: 0.0`) while limiting the remaining
+  authorization to exactly 108 decisions.
+- `PROVENANCE.json` remains false/null. No provider call is authorized by this
+  commit; the final execution agent must verify, bind, and later revoke this
+  companion's hash.
