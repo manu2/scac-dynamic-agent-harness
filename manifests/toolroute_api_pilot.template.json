@@ -14,10 +14,9 @@
     "temperature": 0.0,
     "request_retry_policy": "no retry; every submitted request is retained"
   },
-  "tokenizer": {
-    "name": "FILL_ME",
-    "version": "FILL_ME",
-    "b_control": "structurally parallel equal-tool telemetry table; exact provider-native B/C input-token match, retained before generation and rechecked from provider usage where available"
+  "b_control": {
+    "construction": "same fixed telemetry envelope, field names, ordering, and tool rows as C; equal neutral values for equivalent tools",
+    "token_usage": "record provider-reported input tokens descriptively; no online token padding or token-count API calls"
   },
   "model_access": {
     "tools": "none",

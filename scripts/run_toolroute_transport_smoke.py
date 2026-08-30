@@ -1,8 +1,8 @@
 """Run one explicitly manifest-authorized, non-paper ToolRoute transport smoke.
 
 The script reads a local dotenv file only into its process environment and
-never prints credentials. It refuses A/B because tokenizer-matched controls
-belong to the later balanced cohort, not this C-only transport diagnostic.
+never prints credentials. It refuses A/B because this is a C-only transport
+diagnostic, not a balanced cohort.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from pathlib import Path
 
 from scac_harness.toolroute_api import (
     AnthropicMessagesProvider, GeminiGenerateContentProvider, OpenAICompatibleProvider,
-    Tokenizer, ToolRouteAPIEpisode, ToolRouteAuthorization, WhitespaceTokenizer,
+    ToolRouteAPIEpisode, ToolRouteAuthorization,
 )
 
 
@@ -58,7 +58,6 @@ def main() -> None:
     _load_dotenv(args.dotenv)
     authorization = ToolRouteAuthorization.load(provenance_path=args.provenance, pilot_manifest_path=args.manifest)
     episode = ToolRouteAPIEpisode(seed=args.seed, turn=args.turn, condition="C", experiments_root=Path("experiments/api-transport-smoke"),
-                                  tokenizer=Tokenizer(WhitespaceTokenizer.name, WhitespaceTokenizer.count),
                                   model_id=args.model, provider_label=args.provider)
     result = episode.run(_provider(args.provider, args.model), authorization=authorization)
     print(f"trial_directory={episode.directory}")

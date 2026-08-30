@@ -12,7 +12,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
-from typing import Callable, Literal, Mapping, Protocol
+from typing import Literal, Mapping, Protocol
 from urllib import error, request
 from uuid import uuid4
 
@@ -48,12 +48,6 @@ class Provider(Protocol):
 
 
 @dataclass(frozen=True)
-class Tokenizer:
-    name: str
-    count: Callable[[str], int]
-
-
-@dataclass(frozen=True)
 class ToolRouteObservationModel:
     """Versioned synthetic monitor assumptions, retained with every episode.
 
@@ -77,29 +71,6 @@ class ToolRouteObservationModel:
                 raise ValueError("observation error and drop probabilities must be in [0, 1)")
         if self.delivery_delay_ms < 0:
             raise ValueError("delivery_delay_ms must be non-negative")
-
-
-class WhitespaceTokenizer:
-    """Test-only tokenizer; never valid for a paper provider cohort."""
-
-    name = "test-whitespace-tokenizer"
-
-    @staticmethod
-    def count(text: str) -> int:
-        return len(text.split())
-
-
-class ProviderTokenCounter(Protocol):
-    """Provider-native input-token counter used to freeze a B/C control.
-
-    The count must be produced by the same provider/model family that will
-    receive the episode.  A local approximation is allowed only in unit tests
-    and never establishes a paper-cohort B/C match.
-    """
-
-    name: str
-
-    def count_tokens(self, prompt: str) -> int: ...
 
 
 @dataclass(frozen=True)
@@ -155,19 +126,6 @@ class ToolRouteAuthorization:
         raise PermissionError("episode is not explicitly authorized by the frozen manifest")
 
 
-@dataclass(frozen=True)
-class AuthorizationBoundTokenizer:
-    """Make provider-native token counting subject to live authorization."""
-
-    authorization: ToolRouteAuthorization
-    name: str
-    counter: Callable[[str], int]
-
-    def count(self, prompt: str) -> int:
-        self.authorization.verify_live()
-        return self.counter(prompt)
-
-
 class OpenAICompatibleProvider:
     """Small dependency-free chat-completions adapter for a later authorized run."""
 
@@ -201,24 +159,6 @@ class OpenAICompatibleProvider:
             request_id=payload.get("id"), input_tokens=usage.get("prompt_tokens"), output_tokens=usage.get("completion_tokens"), raw_response=payload,
         )
 
-    def count_tokens(self, prompt: str) -> int:
-        """Use OpenAI's native Responses input-token counter.
-
-        Generation remains on Chat Completions for the retained transport
-        preflights.  The counter is used only to match the *same user prompt*
-        between B and C; a frozen paper manifest must record that distinction.
-        """
-        endpoint = "https://api.openai.com/v1/responses/input_tokens"
-        body = {"model": self.model, "input": [{"role": "user", "content": prompt}]}
-        req = request.Request(endpoint, data=json.dumps(body).encode("utf-8"), method="POST", headers={
-            "Authorization": f"Bearer {self._api_key}", "Content-Type": "application/json",
-        })
-        with request.urlopen(req, timeout=60) as response:  # nosec B310: explicitly authorized calibration only
-            payload = json.loads(response.read().decode("utf-8"))
-        value = payload.get("input_tokens")
-        if not isinstance(value, int):
-            raise ValueError("OpenAI input-token counter returned no integer input_tokens")
-        return value
 
 
 class AnthropicMessagesProvider:
@@ -254,18 +194,6 @@ class AnthropicMessagesProvider:
         usage = payload.get("usage", {})
         return ProviderResponse(text=text, request_id=payload.get("id"), input_tokens=usage.get("input_tokens"), output_tokens=usage.get("output_tokens"), raw_response=payload)
 
-    def count_tokens(self, prompt: str) -> int:
-        endpoint = "https://api.anthropic.com/v1/messages/count_tokens"
-        body = {"model": self.model, "messages": [{"role": "user", "content": prompt}]}
-        req = request.Request(endpoint, data=json.dumps(body).encode("utf-8"), method="POST", headers={
-            "x-api-key": self._api_key, "anthropic-version": self.api_version, "content-type": "application/json",
-        })
-        with request.urlopen(req, timeout=60) as response:  # nosec B310: explicitly authorized calibration only
-            payload = json.loads(response.read().decode("utf-8"))
-        value = payload.get("input_tokens")
-        if not isinstance(value, int):
-            raise ValueError("Anthropic token counter returned no integer input_tokens")
-        return value
 
 
 class GeminiGenerateContentProvider:
@@ -301,16 +229,6 @@ class GeminiGenerateContentProvider:
             output -= usage["promptTokenCount"]
         return ProviderResponse(text=text, request_id=payload.get("responseId"), input_tokens=usage.get("promptTokenCount"), output_tokens=output, raw_response=payload)
 
-    def count_tokens(self, prompt: str) -> int:
-        endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{self.model}:countTokens?key={self._api_key}"
-        body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}]}
-        req = request.Request(endpoint, data=json.dumps(body).encode("utf-8"), method="POST", headers={"content-type": "application/json"})
-        with request.urlopen(req, timeout=60) as response:  # nosec B310: explicitly authorized calibration only
-            payload = json.loads(response.read().decode("utf-8"))
-        value = payload.get("totalTokens")
-        if not isinstance(value, int):
-            raise ValueError("Gemini token counter returned no integer totalTokens")
-        return value
 
 
 def _safe_provider_error(exc: Exception, api_key: str) -> dict[str, object]:
@@ -411,21 +329,21 @@ class ToolRouteAPIEpisode:
 
     def __init__(
         self, *, seed: int, turn: int, condition: Condition, experiments_root: Path,
-        tokenizer: Tokenizer, model_id: str, provider_label: str,
+        model_id: str, provider_label: str,
         observation_model: ToolRouteObservationModel = ToolRouteObservationModel(),
     ) -> None:
         if turn not in range(4):
             raise ValueError("ToolRoute API episode turn must be in [0, 3]")
         self.seed, self.turn, self.condition = seed, turn, condition
-        self.tokenizer, self.model_id, self.provider_label = tokenizer, model_id, provider_label
+        self.model_id, self.provider_label = model_id, provider_label
         self.observation_model = observation_model
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
         self.directory = Path(experiments_root) / "api-preflight" / "toolroute" / f"{stamp}-{condition}-{uuid4().hex}"
         self.directory.mkdir(parents=True, mode=0o700)
         self._write_once("manifest.json", {
-            "kind": "toolroute_api_independent_full_checkpoint", "scenario": "ToolRoute-v0.6-api-preflight",
+            "kind": "toolroute_api_independent_full_checkpoint", "scenario": "ToolRoute-v1.0-api",
             "seed": seed, "turn": turn, "condition": condition, "model_id": model_id,
-            "provider_label": provider_label, "tokenizer": tokenizer.name,
+            "provider_label": provider_label,
             "state_delivery": "independent_full_checkpoint_only", "provider_tools": "none",
             "observation_model": asdict(observation_model),
             "primary_oracle": "observable_monitor_cost_v0.6", "secondary_oracle": "clairvoyant_latent_cost_diagnostic_only",
@@ -435,19 +353,9 @@ class ToolRouteAPIEpisode:
         if ToolRouteOracle.observable_margin(self.snapshot) < _MIN_OBSERVABLE_MARGIN:
             raise RuntimeError("observable-oracle calibration failed")
         self.options = _option_order(seed, turn)
-        try:
-            self.prompt = self._prompt()
-        except Exception as exc:
-            # Reservation happens before any provider contact.  A tokenizer
-            # mismatch is still an attempted setup and must be terminal.
-            self._write_once("setup-error.json", {
-                "classification": "REJECTED_TOKEN_CONTROL_SETUP",
-                "exception_type": type(exc).__name__, "reason": str(exc),
-            })
-            self._finalize("REJECTED_TOKEN_CONTROL_SETUP")
-            raise
+        self.prompt = self._prompt()
         self._write_once("input.json", {
-            "condition": condition, "prompt": self.prompt, "prompt_tokens": tokenizer.count(self.prompt),
+            "condition": condition, "prompt": self.prompt, "prompt_characters": len(self.prompt),
             "option_order": list(self.options), "visible_snapshot": self.snapshot if condition == "C" else None,
         })
         self._write_once("host.json", {
@@ -474,7 +382,7 @@ class ToolRouteAPIEpisode:
             seed=self.seed, turn=self.turn, observation_model=self.observation_model,
         )
 
-    def _neutral_prompt(self, task: str, target_tokens: int) -> str:
+    def _neutral_prompt(self, task: str) -> str:
         # Keep the exact telemetry envelope and field layout visible in C, but
         # replace every route-relevant value with the same benign value for
         # both tools.  B therefore controls for telemetry-shaped attention and
@@ -485,33 +393,12 @@ class ToolRouteAPIEpisode:
             if line.startswith("  tool_alpha:") or line.startswith("  tool_beta:"):
                 tool = line.split(":", 1)[0].strip()
                 lines.append(
-                    f"  {tool}: window=0 succ=0 consec_fail=0 latency_ewma=0.0ms "
+                    f"  {tool}: window=6 succ=6 consec_fail=0 latency_ewma=1000.0ms "
                     "last_err=NONE circuit=CLOSED age=10ms"
                 )
             else:
                 lines.append(line)
-        prefix = task + "\n".join(lines)
-        prompt, current = prefix, self.tokenizer.count(prefix)
-        # Provider tokenizers are discrete and need not assign one token to the
-        # same padding atom.  Greedily use only empirically observed deltas
-        # that do not overshoot the target; fail closed if none is available.
-        padding_atoms = (" neutral", " .", " 0", " x", " _", "\n")
-        while current < target_tokens:
-            remaining = target_tokens - current
-            choices: list[tuple[int, str]] = []
-            for atom in padding_atoms:
-                candidate_count = self.tokenizer.count(prompt + atom)
-                delta = candidate_count - current
-                if 0 < delta <= remaining:
-                    choices.append((delta, atom))
-            if not choices:
-                break
-            delta, atom = max(choices)
-            prompt += atom
-            current += delta
-        if current != target_tokens:
-            raise ValueError("tokenizer cannot construct an exactly token-matched B control")
-        return prompt
+        return task + "\n".join(lines)
 
     def _prompt(self) -> str:
         task = _task(self.options)
@@ -519,7 +406,7 @@ class ToolRouteAPIEpisode:
         if self.condition == "A":
             return task
         if self.condition == "B":
-            return self._neutral_prompt(task, self.tokenizer.count(c_prompt))
+            return self._neutral_prompt(task)
         return c_prompt
 
     def _outcome(self, action: Action) -> dict[str, object]:

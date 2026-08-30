@@ -21,12 +21,12 @@ provider has been attempted and finalized; no paper cohort is authorized.
 
 ## Exact actions remaining before the first API call
 
-1. Choose the model/provider cohort and confirm each API adapter and exact
-   tokenizer implementation. A byte or whitespace-token control is not valid
-   for paper data.
+1. Choose the model/provider cohort and confirm each API adapter. The paper
+   control is a fixed, same-shape neutral table, not an online token-matching
+   procedure.
 2. Create a committed pilot manifest from
    `manifests/toolroute_api_pilot.template.json`. It must include the frozen
-   model/version, tokenizer/version, output cap, parameters, six seeds,
+   model/version, fixed B construction, output cap, parameters, six seeds,
    condition randomization, baseline, sensitivity analysis, exclusions, and
    analysis plan.
 3. Review the manifest, set only the ToolRoute-specific provenance authorization

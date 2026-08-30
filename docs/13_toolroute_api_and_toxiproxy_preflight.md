@@ -22,8 +22,10 @@ pooled.
   artifact hashes.
 - Each decision sends a full checkpoint with `base_snapshot_id: null`; no prior
   conversation state is required.
-- A, B and C share task/options. B is matched to the supplied tokenizer; a
-  paper run must inject a pinned provider tokenizer, never `WhitespaceTokenizer`.
+- A, B and C share task/options. B has the same fixed envelope, field names,
+  ordering, and tool rows as C, with equal neutral values for both equivalent
+  tools. Provider-reported input-token usage is retained; no token-padding or
+  tokenizer service is used.
 - `ToolRouteAuthorization.load` binds provenance to the SHA-256 of a committed
   frozen manifest. A caller boolean cannot enable a request. Repository
   provenance remains false with a null hash.
@@ -35,13 +37,13 @@ pooled.
 
 ## Remaining authorization actions
 
-1. Select provider/model and obtain its exact tokenizer/version. The run must
-   use an adapter that matches that provider's documented API. Dependency-free,
+1. Select provider/model. The run must use an adapter that matches that
+   provider's documented API. Dependency-free,
    tool-less adapters for OpenAI Chat Completions, Anthropic Messages, and
    Gemini GenerateContent are implemented and locally tested; credentials and
    model selection remain external to the repository.
 2. Copy and complete `manifests/toolroute_api_pilot.template.json`, then freeze
-   model/version, tokenizer/version, parameters, parser, no-retry policy,
+   model/version, fixed B construction, parameters, parser, no-retry policy,
    seeds/randomization, observation baseline/sensitivity grid,
    inclusion/exclusion rules, and analysis/power plan in a pilot manifest.
 3. Retain model-free calibration for the frozen baseline and each declared

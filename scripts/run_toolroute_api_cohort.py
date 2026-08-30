@@ -1,8 +1,7 @@
 """Execute one frozen ToolRoute provider cohort without retries.
 
-Every model decision receives an independent full checkpoint.  Condition B is
-constructed with the selected provider's native token counter; the episode
-constructor fails before generation if B cannot exactly match C.
+Every model decision receives an independent full checkpoint. Condition B uses
+the same fixed telemetry structure as C but equal values for equivalent tools.
 """
 
 from __future__ import annotations
@@ -15,7 +14,7 @@ from pathlib import Path
 
 from scac_harness.toolroute_api import (
     AnthropicMessagesProvider, GeminiGenerateContentProvider,
-    AuthorizationBoundTokenizer, OpenAICompatibleProvider, ToolRouteAPIEpisode,
+    OpenAICompatibleProvider, ToolRouteAPIEpisode,
     ToolRouteAuthorization,
 )
 
@@ -69,9 +68,6 @@ def main() -> None:
     authorization.verify_live()
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     provider = _provider(args.provider, args.model)
-    tokenizer = AuthorizationBoundTokenizer(
-        authorization, f"{args.provider}-native-count-endpoint:{args.model}", provider.count_tokens,
-    )
     episodes = _episodes(manifest, args.provider, args.model)
     requested = (args.only_seed, args.only_turn, args.only_condition)
     if any(value is not None for value in requested):
@@ -83,7 +79,7 @@ def main() -> None:
     for seed, turn, condition in episodes:
         authorization.verify_live()
         episode = ToolRouteAPIEpisode(seed=seed, turn=turn, condition=condition, experiments_root=args.experiments_root,
-                                      tokenizer=tokenizer, model_id=args.model, provider_label=args.provider)
+                                      model_id=args.model, provider_label=args.provider)
         result = episode.run(provider, authorization=authorization)
         print(json.dumps({"seed": seed, "turn": turn, "condition": condition,
                           "classification": result["classification"], "directory": str(episode.directory)}), flush=True)

@@ -55,8 +55,8 @@ Toxiproxy adapter are retained development diagnostics—not empirical evidence.
 
 Provider trials remain deliberately unauthorized. The selected first-paper
 cohort is GPT-5.6 Sol, Claude Sonnet 5, and Gemini 3.7 Flash. The only
-remaining ToolRoute actions are to freeze and retain each provider's native B/C token-count calibration, commit
-the completed pilot manifest and analysis plan, bind its hash in provenance
+remaining ToolRoute actions are to freeze the fixed-structure A/B/C pilot
+manifest and analysis plan, bind its hash in provenance
 through an explicit review, and run the separated canary then the frozen cohort. This
 narrow ToolRoute exception does not close G1 globally or apply to
 MemoryGovernor, RetryBudget, or a combined study. See

@@ -1,4 +1,8 @@
-# ToolRoute API Handover — 2026-08-30
+# ToolRoute API Handover — 2026-08-30 (historical; superseded)
+
+> This handover predates the final fixed-structure B-control decision. Do not
+> follow its tokenizer-matching instructions; use `PROTOCOL.md`,
+> `docs/07_toolroute_hardening_issue_ledger.md`, and the current final manifest.
 
 ## Current truth
 
@@ -13,9 +17,9 @@
   hash, or copy it into an artifact.
 - Toxiproxy is frozen and out of scope. RetryBudget and MemoryGovernor are out
   of scope. Do not run fresh-subagent smoke trajectories.
-- The future paper cohort remains synthetic ToolRoute v0.6: independent full
-  checkpoints; six seeds x four turns x A/B/C = 72 decisions per model; exact
-  provider-tokenizer B control is mandatory.
+- The future paper cohort remains synthetic ToolRoute: independent full
+  checkpoints; six seeds x four turns x A/B/C = 72 decisions per model; B is a
+  same-shape equal-tool neutral table and provider token usage is descriptive.
 
 ## Completed non-paper API transport smoke
 

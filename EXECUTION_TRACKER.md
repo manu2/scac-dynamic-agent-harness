@@ -511,3 +511,19 @@
   recheck before every count and episode, and setup failures now finalize
   automatically. The exact old runner was terminated; authorization remains
   revoked. A revised manifest and fresh cohort are required before any restart.
+
+### 2026-08-30 — Final ToolRoute protocol simplification (v1.0)
+
+- Audited and removed the active online token-equalization path: provider token
+  counter adapters, iterative opaque padding, tokenizer-bound constructor
+  inputs, and the associated count-request authorization surface. Historical
+  v0.7–v0.9 manifests and attempts remain retained as excluded engineering
+  records.
+- The final A/B/C contract is now fixed structure: B has C's envelope, field
+  names, ordering, and rows, but identical neutral tool values; C has truthful
+  values. No padding or exact token equality is claimed. Provider-reported
+  input-token usage and prompt characters are retained as descriptive checks.
+- Added `manifests/toolroute_api_canary.v1.0.json`, a fresh 36-decision,
+  per-episode end-to-end canary (one seed × four turns × A/B/C × three models),
+  outside the paper denominator. It is not yet authorized. The full 24-state
+  route-symmetry test for B passes locally.

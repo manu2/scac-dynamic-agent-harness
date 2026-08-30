@@ -89,7 +89,10 @@ all of the following are frozen and passing:
   artifact access beyond its one assigned prompt;
 - the reservation-first API runner passes mock-provider, malformed-response,
   redaction, finalization, and evaluator-defeat tests;
-- B is matched by the pinned provider tokenizer, not merely UTF-8 byte length;
+- B uses the same fixed telemetry envelope, field names, ordering, and tool
+  rows as C, but assigns both equivalent tools the same neutral values. Exact
+  provider-token equality is not required; provider-reported input-token usage
+  is retained as a descriptive manipulation check;
 - the synthetic observation model's accuracy, freshness, missingness, and
   noise/staleness sensitivity are calibrated and retained; and
 - a ToolRoute pilot manifest and analysis plan are committed, with the
