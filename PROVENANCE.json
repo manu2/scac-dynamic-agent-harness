@@ -9,7 +9,7 @@
     "canonical_design_path": "docs/15_dynamic_agent_telemetry_whitepaper.md"
   },
   "provider_trials_authorized": false,
-  "toolroute_provider_trials_authorized": true,
-  "toolroute_pilot_manifest_sha256": "9fb8003e4742b3e94afd872a88522cbe5d238d13ae631c1f0f30c78705789218",
-  "authorization_scope": "ToolRoute paper cohort v1.0 authorized for seeds [8, 9, 10, 11, 12, 13], turns [0, 1, 2, 3], conditions [A, B, C], models [gpt-5.6-sol, claude-sonnet-5, gemini-3.7-flash] under manifest manifests/toolroute_api_paper.v1.0.json."
+  "toolroute_provider_trials_authorized": false,
+  "toolroute_pilot_manifest_sha256": null,
+  "authorization_scope": "No provider call is authorized. The ToolRoute paper cohort v1.0 seed-8 block (36 decisions) completed and was audited; any subsequent execution requires a new reviewed authorization."
 }
