@@ -543,3 +543,13 @@
 - B/C prompt-character and provider-reported input-token values were retained
   as descriptive checks. They are deliberately not forced equal. Authorization
   is revoked; a new frozen paper manifest is required for further calls.
+
+### 2026-08-30 — Fixed-structure Gemini v1.1 seed-7 test completed
+
+- Authorized, executed, audited, and revoked the 12 Gemini 3.7 Flash seed-7
+  decisions in `manifests/toolroute_api_gemini_test_seed.v1.1.json`. All four
+  turns have one A/B/C record, all 12 parsed and completed, and every terminal
+  hash verifies. It is excluded engineering evidence, not paper data.
+- On turn 0, A/B selected `tool_alpha` (80.0 observable regret) and C selected
+  `tool_beta` (0). On turns 1–3 all three conditions selected zero-regret
+  actions; seed 7's turn-3 healthy route is alpha. Authorization is revoked.
