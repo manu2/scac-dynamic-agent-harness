@@ -1,0 +1,16 @@
+{
+  "condition": "C",
+  "kind": "development_smoke_only",
+  "neutral_control": "same_state_field_envelope_with_neutral_values_not_token_matched",
+  "observation_model": {
+    "delivery_delay_ms": 0,
+    "missing_field_probability": 0.0,
+    "value_corruption_probability": 0.0,
+    "version": "synthetic_host_lifecycle_v0.2"
+  },
+  "primary_oracle": "observable_dynamic_program_v0.2",
+  "provider_calls": "prohibited",
+  "scenario": "RetryBudget-v0.2",
+  "seed": 47,
+  "state_delivery": "independent_full_checkpoint_only"
+}

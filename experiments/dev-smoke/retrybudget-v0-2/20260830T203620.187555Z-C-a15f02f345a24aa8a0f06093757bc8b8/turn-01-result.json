@@ -1,0 +1,14 @@
+{
+  "action": "terminate",
+  "completed_work": false,
+  "oracle_actions": [
+    "terminate"
+  ],
+  "policy_regret": 0,
+  "response_text": "terminate",
+  "subject_id": "host-oracle-development",
+  "terminal": false,
+  "terminal_classification": "RUNNING",
+  "utility": 50,
+  "violation": null
+}

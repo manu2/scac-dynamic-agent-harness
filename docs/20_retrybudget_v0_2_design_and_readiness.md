@@ -109,6 +109,18 @@ loss/corruption fails closed until a separately calibrated sensitivity model is
 implemented. This is a development contract, not a frozen prompt/manifest for
 agent trials.
 
+## Local-only execution mechanism
+
+`RetryBudgetDevelopmentTrial` and `retry_budget_smoke_cli` implement a
+write-once, fresh-context handoff path. The subject receives only its current
+condition prompt and an exact-label instruction; the host retains state,
+action-values, oracle, transitions, rejections, and finalization hashes. The
+first host-oracle end-to-end diagnostic is retained at
+`experiments/dev-smoke/retrybudget-v0-2/20260830T203620.187555Z-C-a15f02f345a24aa8a0f06093757bc8b8/`.
+It has seven full-checkpoint decisions, zero oracle regret, valid finalization
+hashes, and `provider_calls: prohibited`. It validates execution capture only;
+it is not a subagent trajectory or paper evidence.
+
 ## Boundary and next gate
 
 New records belong under `experiments/g2-calibrations/retrybudget-v0-2/` and

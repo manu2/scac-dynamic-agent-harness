@@ -1,0 +1,28 @@
+{
+  "artifact_sha256": {
+    "manifest.json": "e2226a2be5f85b6fc0cd615cd3a95bbe046b3f43a33d60bd314eeeb65699a32c",
+    "turn-00-host.json": "c716602d537bee402fad4d751ecc767cc42376785b9d2af04c597e9ab6670da5",
+    "turn-00-input.json": "0118d9087e3cff3c67da3ccab1cba00704e87dcf17b6b48e2a212beb20689197",
+    "turn-00-result.json": "604e6a27b63bc4ad2253f8e990ad65edbae610b2ce22c543ddb1f3c1a1035878",
+    "turn-01-host.json": "813854fa8491b6d628d1a88371e022398af4d17a30d5034b913b576ee58822e2",
+    "turn-01-input.json": "95b581f6f0b5cbfb342dfe3d0999ea343b87d9028ec0acd93104e520eabdbe86",
+    "turn-01-result.json": "e5324c3f775b74b80967bbecda0674517aa18305425f53c96118bde6cf63d05d",
+    "turn-02-host.json": "5dc10c40ccfa75d6900c358227427d6e023318ce97124c04cf3dbc31a4c4d13c",
+    "turn-02-input.json": "c9a779e51408f6fecfab64a5b0e787cea3c2083400547ec34658969b0d14ec55",
+    "turn-02-result.json": "e5324c3f775b74b80967bbecda0674517aa18305425f53c96118bde6cf63d05d",
+    "turn-03-host.json": "b7cc084229aa78703b1092cdfda353370184f3a2e32ee90db01286f08f01da63",
+    "turn-03-input.json": "cf2072c616cd4299fc9b28562d9231f56a55c64e697ce683f9994510b6a672b4",
+    "turn-03-result.json": "1e8ca430f05379537443eb23e8c20752b019dde175310169c854476adc9e7659",
+    "turn-04-host.json": "61dfcbe7d02e0bd5e0988d9f5997cddeebcead83338a5c0e8ffeb14c6d24d65e",
+    "turn-04-input.json": "48cbb8b5d5e49783dc01d6368114ae08f91582201024fa0c3c87ba8e3bf2255e",
+    "turn-04-result.json": "035cf42fda168b161487bdd37d568ab027b1ea1c9b81212a2df28d5fb1c3bfa0",
+    "turn-05-host.json": "cea188ca40e7659ccbc6356b92871545ea4329dffa7e73b0ad88bab50d58f2b0",
+    "turn-05-input.json": "a104941decd83f4abeb862916f18c4168816c3c6e5a8c73382652c0a1dfc0f58",
+    "turn-05-result.json": "035cf42fda168b161487bdd37d568ab027b1ea1c9b81212a2df28d5fb1c3bfa0",
+    "turn-06-host.json": "5ff3e213952dd59f1ac876407361cfc391153ed143a1bb85ed780259699723ba",
+    "turn-06-input.json": "cda0feaa85be625f892c9b62dfdb79a6a14346888bf9983573ece8a26ef9a6a9",
+    "turn-06-result.json": "373a39c0c1399a36945ee026a44b6c7cfe4b3b1a1609db3f3918407d9c41b977"
+  },
+  "classification": "COMPLETED",
+  "terminal_turn": 6
+}

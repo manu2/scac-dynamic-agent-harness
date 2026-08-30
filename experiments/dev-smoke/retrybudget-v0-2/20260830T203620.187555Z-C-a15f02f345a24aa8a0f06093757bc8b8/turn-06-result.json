@@ -1,0 +1,14 @@
+{
+  "action": "fallback",
+  "completed_work": true,
+  "oracle_actions": [
+    "fallback"
+  ],
+  "policy_regret": 0,
+  "response_text": "fallback",
+  "subject_id": "host-oracle-development",
+  "terminal": true,
+  "terminal_classification": "COMPLETED",
+  "utility": 60,
+  "violation": null
+}

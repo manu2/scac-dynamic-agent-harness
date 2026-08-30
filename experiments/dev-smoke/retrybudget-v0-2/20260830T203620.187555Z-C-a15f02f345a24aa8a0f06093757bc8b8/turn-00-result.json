@@ -1,0 +1,14 @@
+{
+  "action": "checkpoint",
+  "completed_work": false,
+  "oracle_actions": [
+    "checkpoint"
+  ],
+  "policy_regret": 0,
+  "response_text": "checkpoint",
+  "subject_id": "host-oracle-development",
+  "terminal": false,
+  "terminal_classification": "RUNNING",
+  "utility": -5,
+  "violation": null
+}

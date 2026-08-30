@@ -1,0 +1,41 @@
+{
+  "action_values": {
+    "checkpoint": 45,
+    "fallback": 15,
+    "retry": 25,
+    "terminate": 0,
+    "wait": 0
+  },
+  "best_actions": [
+    "checkpoint"
+  ],
+  "observable_projection": {
+    "checkpoint_available": true,
+    "checkpoint_recovery_utility": 50,
+    "checkpointed": false,
+    "deadline_remaining_ms": 400,
+    "decision_steps_remaining": 3,
+    "delivery_delay_ms": 0,
+    "fallback_available": false,
+    "fallback_utility": 0,
+    "observation_source": "synthetic_host_lifecycle_v0.2",
+    "primary_status": "HTTP_503",
+    "remaining_quota": 1,
+    "retry_after_ms": null,
+    "state_delivery": "independent_full_checkpoint",
+    "work_item": 0
+  },
+  "state": {
+    "checkpoint_available": true,
+    "checkpoint_recovery_utility": 50,
+    "checkpointed": false,
+    "deadline_remaining_ms": 400,
+    "decision_steps_remaining": 3,
+    "fallback_available": false,
+    "fallback_utility": 0,
+    "primary_status": "HTTP_503",
+    "remaining_quota": 1,
+    "retry_after_ms": null,
+    "work_item": 0
+  }
+}

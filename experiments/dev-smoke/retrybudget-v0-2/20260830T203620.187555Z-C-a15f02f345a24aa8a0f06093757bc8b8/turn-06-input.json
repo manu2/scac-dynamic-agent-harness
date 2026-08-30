@@ -1,0 +1,38 @@
+{
+  "condition": "C",
+  "decision_steps_remaining": 3,
+  "kind": "retrybudget_v0_2_independent_full_checkpoint_prompt",
+  "observation_model": {
+    "delivery_delay_ms": 0,
+    "missing_field_probability": 0.0,
+    "value_corruption_probability": 0.0,
+    "version": "synthetic_host_lifecycle_v0.2"
+  },
+  "option_order": [
+    "terminate",
+    "retry",
+    "wait",
+    "fallback",
+    "checkpoint"
+  ],
+  "prompt": "Task: choose the next operational action for one pending work item. retry attempts the primary service; wait preserves work until a declared recovery; fallback uses the declared alternative; checkpoint preserves recoverable progress; terminate safely ends the work item. Return exactly one listed action label and no other text.\nOptions: terminate, retry, wait, fallback, checkpoint\n[HOST-OWNED RETRYBUDGET STATE \u2014 FULL CHECKPOINT]\nwork_item=4\ndecision_steps_remaining=3\ndeadline_remaining_ms=400\nprimary_status=HTTP_429\nremaining_quota=1\nretry_after_ms=900\nfallback_available=True\nfallback_utility=60\ncheckpoint_available=True\ncheckpointed=False\ncheckpoint_recovery_utility=30\nobservation_source=synthetic_host_lifecycle_v0.2\ndelivery_delay_ms=0\nstate_delivery=independent_full_checkpoint\n",
+  "prompt_characters": 790,
+  "seed": 47,
+  "visible_projection": {
+    "checkpoint_available": true,
+    "checkpoint_recovery_utility": 30,
+    "checkpointed": false,
+    "deadline_remaining_ms": 400,
+    "decision_steps_remaining": 3,
+    "delivery_delay_ms": 0,
+    "fallback_available": true,
+    "fallback_utility": 60,
+    "observation_source": "synthetic_host_lifecycle_v0.2",
+    "primary_status": "HTTP_429",
+    "remaining_quota": 1,
+    "retry_after_ms": 900,
+    "state_delivery": "independent_full_checkpoint",
+    "work_item": 4
+  },
+  "work_item": 4
+}

@@ -807,3 +807,18 @@
   proves that property. Recorded as RB-007.
 - RetryBudget now has 13 focused transition/observation tests; no agent prompt
   was sent, no provider call was made, and no authorization state changed.
+
+### 2026-08-31 — RetryBudget v0.2 local-only execution-path check
+
+- Added a scenario-owned development runner and CLI handoff path. Each subject
+  receives only one current full checkpoint condition prompt and must return an
+  exact action label; host-owned state, action values, oracle, rejections,
+  transitions, and finalization remain outside the subject.
+- Ran one host-oracle end-to-end diagnostic under
+  `experiments/dev-smoke/retrybudget-v0-2/`. It completed seven decisions with
+  zero regret, all finalization hashes valid, and an explicit provider-call
+  prohibition. This validates local capture/resume/finalization only; it is not
+  a subagent trajectory, a blinded trial, or paper evidence.
+- No provider adapter, authorization, manifest, observation-noise calibration,
+  or agent-result inclusion rule has been added. RetryBudget remains blocked
+  from fresh-subagent and provider collection pending its readiness packet.

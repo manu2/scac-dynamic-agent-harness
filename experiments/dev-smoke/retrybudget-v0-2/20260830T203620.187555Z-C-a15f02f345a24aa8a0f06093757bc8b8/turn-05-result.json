@@ -1,0 +1,14 @@
+{
+  "action": "retry",
+  "completed_work": true,
+  "oracle_actions": [
+    "retry"
+  ],
+  "policy_regret": 0,
+  "response_text": "retry",
+  "subject_id": "host-oracle-development",
+  "terminal": false,
+  "terminal_classification": "RUNNING",
+  "utility": 100,
+  "violation": null
+}
