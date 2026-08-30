@@ -613,3 +613,28 @@
   remain included; the next authorization may run only seeds 9–10 (72
   decisions) under this same effective configuration. Seeds 11–13 require a
   subsequent reviewed continuation configuration.
+
+### 2026-08-30 — ToolRoute paper cohort v1.0 continuation seeds 9–10 completed
+
+- Authorized, executed, audited, and revoked the 72 decisions in the first paper
+  continuation block: Seeds 9 and 10 across four turns, A/B/C conditions, and
+  three models (`gpt-5.6-sol`, `claude-sonnet-5`, `gemini-3.7-flash`).
+- Artifacts stored under `experiments/api-paper-v1.0-seeds9-10/`.
+- **Integrity Audit:** Exactly 72/72 unique expected cells completed once (24 per
+  model); 0 provider errors; 0 malformed responses; all 72 `finalization.json`
+  artifact hashes valid; outer `pilot_manifest_sha256` (`9fb8003e...`) and
+  `execution_config_sha256` (`d1cba39f...`) hashes verified; 0 tool/function
+  declarations; symmetric B tool rows; 0 retries.
+- **Results Summary (Seeds 9 & 10):**
+  - **`gpt-5.6-sol`:** Condition C achieved **0.00 mean regret**, 100% success rate,
+    160.0 ms mean latency; Condition B: 3,288.51 mean regret (62.5% success);
+    Condition A: 3,298.51 mean regret (62.5% success). Treatment effect $C - B = -3,288.51$ ms.
+  - **`claude-sonnet-5`:** Condition C achieved **0.00 mean regret**, 100% success rate,
+    160.0 ms mean latency; Condition B: 3,298.51 mean regret (62.5% success);
+    Condition A: 4,222.22 mean regret (50.0% success). Treatment effect $C - B = -3,298.51$ ms.
+  - **`gemini-3.7-flash`:** Condition C achieved **727.06 mean regret**, 87.5% success rate,
+    200.0 ms mean latency (chose `wait` on Seed 9 Turn 3); Condition B: 3,298.51 mean regret
+    (62.5% success); Condition A: 3,298.51 mean regret (62.5% success). Treatment effect $C - B = -2,571.45$ ms.
+- Authorization revoked immediately in `PROVENANCE.json` (`toolroute_provider_trials_authorized: false`).
+- Seeds 11–13 remain held pending separate authorization.
+

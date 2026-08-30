@@ -1,0 +1,11 @@
+{
+  "accepted": true,
+  "action": "wait",
+  "clairvoyant_regret_diagnostic": 10220.0,
+  "classification": "COMPLETED",
+  "error_class": null,
+  "latency_ms": 500,
+  "policy_regret": 5816.47,
+  "response_text": "wait",
+  "success": false
+}

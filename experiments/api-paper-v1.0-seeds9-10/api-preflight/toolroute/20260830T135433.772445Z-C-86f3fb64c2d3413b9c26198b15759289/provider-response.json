@@ -1,0 +1,38 @@
+{
+  "input_tokens": 362,
+  "output_tokens": 340,
+  "raw_response": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "wait",
+              "thoughtSignature": "Eq0ICqoIARFNMg8Ylnv1Se+S/4DJI7jf/qGUz4KK86g2aauxi1GlAaE+eqshSIojzI/IS4IUi3tHVr3hLaHArItwyL331GGW2aQ6UN5oBx0+As8nBeT20qANVq1lReOZPhpYRoPnEW/X1ysnmm4ySpHIjqF/RpbCT0g0cAiZl48La1d/tuOcCsfpDjl6D4+nEP2oQOhRgsgwbAVycTV2ZQUA0vuIAcv79HD6q3afXFQrFCFb3/GKN1SgEEETDvmubDkYTh5M1I8c5yUZSoiI+HWsbSUWnJqwh/7KDQivltadtg6jf+B/d34lmGeZb8+plDVGySvikNR+SEtFAx2qpF/t7Ai1oWV2qjSlmPMjkCR808muiKyFX++At+OgPa7K2nZpPqSaBqHERV0Klx8h/w+ZTUGroEsSDqgUBZyyfnS4M/xuoyq9BOC4cf32lT5/po8Dd7CKktpZjcSwgY7I+K5nlRb9F7QwF3AQxRFcCVVPWJwf9tiUeFih26P0dOgFXv+U/cD9XdmBzZfgISgWeyQ5AdRfD+s5NqMSgGNl+8CIU0n/KajUPwJJYGEqiLxzRJ9LyluBRJAbdXSRoagzBY0x19eLfrTvzMURt1aetolr2TeanWBp+ZRSYmABrn7xPcJFWS/8uQV/FbCIFQVnzU9zYU6jYoVscjElqP7fx2IKjgF3TJJ0LHkuUzXypfTTGa7je1OcGtmfez2ntEq8zzDSM9Y2yjnQ8PDhzzD6eJBku+3A/yOrEUX2roBtxjNgrHQIHz5FZ7uiCnxjIAcppnIUJtTpyXpRRTimky5BuZXesjujnVBsitFm5f3AD9qH6z5n9i4Mj2oLis34hGOoAgmoDO7+qHhByyUpt3ShfJv0aH0CgtpuobkCSw/a/WEqqkSZ9i4mSeQanXJ2/3DWjIZpX6GEUrd3Qyobc/hKaFD641U0uPO+XPXXhSHmk+DWyGP3XLwzyTT8uiunPvmde8C+eRfRQt0mrdwMcY2w0B4upAFkgJ6aKcNXy3GWMXFNEQNG2x3JnlabMP51OtRHG4KhRY4rUQ0Ipg+vLEiibv4eBP5H5mzujZToSQeSVl/c+dl/IrVDjvaVL/zSJ4IVMKNxcoJvEpE/Xivjpy4+XHH6Znd1P7SIavDRsqb7wpzgVS3/GmujbBtRZcP8I1dUyRfitY/Cks9inOjpaP1uVkO55tgJWj+JdpYKjds0Ht4sIsQPg5dMBj3k7217NR5q8+hzGrCR3xOUDpARYnZyhdWsmbcHM4WnzjROuwhvOT4DgYyG+ijNJSBMQwSYIa3lU+t5jj7i2gqkFDrN6R0WE7t/RPacu2ve+rlT697JAGT/uOJy+Aw6X/A1/hVRZKVTU1NZ3Xrph9qXs8k7nNtIJVDvjVR5KAQ7w5tP6fYqK4uqEb6MgRH/3vCF3gtowvtwZg=="
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "modelVersion": "gemini-3.7-flash",
+    "responseId": "GjaUapPqBqzeg8UP3ODf8Qc",
+    "usageMetadata": {
+      "candidatesTokenCount": 1,
+      "promptTokenCount": 362,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 362
+        }
+      ],
+      "serviceTier": "standard",
+      "thoughtsTokenCount": 339,
+      "totalTokenCount": 702
+    }
+  },
+  "request_id": "GjaUapPqBqzeg8UP3ODf8Qc",
+  "text": "wait"
+}
