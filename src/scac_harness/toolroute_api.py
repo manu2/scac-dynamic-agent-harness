@@ -138,8 +138,21 @@ class ToolRouteAuthorization:
         manifest = json.loads(self.pilot_manifest_path.read_text(encoding="utf-8"))
         episodes = manifest.get("authorized_episodes")
         target = {"seed": seed, "turn": turn, "condition": condition, "model_id": model_id, "provider_label": provider_label}
-        if not isinstance(episodes, list) or target not in episodes:
-            raise PermissionError("episode is not explicitly authorized by the frozen manifest")
+        if isinstance(episodes, list) and target in episodes:
+            return
+        # A Cartesian episode grid is equally explicit but avoids an error-prone
+        # 216-row manifest.  Every dimension is frozen; no wildcard model,
+        # provider, seed, turn, or condition is accepted.
+        grids = manifest.get("authorized_episode_grids")
+        if isinstance(grids, list):
+            for grid in grids:
+                if not isinstance(grid, Mapping):
+                    continue
+                if (grid.get("model_id") == model_id and grid.get("provider_label") == provider_label
+                    and seed in grid.get("seeds", []) and turn in grid.get("turns", [])
+                    and condition in grid.get("conditions", [])):
+                    return
+        raise PermissionError("episode is not explicitly authorized by the frozen manifest")
 
 
 class OpenAICompatibleProvider:
@@ -449,12 +462,12 @@ class ToolRouteAPIEpisode:
             if line.startswith("  tool_alpha:") or line.startswith("  tool_beta:"):
                 tool = line.split(":", 1)[0].strip()
                 lines.append(
-                    f"  {tool}: window=6 succ=6 consec_fail=0 latency_ewma=1000.0ms "
+                    f"  {tool}: window=0 succ=0 consec_fail=0 latency_ewma=0.0ms "
                     "last_err=NONE circuit=CLOSED age=10ms"
                 )
             else:
                 lines.append(line)
-        prefix = task + "\n".join(lines) + "\n[CONTROL_PADDING]"
+        prefix = task + "\n".join(lines)
         prompt = prefix
         while self.tokenizer.count(prompt) < target_tokens:
             prompt += " neutral"

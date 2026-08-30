@@ -65,8 +65,8 @@ def test_api_episode_uses_full_checkpoint_and_exact_token_b_control(tmp_path: Pa
     assert c.snapshot["base_snapshot_id"] is None
     assert c.tokenizer.count(c.prompt) == b.tokenizer.count(b.prompt)
     assert "HOST TELEMETRY" in c.prompt and "HOST TELEMETRY" in b.prompt
-    assert "tool_alpha: window=6 succ=6 consec_fail=0 latency_ewma=1000.0ms" in b.prompt
-    assert "tool_beta: window=6 succ=6 consec_fail=0 latency_ewma=1000.0ms" in b.prompt
+    assert "tool_alpha: window=0 succ=0 consec_fail=0 latency_ewma=0.0ms" in b.prompt
+    assert "tool_beta: window=0 succ=0 consec_fail=0 latency_ewma=0.0ms" in b.prompt
     assert "retry_after=" not in b.prompt
 
 

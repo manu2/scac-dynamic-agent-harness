@@ -1,0 +1,25 @@
+{
+  "manifest_status": "FROZEN_COMPACT_FIRST_PAPER_COHORT",
+  "scenario": "ToolRoute-v0.7-api",
+  "cohort_size": "216 independent decisions: 3 models x 6 seeds x 4 turns x 3 conditions",
+  "selected_first_paper_models": [
+    {"provider_label": "openai", "model_id": "gpt-5.6-sol"},
+    {"provider_label": "anthropic", "model_id": "claude-sonnet-5"},
+    {"provider_label": "google", "model_id": "gemini-3.7-flash"}
+  ],
+  "state_delivery": "independent_full_checkpoint_only",
+  "provider_parameters": {"sampling_controls": "omitted; provider defaults", "max_output_tokens": 1024, "tools": "none", "request_retry_policy": "no retry"},
+  "tokenizer": {"method": "provider-native count endpoint", "b_control": "same telemetry envelope and fields as C; equal benign tool values; exact native B/C input-token match required before generation"},
+  "authorized_episode_grids": [
+    {"provider_label": "openai", "model_id": "gpt-5.6-sol", "seeds": [0, 1, 2, 3, 4, 5], "turns": [0, 1, 2, 3], "conditions": ["A", "B", "C"]},
+    {"provider_label": "anthropic", "model_id": "claude-sonnet-5", "seeds": [0, 1, 2, 3, 4, 5], "turns": [0, 1, 2, 3], "conditions": ["A", "B", "C"]},
+    {"provider_label": "google", "model_id": "gemini-3.7-flash", "seeds": [0, 1, 2, 3, 4, 5], "turns": [0, 1, 2, 3], "conditions": ["A", "B", "C"]}
+  ],
+  "execution_randomization_salt": "toolroute-v0.7-20260830",
+  "observation_baseline": {"version": "synthetic_host_probe_v0.6", "probes_per_tool": 3, "success_label_error_probability": 0.0, "event_drop_probability": 0.0, "delivery_delay_ms": 0},
+  "eligible_state_margin_ms": 50.0,
+  "primary_outcome": "observable_monitor_cost_v0.6 policy regret",
+  "secondary_outcome": "clairvoyant latent cost diagnostic only",
+  "inclusion_exclusion": "Every reserved request is retained. Provider errors and malformed outputs are reported separately and excluded from action-level regret only; no retries.",
+  "analysis_and_power_plan": "Analyze each model separately; independent samples only; report condition-level mean policy regret, exact-label agreement, malformed/provider-error rate, and bootstrap intervals. This compact cohort is an arXiv pilot, not a powered confirmatory study."
+}

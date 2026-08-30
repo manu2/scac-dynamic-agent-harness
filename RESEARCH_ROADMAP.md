@@ -33,7 +33,7 @@ Every snapshot enforces:
   controls are implemented. Timeout and deterministic tool-fault controls pass
   locally; the cgroup-v2 memory OOM-kill positive control is blocked pending a
   delegated Linux cgroup-v2 runner and cannot be substituted with a host limit.
-- **ToolRoute API readiness (Run-ready; authorization pending):** independent
+- **ToolRoute API readiness (Cohort frozen; authorization pending):** independent
   full-checkpoint episodes, isolated remote-model access, mock-provider
   capture/finalization, observation-model calibration, and evaluator-defeat
   checks are complete. The remaining authorization inputs are a chosen

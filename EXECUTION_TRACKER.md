@@ -482,3 +482,17 @@
   `experiments/api-transport-smoke/api-preflight/toolroute/20260830T083610.523454Z-C-0c92df46ea004b49a621d0a20f1ddf6a`.
 - Sonnet 5 and Gemini Flash retain earlier clean C-only transport diagnostics;
   those do not substitute for per-provider B/C native-count calibration.
+
+### 2026-08-30 — Compact ToolRoute API cohort frozen for execution
+
+- Frozen `manifests/toolroute_api_pilot.v0.7.json`: 216 independent decisions
+  (three selected models × six seeds × four turns × A/B/C), with native
+  provider token counts, independent full checkpoints, no tools, provider
+  defaults, no request retries, and deterministic execution randomization.
+- Added the manifest-bound cohort runner. It refuses undeclared episodes and
+  constructs B with the selected provider's native count endpoint before a
+  generation request; any unmatched B prompt fails closed.
+- Before authorization, checked every 24 seed/turn B/C prompt pair under the
+  deterministic test tokenizer after repairing a turn-0 one-token overshoot.
+  The complete local test suite passes (101 tests). The next action is an
+  authorized provider block; no cohort request has yet been submitted.
