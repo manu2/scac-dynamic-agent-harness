@@ -1,0 +1,56 @@
+{
+  "configurations": {
+    "baseline": {
+      "delivery_delay_ms": 0,
+      "event_drop_probability": 0.0,
+      "probes_per_tool": 3,
+      "success_label_error_probability": 0.0,
+      "version": "synthetic_host_probe_v0.6"
+    },
+    "delivery_delay_500ms": {
+      "delivery_delay_ms": 500,
+      "event_drop_probability": 0.0,
+      "probes_per_tool": 3,
+      "success_label_error_probability": 0.0,
+      "version": "synthetic_host_probe_v0.6"
+    },
+    "event_drop_10pct": {
+      "delivery_delay_ms": 0,
+      "event_drop_probability": 0.1,
+      "probes_per_tool": 3,
+      "success_label_error_probability": 0.0,
+      "version": "synthetic_host_probe_v0.6"
+    },
+    "label_error_10pct": {
+      "delivery_delay_ms": 0,
+      "event_drop_probability": 0.0,
+      "probes_per_tool": 3,
+      "success_label_error_probability": 0.1,
+      "version": "synthetic_host_probe_v0.6"
+    },
+    "stale_delivery_2500ms": {
+      "delivery_delay_ms": 2500,
+      "event_drop_probability": 0.0,
+      "probes_per_tool": 3,
+      "success_label_error_probability": 0.0,
+      "version": "synthetic_host_probe_v0.6"
+    }
+  },
+  "kind": "toolroute_observation_model_calibration_v1",
+  "minimum_observable_margin_ms": 50.0,
+  "not_model_evidence": true,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "turns": [
+    0,
+    1,
+    2,
+    3
+  ]
+}

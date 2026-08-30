@@ -1,0 +1,8 @@
+{
+  "artifact_sha256": {
+    "manifest.json": "6f0f3194f21cdd2323bf437df704c2c24cc8e5e82053288b87a337957cdb460a",
+    "raw-events.json": "fb5745ee2f15f86470625690e263b73fbd45af43f3ba3e6a3afb70b229c70e60",
+    "result.json": "8503fd52045c40a31e74fded101e88d317f5e74a2d9c1036dca17cdc7fdb5541"
+  },
+  "classification": "FAILED"
+}

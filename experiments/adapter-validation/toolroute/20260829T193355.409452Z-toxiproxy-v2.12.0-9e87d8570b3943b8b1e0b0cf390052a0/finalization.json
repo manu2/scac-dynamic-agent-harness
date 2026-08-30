@@ -1,0 +1,10 @@
+{
+  "artifact_sha256": {
+    "checkpoint.json": "51143b74a54301091812328dda7755ab2e645e1ee86f229a819fab6829a69e41",
+    "manifest.json": "0f20788e998b84012a53251e80b251ad8cf4269dc829e707365f4c6f9f1e1fd1",
+    "raw-events.json": "9e9e20f15c01466543bc4e2cdf75ca88bc0a74d48b5193b541827aa69150cbcb",
+    "rendered-telemetry.json": "9be4949f7dd018cac4568fd93a0425cd25fdcf64a4459178b624e4b64504fb09",
+    "result.json": "58e14099db28d6b79cac572465cab94df85b36a81a3908669cb567754385fdc2"
+  },
+  "classification": "COMPLETED"
+}

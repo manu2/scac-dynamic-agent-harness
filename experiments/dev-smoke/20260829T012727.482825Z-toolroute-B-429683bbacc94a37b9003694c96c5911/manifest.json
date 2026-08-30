@@ -1,0 +1,10 @@
+{
+  "condition": "B",
+  "decision_budget": 4,
+  "kind": "development_smoke_only",
+  "measurement_model": "synthetic_host_probe_perfect_signal_development_only",
+  "neutral_control": "utf8_byte_matched_opaque_structural_control_not_token_matched",
+  "records_required": 3,
+  "scenario": "ToolRoute-v0.3",
+  "seed": 23
+}

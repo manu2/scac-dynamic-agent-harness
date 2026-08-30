@@ -7,7 +7,9 @@ name = "scac-dynamic-agent-harness"
 version = "0.1.0"
 description = "Deterministic harness for dynamic execution-telemetry agent evaluation"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "jcs>=0.2.1",
+]
 
 [project.optional-dependencies]
 test = ["pytest>=8", "jsonschema>=4"]

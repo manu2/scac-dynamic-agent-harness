@@ -1,0 +1,108 @@
+{
+  "raw_events": [
+    {
+      "event_id": "1d267298016515dc29ea54bab8cdaec1024ab9e21b387b2d5bdb3d4e69247de8",
+      "payload": {
+        "error_class": "HTTP_503",
+        "latency_ms": 180,
+        "retry_after_ms": null,
+        "success": true,
+        "tool_id": "tool_alpha"
+      },
+      "source": "host_health_monitor",
+      "timestamp_ms": 4000,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "946c2922e6ab070a114417bf96c80df74bc836b803a82ce4572e9de0bd1468c2",
+      "payload": {
+        "error_class": "HTTP_503",
+        "latency_ms": 4200,
+        "retry_after_ms": 2000,
+        "success": false,
+        "tool_id": "tool_beta"
+      },
+      "source": "host_health_monitor",
+      "timestamp_ms": 4001,
+      "topic": "tool_span"
+    }
+  ],
+  "rendered_telemetry": "=== HOST TELEMETRY [seq=3 kind=delta base=36447523 id=25173e16 obs=4001ms fresh=2000ms] ===\n[TOOLS]\n  tool_alpha: window=4 succ=2 consec_fail=0 latency_ewma=793.76ms last_err=NONE circuit=DEGRADED retry_after=2000ms\n  tool_beta: window=4 succ=3 consec_fail=1 latency_ewma=943.04ms last_err=HTTP_503 circuit=CLOSED retry_after=2000ms\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "snapshot": {
+    "base_snapshot_id": "3644752383cb66a68ba179e03e84b7345648adfe93e5482961a6087b3ed39bf8",
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "efe24ad720f2aa542bc8d9a77cc5e69d4b81c07225ea382f11c8fc36ee92e764",
+        "21030640956ea4e679fe4470aa3c53e71b2d84b5d9d3f63a44794790cf0c337c",
+        "198f0405a56e5c4bb3693451cbd2070829e9b5b9b2d7852c97780fbdb6405b39",
+        "1d267298016515dc29ea54bab8cdaec1024ab9e21b387b2d5bdb3d4e69247de8"
+      ],
+      "tools.tool_beta": [
+        "89a05b69b10d242a1875d2790ac8a5fd7e5a6b382331dab1e021f5cbadb2bfb2",
+        "6e3e3d898bd5dc4ed619d52a717076162bb75d385a597a1a58813d334b713a66",
+        "266966c1281a5027875baa25ff97dab67dacd897ba2296a56980bbf085ddb464",
+        "946c2922e6ab070a114417bf96c80df74bc836b803a82ce4572e9de0bd1468c2"
+      ]
+    },
+    "fresh_for_ms": 2000,
+    "kind": "delta",
+    "observed_at_ms": 4001,
+    "raw_event_hashes": [
+      "1d267298016515dc29ea54bab8cdaec1024ab9e21b387b2d5bdb3d4e69247de8",
+      "946c2922e6ab070a114417bf96c80df74bc836b803a82ce4572e9de0bd1468c2"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 3,
+    "snapshot_id": "25173e16de5929c40a3f7eb47225c559aa1e4c39694a07e61aaa92c93db105b2",
+    "subsystem_observed_at_ms": {
+      "tool_span": 4001
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "DEGRADED",
+        "consecutive_failures": 0,
+        "failures": 2,
+        "history": [
+          true,
+          false,
+          false,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 793.76,
+        "retry_after_ms": 2000,
+        "state": "DEGRADED",
+        "successes": 2,
+        "window_n": 4
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 1,
+        "failures": 1,
+        "history": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "last_error": "HTTP_503",
+        "latency_ewma_ms": 943.04,
+        "retry_after_ms": 2000,
+        "state": "OK",
+        "successes": 3,
+        "window_n": 4
+      }
+    },
+    "trajectory_id": "dev-smoke-202",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "condition": "B",
+  "message": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: tool_alpha, wait, tool_beta\n[NEUTRAL STRUCTURAL CONTROL]\n  opaque_fields=UNAVAILABLE\ncedar lantern meadow cobalt river slate cedar lantern meadow cobalt river slate cedar lantern meadow cobalt river slate cedar lantern meadow cobalt river slate cedar lantern meadow cobalt river slate cedar lantern meadow cobalt river slate cedar lantern meadow cobalt river slate cedar lantern meadow cobalt river slate cedar lantern meadow cobalt river slate cedar lantern meadow cobalt",
+  "message_bytes": 634,
+  "option_order": [
+    "tool_alpha",
+    "wait",
+    "tool_beta"
+  ],
+  "visible_snapshot": null
+}

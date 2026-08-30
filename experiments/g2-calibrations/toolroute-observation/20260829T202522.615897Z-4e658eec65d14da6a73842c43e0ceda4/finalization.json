@@ -1,0 +1,8 @@
+{
+  "artifact_sha256": {
+    "manifest.json": "b70fbdf1a0a0aa5c5a734fe2c7e7f9869ecf0fa71bb39f1a3e7904660857ccbf",
+    "state-records.json": "a1e741ade69e6aeb51fd80754a5de035a6e6ee3384cde948b394bc41c8a40b11",
+    "summary.json": "c284c347296041fc754a98dbbcb086c3d6948a344283d0a36e393b4b572ca924"
+  },
+  "classification": "COMPLETED"
+}

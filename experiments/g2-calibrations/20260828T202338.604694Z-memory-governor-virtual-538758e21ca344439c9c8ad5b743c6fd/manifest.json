@@ -1,0 +1,4 @@
+{
+  "enforcement": "virtual_only_no_cgroup_claim",
+  "scenario": "MemoryGovernor-v0.1"
+}

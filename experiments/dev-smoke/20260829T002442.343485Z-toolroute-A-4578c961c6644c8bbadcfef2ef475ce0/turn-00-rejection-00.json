@@ -1,0 +1,7 @@
+{
+  "accepted": false,
+  "reason": "response_is_not_exact_action_label",
+  "response_text": "- tool_alpha",
+  "subject_id": "v3a0",
+  "turn": 0
+}

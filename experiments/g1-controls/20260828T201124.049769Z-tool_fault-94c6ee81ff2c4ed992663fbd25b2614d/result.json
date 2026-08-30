@@ -1,0 +1,11 @@
+{
+  "classification": "INJECTED_HTTP_503",
+  "detail": "deterministic host-owned tool fault observed",
+  "ended_at_ms": 288752870,
+  "name": "tool_fault",
+  "returncode": 75,
+  "started_at_ms": 288752843,
+  "status": "PASS",
+  "stderr": "SCAC_TOOL_FAULT HTTP_503\n",
+  "stdout": ""
+}

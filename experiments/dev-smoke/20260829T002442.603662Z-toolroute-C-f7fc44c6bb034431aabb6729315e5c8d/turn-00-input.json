@@ -1,0 +1,92 @@
+{
+  "condition": "C",
+  "message": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: tool_alpha, tool_beta, wait\n=== HOST TELEMETRY [seq=0 kind=full_checkpoint id=f60b0645 obs=1001ms fresh=2000ms] ===\n[HARDWARE]\n  memory: cur=UNAVAILABLE max=UNLIMITED headroom=UNAVAILABLE state=UNKNOWN psi_some_avg10=UNAVAILABLE events_delta=UNAVAILABLE\n  cpu: quota=UNLIMITED throttled_usec_delta=UNAVAILABLE psi_some_avg10=UNAVAILABLE state=UNKNOWN\n  disk: free=UNAVAILABLE used_ratio=UNAVAILABLE state=UNKNOWN\n  gpu: available=false (UNAVAILABLE)\n[TOOLS]\n  tool_alpha: window=1 succ=1 consec_fail=0 latency_ewma=100.0ms last_err=NONE circuit=CLOSED\n  tool_beta: window=1 succ=1 consec_fail=0 latency_ewma=180.0ms last_err=NONE circuit=CLOSED\n[RUNTIME]\n  step=UNAVAILABLE wall_remaining=UNLIMITED pids=UNAVAILABLE/UNLIMITED network=UNKNOWN last_exit=UNAVAILABLE\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "message_bytes": 1060,
+  "option_order": [
+    "tool_alpha",
+    "tool_beta",
+    "wait"
+  ],
+  "visible_snapshot": {
+    "base_snapshot_id": null,
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "74147d9a9719455bed0f3308d45d535f36fcc4f793fe644d767583354745e124"
+      ],
+      "tools.tool_beta": [
+        "46a4c6358b857b237a1dc7ff963ca0e34e590aeb2881cc76fdafd9cda9b5920c"
+      ]
+    },
+    "economics": {},
+    "fresh_for_ms": 2000,
+    "hardware": {
+      "cpu": {
+        "state": "UNKNOWN"
+      },
+      "ephemeral_disk": {
+        "state": "UNKNOWN"
+      },
+      "gpu": {
+        "available": false,
+        "state": "UNAVAILABLE"
+      },
+      "memory": {
+        "state": "UNKNOWN"
+      }
+    },
+    "kind": "full_checkpoint",
+    "observed_at_ms": 1001,
+    "raw_event_hashes": [
+      "74147d9a9719455bed0f3308d45d535f36fcc4f793fe644d767583354745e124",
+      "46a4c6358b857b237a1dc7ff963ca0e34e590aeb2881cc76fdafd9cda9b5920c"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "runtime": {
+      "network": "UNKNOWN"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 0,
+    "snapshot_id": "f60b06451e43e894f8910712e8551f341b789714368db6f87894e9db4ebf23f5",
+    "subsystem_observed_at_ms": {
+      "tool_span": 1001
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 100.0,
+        "state": "OK",
+        "successes": 1,
+        "window_n": 1
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 180.0,
+        "state": "OK",
+        "successes": 1,
+        "window_n": 1
+      }
+    },
+    "trajectory_id": "dev-smoke-18",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}

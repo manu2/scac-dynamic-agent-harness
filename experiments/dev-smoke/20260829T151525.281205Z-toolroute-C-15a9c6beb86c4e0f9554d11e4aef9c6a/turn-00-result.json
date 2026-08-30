@@ -1,0 +1,15 @@
+{
+  "action": "tool_alpha",
+  "clairvoyant_regret_diagnostic": 0.0,
+  "error_class": null,
+  "latency_ms": 100,
+  "policy_regret": 0.0,
+  "records_completed": 1,
+  "records_required": 3,
+  "response_text": "tool_alpha",
+  "subject_id": "/root/s34_c_t0",
+  "success": true,
+  "task_completed": false,
+  "terminal": false,
+  "terminal_classification": "RUNNING"
+}

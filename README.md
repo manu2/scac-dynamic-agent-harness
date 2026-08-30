@@ -46,6 +46,22 @@ docs/                    design reviews and empirical reports
 
 ## Current status
 
-Design scaffold only. No provider trials are authorized. Begin with G0 schema and
-threat-model fixtures, followed by local G1 positive controls and G2 deterministic
-scenario calibration.
+Gate G0 (Specification & Threat Model) is complete. ToolRoute v1.0 collection
+is complete as a narrow synthetic API study: independent full-checkpoint
+episodes, an observable-only primary oracle, reservation-first artifact capture,
+and finalization hashes. Fresh-context subagent artifacts and the optional
+Toxiproxy adapter are retained development diagnostics—not empirical evidence.
+
+The selected first-paper cohort is GPT-5.6 Sol, Claude Sonnet 5, and Gemini
+3.7 Flash. The frozen six-seed cohort is complete: 216 independent decisions
+are retained under `experiments/api-paper-v1.0-seed8/`,
+`experiments/api-paper-v1.0-seeds9-10/`, and
+`experiments/api-paper-v1.0-seeds11-13/`. Authorization is deliberately
+revoked. An audit found that the
+manifest's "sampling controls omitted" wording does not match the recorded
+Gemini requests, which explicitly use `temperature: 0.0`. This is a
+documentation deviation, not a condition confound: all Gemini A/B/C decisions
+use the same captured parameter. The completed cohort used
+`temperature: 0.0` for Gemini throughout. This narrow ToolRoute work does not close G1
+globally or apply to MemoryGovernor, RetryBudget, or a combined study. See
+`docs/17_toolroute_v1_execution_config_clarification.md`.

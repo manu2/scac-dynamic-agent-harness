@@ -1,0 +1,10 @@
+{
+  "artifact_sha256": {
+    "abort.json": "8cf63c764566c91890374c63fced33beecd2b53e126337ddb8f1a5ebf2c7ea57",
+    "manifest.json": "fdb1934fa53ac3a523d021605c67a3e844570d2eccbd7ac0cf775cc42293699b",
+    "turn-00-host.json": "93e266bc7d3ed3beeb376873711afbaec399294991771b6f6be4ff96926b7515",
+    "turn-00-input.json": "ae7d77a045fb8eb08460ad1b0ec52f8bfd8448f442e4e584892b99d6e06851ff"
+  },
+  "classification": "ABORTED_DEVELOPMENT",
+  "terminal_turn": null
+}

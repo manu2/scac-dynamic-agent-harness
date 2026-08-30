@@ -1,0 +1,14 @@
+{
+  "adapter": "openai_chat_completions_v1",
+  "body": {
+    "max_completion_tokens": 1024,
+    "messages": [
+      {
+        "content": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: tool_alpha, tool_beta, wait\n",
+        "role": "user"
+      }
+    ],
+    "model": "gpt-5.6-sol"
+  },
+  "endpoint": "https://api.openai.com/v1/chat/completions"
+}

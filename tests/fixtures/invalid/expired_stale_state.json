@@ -1,0 +1,38 @@
+{
+  "schema": "scac-sst-v0.1",
+  "trajectory_id": "traj-invalid-001",
+  "snapshot_id": "0000000000000000000000000000000000000000000000000000000000000000",
+  "seq": 0,
+  "kind": "full_checkpoint",
+  "base_snapshot_id": null,
+  "observed_at_ms": 1787884200000,
+  "fresh_for_ms": 0,
+  "reducer": {
+    "name": "scac-deterministic-reducer",
+    "version": "0.1.0"
+  },
+  "raw_event_hashes": [
+    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  ],
+  "hardware": {
+    "memory": {
+      "current_bytes": 1024,
+      "state": "OK"
+    },
+    "cpu": {
+      "state": "OK"
+    },
+    "gpu": {
+      "available": false
+    },
+    "ephemeral_disk": {
+      "free_bytes": 1024,
+      "state": "OK"
+    }
+  },
+  "tools": {},
+  "runtime": {
+    "network": "ENABLED"
+  },
+  "economics": {}
+}

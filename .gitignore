@@ -5,6 +5,7 @@ __pycache__/
 build/
 dist/
 *.egg-info/
+.env
 
 # Raw experiments are retained, but transient scratch files are not.
 experiments/**/scratch/

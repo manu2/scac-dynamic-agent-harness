@@ -1,0 +1,6 @@
+{
+  "condition": "A",
+  "kind": "development_smoke_only",
+  "scenario": "ToolRoute-v0.1",
+  "seed": 202
+}

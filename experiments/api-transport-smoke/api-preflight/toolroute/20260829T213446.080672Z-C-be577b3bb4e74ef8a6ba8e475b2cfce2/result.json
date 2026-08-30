@@ -1,0 +1,5 @@
+{
+  "accepted": false,
+  "classification": "REJECTED_MANIFEST_SCOPE",
+  "reason": "pre-fix CLI used seed 0 while the frozen sampling-fix manifest authorized seed 1; no provider request issued"
+}

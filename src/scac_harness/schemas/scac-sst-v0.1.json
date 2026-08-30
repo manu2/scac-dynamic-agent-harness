@@ -1,27 +1,633 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/scac/scac-sst-v0.1.json",
+  "$id": "https://github.com/manu2/scac-dynamic-agent-harness/schemas/scac-sst-v0.1.json",
   "title": "SCAC Self-Telemetry Snapshot v0.1",
+  "description": "Strict, versioned schema for host-verified 4D agent self-telemetry state (hardware, tools, runtime, economics).",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema",
+    "trajectory_id",
+    "snapshot_id",
     "seq",
+    "kind",
     "observed_at_ms",
     "fresh_for_ms",
-    "hardware",
-    "tools",
-    "runtime",
-    "economics"
+    "reducer",
+    "raw_event_hashes"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": { "kind": { "const": "full_checkpoint" } }
+      },
+      "then": {
+        "required": ["hardware", "tools", "runtime", "economics"],
+        "properties": {
+          "hardware": {
+            "required": ["memory", "cpu", "gpu", "ephemeral_disk"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "kind": { "const": "delta" } }
+      },
+      "then": {
+        "required": ["base_snapshot_id"],
+        "properties": {
+          "base_snapshot_id": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      }
+    }
   ],
   "properties": {
-    "schema": {"const": "scac-sst-v0.1"},
-    "seq": {"type": "integer", "minimum": 0},
-    "observed_at_ms": {"type": "integer", "minimum": 0},
-    "fresh_for_ms": {"type": "integer", "minimum": 0},
-    "hardware": {"type": "object"},
-    "tools": {"type": "object"},
-    "runtime": {"type": "object"},
-    "economics": {"type": "object"}
+    "schema": {
+      "type": "string",
+      "const": "scac-sst-v0.1",
+      "description": "Fixed schema version identifier."
+    },
+    "trajectory_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.-]{1,128}$",
+      "description": "Unique trajectory identifier for trial isolation and provenance."
+    },
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Canonical SHA-256 hash of the snapshot content."
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonically increasing sequence number within the trajectory."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["full_checkpoint", "delta"],
+      "description": "Snapshot classification: complete state checkpoint or incremental delta."
+    },
+    "base_snapshot_id": {
+      "type": ["string", "null"],
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Reference to parent snapshot ID for delta snapshots; null for independent full checkpoints."
+    },
+    "observed_at_ms": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonic host epoch timestamp (milliseconds) when telemetry was sampled."
+    },
+    "fresh_for_ms": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Maximum validity duration in milliseconds before snapshot must be considered stale."
+    },
+    "subsystem_observed_at_ms": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-zA-Z0-9_.-]+$": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "description": "Per-subsystem observation timestamps in milliseconds for fine-grained freshness tracking."
+    },
+    "reducer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": ["scac-deterministic-reducer"],
+          "description": "Identifier of the deterministic reducer implementation."
+        },
+        "version": {
+          "type": "string",
+          "enum": ["0.1.0"],
+          "description": "Semantic version of the deterministic reducer."
+        }
+      }
+    },
+    "raw_event_hashes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "minItems": 1,
+      "description": "Ordered list of SHA-256 hashes of raw telemetry events reduced into this snapshot."
+    },
+    "derivation_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-zA-Z0-9_.-]+$": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      },
+      "description": "Audit linkage mapping derived field paths to contributing raw event hashes."
+    },
+    "hardware": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "memory": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": {
+            "current_bytes": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Current memory usage in bytes from cgroup v2 memory.current."
+            },
+            "peak_bytes": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Peak memory usage in bytes from cgroup v2 memory.peak."
+            },
+            "max_bytes": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Memory ceiling limit in bytes from cgroup v2 memory.max."
+            },
+            "headroom_ratio": {
+              "type": ["number", "null"],
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Remaining headroom ratio (max_bytes - current_bytes) / max_bytes in range [0, 1]."
+            },
+            "events_delta": {
+              "$ref": "#/$defs/MemoryEventsDelta"
+            },
+            "events_local_delta": {
+              "$ref": "#/$defs/MemoryEventsDelta"
+            },
+            "psi_some_avg10": {
+              "type": ["number", "null"],
+              "minimum": 0.0,
+              "maximum": 100.0,
+              "description": "Memory PSI some avg10 rolling stall percentage."
+            },
+            "psi_full_avg10": {
+              "type": ["number", "null"],
+              "minimum": 0.0,
+              "maximum": 100.0,
+              "description": "Memory PSI full avg10 rolling stall percentage."
+            },
+            "psi_some_total_usec_delta": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Interval delta of memory PSI some total stall time in microseconds."
+            },
+            "psi_full_total_usec_delta": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Interval delta of memory PSI full total stall time in microseconds."
+            },
+            "state": {
+              "type": "string",
+              "enum": ["OK", "PRESSURED", "CRITICAL", "UNKNOWN"],
+              "description": "Deterministic categorical classification of memory pressure."
+            }
+          }
+        },
+        "cpu": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": {
+            "quota_cores": {
+              "type": ["number", "null"],
+              "minimum": 0.0,
+              "description": "Allocated CPU core quota (cpu.max quota / period)."
+            },
+            "period_usec": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "cgroup v2 cpu.max period in microseconds."
+            },
+            "nr_throttled_delta": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Delta of cgroup v2 cpu.stat nr_throttled in the recent interval."
+            },
+            "throttled_usec_delta": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Delta of cgroup v2 cpu.stat throttled_usec in the recent interval."
+            },
+            "usage_usec_delta": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Delta of cgroup v2 cpu.stat usage_usec in the recent interval."
+            },
+            "psi_some_avg10": {
+              "type": ["number", "null"],
+              "minimum": 0.0,
+              "maximum": 100.0,
+              "description": "CPU PSI some avg10 rolling percentage."
+            },
+            "psi_full_avg10": {
+              "type": ["number", "null"],
+              "minimum": 0.0,
+              "maximum": 100.0,
+              "description": "CPU PSI full avg10 rolling percentage."
+            },
+            "state": {
+              "type": "string",
+              "enum": ["OK", "THROTTLED", "CRITICAL", "UNKNOWN"],
+              "description": "Deterministic categorical classification of CPU throttle pressure."
+            }
+          }
+        },
+        "io": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": {
+            "psi_some_avg10": {
+              "type": ["number", "null"],
+              "minimum": 0.0,
+              "maximum": 100.0,
+              "description": "I/O PSI some avg10 percentage."
+            },
+            "psi_full_avg10": {
+              "type": ["number", "null"],
+              "minimum": 0.0,
+              "maximum": 100.0,
+              "description": "I/O PSI full avg10 percentage."
+            },
+            "state": {
+              "type": "string",
+              "enum": ["OK", "PRESSURED", "CRITICAL", "UNKNOWN"]
+            }
+          }
+        },
+        "gpu": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["available"],
+          "properties": {
+            "available": {
+              "type": "boolean",
+              "description": "Whether an accelerator/GPU device is detected and accessible."
+            },
+            "device_count": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Number of detected GPU devices."
+            },
+            "vram_used_bytes": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "GPU VRAM currently allocated in bytes."
+            },
+            "vram_total_bytes": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Total GPU VRAM capacity in bytes."
+            },
+            "utilization_ratio": {
+              "type": ["number", "null"],
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "GPU core/SM utilization ratio in range [0, 1]."
+            },
+            "state": {
+              "type": "string",
+              "enum": ["OK", "PRESSURED", "UNAVAILABLE", "UNKNOWN"]
+            }
+          }
+        },
+        "ephemeral_disk": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state"],
+          "properties": {
+            "free_bytes": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Free ephemeral scratch disk space in bytes."
+            },
+            "used_bytes": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Used ephemeral disk space in bytes."
+            },
+            "total_bytes": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Total ephemeral disk capacity in bytes."
+            },
+            "used_ratio": {
+              "type": ["number", "null"],
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Fraction of disk used in range [0, 1]."
+            },
+            "state": {
+              "type": "string",
+              "enum": ["OK", "PRESSURED", "CRITICAL", "UNKNOWN"]
+            }
+          }
+        },
+        "processes": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pids_current": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Current process count in cgroup v2 pids.current."
+            },
+            "pids_max": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Maximum process limit in cgroup v2 pids.max."
+            },
+            "threads_current": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Current thread count in the execution scope."
+            }
+          }
+        }
+      }
+    },
+    "tools": {
+      "type": "object",
+      "description": "Dictionary of tool health state keyed by tool_id. Tool IDs are strictly treated as data.",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-zA-Z0-9_.-]{1,64}$": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "window_n",
+            "successes",
+            "consecutive_failures",
+            "latency_ewma_ms",
+            "circuit"
+          ],
+          "properties": {
+            "window_n": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Sample window size for recent health evaluation."
+            },
+            "successes": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of successful calls in the recent sample window."
+            },
+            "failures": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of failed calls in the recent sample window."
+            },
+            "history": {
+              "type": "array",
+              "items": {"type": "boolean"},
+              "maxItems": 32,
+              "description": "Sliding sequence of recent call outcomes (true=success, false=failure)."
+            },
+            "consecutive_failures": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Count of unbroken consecutive failures."
+            },
+            "latency_ewma_ms": {
+              "type": "number",
+              "minimum": 0.0,
+              "description": "Exponentially weighted moving average of tool execution latency in milliseconds."
+            },
+            "last_error": {
+              "type": "string",
+              "enum": [
+                "NONE",
+                "HTTP_400",
+                "HTTP_401",
+                "HTTP_403",
+                "HTTP_404",
+                "HTTP_408",
+                "HTTP_429",
+                "HTTP_500",
+                "HTTP_502",
+                "HTTP_503",
+                "HTTP_504",
+                "TIMEOUT",
+                "CONNECTION_ERROR",
+                "EXEC_ERROR",
+                "SCHEMA_ERROR",
+                "UNKNOWN"
+              ],
+              "description": "Normalized category of the last encountered error."
+            },
+            "retry_after_ms": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Host-parsed retry-after delay in milliseconds."
+            },
+            "circuit": {
+              "type": "string",
+              "enum": ["CLOSED", "OPEN", "HALF_OPEN", "DEGRADED", "UNKNOWN"],
+              "description": "Host circuit breaker status: CLOSED=healthy, OPEN=failing, HALF_OPEN=probing."
+            },
+            "state": {
+              "type": "string",
+              "enum": ["OK", "DEGRADED", "UNAVAILABLE", "UNKNOWN"]
+            }
+          }
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "wall_remaining_ms": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Remaining wall clock budget in milliseconds before hard timeout."
+        },
+        "step": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Current multi-turn step index."
+        },
+        "pids_current": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Current process count."
+        },
+        "pids_max": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Maximum allowed process count."
+        },
+        "threads_current": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Current thread count."
+        },
+        "last_exit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code", "signal", "class"],
+          "properties": {
+            "code": {
+              "type": "integer",
+              "description": "Process exit returncode."
+            },
+            "signal": {
+              "type": ["integer", "null"],
+              "description": "Terminating POSIX signal number, or null if exited cleanly."
+            },
+            "class": {
+              "type": "string",
+              "enum": [
+                "NONE",
+                "OK",
+                "CGROUP_OOM",
+                "TIMEOUT",
+                "SIGNAL_KILL",
+                "SIGTERM",
+                "ERROR",
+                "UNEXPECTED_EXIT"
+              ],
+              "description": "Normalized terminal exit classification."
+            }
+          }
+        },
+        "network": {
+          "type": "string",
+          "enum": ["ENABLED", "DISABLED", "FILTERED", "UNKNOWN"],
+          "description": "Host-enforced network policy state."
+        },
+        "filesystem": {
+          "type": "string",
+          "enum": ["READ_ONLY", "READ_WRITE", "OVERLAY", "UNKNOWN"],
+          "description": "Filesystem mount permission status."
+        },
+        "state": {
+          "type": "string",
+          "enum": ["RUNNING", "DEGRADED", "TERMINATING", "TERMINATED", "UNKNOWN"]
+        }
+      }
+    },
+    "economics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "context_tokens_remaining": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Estimated remaining tokens before model context window limit."
+        },
+        "trajectory_tokens": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Cumulative tokens consumed across the entire trajectory."
+        },
+        "input_tokens": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Input tokens consumed in recent step."
+        },
+        "output_tokens": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Output tokens generated in recent step."
+        },
+        "cached_tokens": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Cached prompt tokens explicitly reported by provider; null if unsupported."
+        },
+        "estimated_cost_usd": {
+          "type": ["number", "null"],
+          "minimum": 0.0,
+          "description": "Estimated monetary cost in USD consumed so far."
+        },
+        "budget_remaining_usd": {
+          "type": ["number", "null"],
+          "minimum": 0.0,
+          "description": "Remaining financial budget in USD."
+        },
+        "rate_limit_remaining": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Remaining request quota explicitly reported by provider; null if unsupported."
+        },
+        "rate_limit_reset_ms": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Duration in milliseconds until rate limit reset; null if unsupported."
+        },
+        "state": {
+          "type": "string",
+          "enum": ["OK", "WARN", "EXHAUSTED", "UNKNOWN"]
+        }
+      }
+    },
+    "recommended_constraints": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 128,
+        "pattern": "^[a-zA-Z0-9_.,:; /<>=+()-]+$"
+      },
+      "maxItems": 16,
+      "description": "Host-derived deterministic constraint statements generated from frozen rules."
+    },
+    "unavailable_fields": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 128,
+        "pattern": "^[a-zA-Z0-9_.-]+$"
+      },
+      "description": "Explicit list of metrics not supported or unavailable on this host platform."
+    }
+  },
+  "$defs": {
+    "MemoryEventsDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["high", "max", "oom", "oom_kill"],
+      "properties": {
+        "high": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Delta count of memory.high events."
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Delta count of memory.max events."
+        },
+        "oom": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Delta count of memory.oom events."
+        },
+        "oom_kill": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Delta count of memory.oom_kill events."
+        }
+      }
+    }
   }
 }

@@ -1,0 +1,20 @@
+{
+  "adapter": "gemini_generate_content_v1",
+  "body": {
+    "contents": [
+      {
+        "parts": [
+          {
+            "text": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: tool_beta, tool_alpha, wait\n=== HOST TELEMETRY [seq=2 kind=full_checkpoint id=4e4d2398 obs=3022ms fresh=2000ms] ===\n[HARDWARE]\n  memory: cur=UNAVAILABLE max=UNLIMITED headroom=UNAVAILABLE state=UNKNOWN psi_some_avg10=UNAVAILABLE events_delta=UNAVAILABLE\n  cpu: quota=UNLIMITED throttled_usec_delta=UNAVAILABLE psi_some_avg10=UNAVAILABLE state=UNKNOWN\n  disk: free=UNAVAILABLE used_ratio=UNAVAILABLE state=UNKNOWN\n  gpu: available=false (UNAVAILABLE)\n[TOOLS]\n  tool_alpha: window=6 succ=6 consec_fail=0 latency_ewma=1000.0ms last_err=NONE circuit=CLOSED age=10ms\n  tool_beta: window=6 succ=6 consec_fail=0 latency_ewma=1000.0ms last_err=NONE circuit=CLOSED age=10ms\n[RUNTIME]\n  step=UNAVAILABLE wall_remaining=UNLIMITED pids=UNAVAILABLE/UNLIMITED network=UNKNOWN last_exit=UNAVAILABLE\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n========================================="
+          }
+        ],
+        "role": "user"
+      }
+    ],
+    "generationConfig": {
+      "maxOutputTokens": 1024,
+      "temperature": 0.0
+    }
+  },
+  "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent"
+}

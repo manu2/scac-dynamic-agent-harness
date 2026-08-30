@@ -1,0 +1,10 @@
+{
+  "action": "tool_alpha",
+  "error_class": "HTTP_503",
+  "latency_ms": 4200,
+  "policy_regret": 11920.0,
+  "response_text": "tool_alpha",
+  "subject_id": "subagent-f7762d29",
+  "success": false,
+  "terminal": false
+}

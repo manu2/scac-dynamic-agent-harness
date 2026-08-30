@@ -1,0 +1,15 @@
+{
+  "action": "tool_alpha",
+  "clairvoyant_regret_diagnostic": 12920.0,
+  "error_class": null,
+  "latency_ms": 4200,
+  "policy_regret": 19653.826666666664,
+  "records_completed": 2,
+  "records_required": 3,
+  "response_text": "tool_alpha",
+  "subject_id": "subagent-b03c3995",
+  "success": true,
+  "task_completed": false,
+  "terminal": false,
+  "terminal_classification": "RUNNING"
+}

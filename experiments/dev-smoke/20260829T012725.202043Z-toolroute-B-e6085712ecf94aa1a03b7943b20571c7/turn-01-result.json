@@ -1,0 +1,14 @@
+{
+  "action": "tool_alpha",
+  "error_class": "HTTP_503",
+  "latency_ms": 4200,
+  "policy_regret": 11920.0,
+  "records_completed": 1,
+  "records_required": 3,
+  "response_text": "tool_alpha",
+  "subject_id": "/root/six_seed_subagent_smoke/subject_18_b_t1",
+  "success": false,
+  "task_completed": false,
+  "terminal": false,
+  "terminal_classification": "RUNNING"
+}

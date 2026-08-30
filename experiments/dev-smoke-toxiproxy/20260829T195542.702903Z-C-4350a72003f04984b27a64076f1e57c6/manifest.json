@@ -1,0 +1,21 @@
+{
+  "condition": "C",
+  "kind": "development_only_toxiproxy_subagent_smoke_v1",
+  "not_paper_evidence": true,
+  "precommitted_schedule": {
+    "tool_alpha": {
+      "latency_ms": 300
+    },
+    "tool_beta": {
+      "latency_ms": 0
+    }
+  },
+  "runtime": {
+    "admin_url": "http://127.0.0.1:65216",
+    "alpha_url": "http://127.0.0.1:65217/",
+    "backend_pid": 37424,
+    "beta_url": "http://127.0.0.1:65218/",
+    "toxiproxy_pid": 37425
+  },
+  "strategy": "toxiproxy_loopback_http_v1"
+}

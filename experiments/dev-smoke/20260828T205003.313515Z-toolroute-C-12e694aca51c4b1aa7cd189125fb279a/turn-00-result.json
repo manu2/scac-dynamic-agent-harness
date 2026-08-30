@@ -1,0 +1,10 @@
+{
+  "action": "tool_alpha",
+  "error_class": null,
+  "latency_ms": 100,
+  "policy_regret": 20.000000000000057,
+  "response_text": "tool_alpha",
+  "subject_id": "agent-test-1",
+  "success": true,
+  "terminal": false
+}

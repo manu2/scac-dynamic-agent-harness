@@ -1,0 +1,15 @@
+{
+  "manifest_status": "FROZEN_TRANSPORT_SMOKE_NOT_PAPER_DATA",
+  "scenario": "ToolRoute-v0.6-api-transport-smoke-samplingfix",
+  "purpose": "One fresh C-only diagnostic per failed provider after removing unsupported explicit sampling controls.",
+  "state_delivery": "independent_full_checkpoint_only",
+  "conditions": ["C"],
+  "tokenizer": {"name": "diagnostic_whitespace_tokenizer", "scope": "Condition C only; no B control or paper inference is authorized"},
+  "provider_parameters": {"sampling_controls": "omitted; provider defaults", "max_output_tokens": 1024, "tools": "none", "request_retry_policy": "no retry"},
+  "authorized_episodes": [
+    {"seed": 1, "turn": 1, "condition": "C", "model_id": "gpt-5.6-terra", "provider_label": "openai"},
+    {"seed": 1, "turn": 1, "condition": "C", "model_id": "claude-opus-5", "provider_label": "anthropic"}
+  ],
+  "inclusion": "No episode in this manifest enters the paper denominator.",
+  "post_run_rule": "Run OpenAI first. Audit its complete terminal record and redacted structured error body, if any, before the Anthropic call."
+}

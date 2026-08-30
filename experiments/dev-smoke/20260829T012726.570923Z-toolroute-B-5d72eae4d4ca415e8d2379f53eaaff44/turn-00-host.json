@@ -1,0 +1,195 @@
+{
+  "cumulative_snapshot": {
+    "base_snapshot_id": null,
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "26517aa0d9163fb372e6a9248a480accbdb8289f2806c5b7d6f72f4924d27cc3"
+      ],
+      "tools.tool_beta": [
+        "1ffde545ee241b4471225ca3a358c1e76f235e97fda6810f0408f552618c7647"
+      ]
+    },
+    "economics": {},
+    "fresh_for_ms": 2000,
+    "hardware": {
+      "cpu": {
+        "state": "UNKNOWN"
+      },
+      "ephemeral_disk": {
+        "state": "UNKNOWN"
+      },
+      "gpu": {
+        "available": false,
+        "state": "UNAVAILABLE"
+      },
+      "memory": {
+        "state": "UNKNOWN"
+      }
+    },
+    "kind": "full_checkpoint",
+    "observed_at_ms": 1001,
+    "raw_event_hashes": [
+      "26517aa0d9163fb372e6a9248a480accbdb8289f2806c5b7d6f72f4924d27cc3",
+      "1ffde545ee241b4471225ca3a358c1e76f235e97fda6810f0408f552618c7647"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "runtime": {
+      "network": "UNKNOWN"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 0,
+    "snapshot_id": "9778ad78b9fc5ee4374fec9f411fe3121808579f1191b188e327a64939d761e0",
+    "subsystem_observed_at_ms": {
+      "tool_span": 1001
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 180.0,
+        "state": "OK",
+        "successes": 1,
+        "window_n": 1
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 100.0,
+        "state": "OK",
+        "successes": 1,
+        "window_n": 1
+      }
+    },
+    "trajectory_id": "dev-smoke-21",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  },
+  "raw_events": [
+    {
+      "event_id": "26517aa0d9163fb372e6a9248a480accbdb8289f2806c5b7d6f72f4924d27cc3",
+      "payload": {
+        "error_class": "HTTP_503",
+        "latency_ms": 180,
+        "retry_after_ms": null,
+        "success": true,
+        "tool_id": "tool_alpha"
+      },
+      "source": "synthetic_host_probe",
+      "timestamp_ms": 1000,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "1ffde545ee241b4471225ca3a358c1e76f235e97fda6810f0408f552618c7647",
+      "payload": {
+        "error_class": "HTTP_503",
+        "latency_ms": 100,
+        "retry_after_ms": null,
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "synthetic_host_probe",
+      "timestamp_ms": 1001,
+      "topic": "tool_span"
+    }
+  ],
+  "rendered_telemetry": "=== HOST TELEMETRY [seq=0 kind=full_checkpoint id=9778ad78 obs=1001ms fresh=2000ms] ===\n[HARDWARE]\n  memory: cur=UNAVAILABLE max=UNLIMITED headroom=UNAVAILABLE state=UNKNOWN psi_some_avg10=UNAVAILABLE events_delta=UNAVAILABLE\n  cpu: quota=UNLIMITED throttled_usec_delta=UNAVAILABLE psi_some_avg10=UNAVAILABLE state=UNKNOWN\n  disk: free=UNAVAILABLE used_ratio=UNAVAILABLE state=UNKNOWN\n  gpu: available=false (UNAVAILABLE)\n[TOOLS]\n  tool_alpha: window=1 succ=1 consec_fail=0 latency_ewma=180.0ms last_err=NONE circuit=CLOSED\n  tool_beta: window=1 succ=1 consec_fail=0 latency_ewma=100.0ms last_err=NONE circuit=CLOSED\n[RUNTIME]\n  step=UNAVAILABLE wall_remaining=UNLIMITED pids=UNAVAILABLE/UNLIMITED network=UNKNOWN last_exit=UNAVAILABLE\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "snapshot": {
+    "base_snapshot_id": null,
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "26517aa0d9163fb372e6a9248a480accbdb8289f2806c5b7d6f72f4924d27cc3"
+      ],
+      "tools.tool_beta": [
+        "1ffde545ee241b4471225ca3a358c1e76f235e97fda6810f0408f552618c7647"
+      ]
+    },
+    "economics": {},
+    "fresh_for_ms": 2000,
+    "hardware": {
+      "cpu": {
+        "state": "UNKNOWN"
+      },
+      "ephemeral_disk": {
+        "state": "UNKNOWN"
+      },
+      "gpu": {
+        "available": false,
+        "state": "UNAVAILABLE"
+      },
+      "memory": {
+        "state": "UNKNOWN"
+      }
+    },
+    "kind": "full_checkpoint",
+    "observed_at_ms": 1001,
+    "raw_event_hashes": [
+      "26517aa0d9163fb372e6a9248a480accbdb8289f2806c5b7d6f72f4924d27cc3",
+      "1ffde545ee241b4471225ca3a358c1e76f235e97fda6810f0408f552618c7647"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "runtime": {
+      "network": "UNKNOWN"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 0,
+    "snapshot_id": "9778ad78b9fc5ee4374fec9f411fe3121808579f1191b188e327a64939d761e0",
+    "subsystem_observed_at_ms": {
+      "tool_span": 1001
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 180.0,
+        "state": "OK",
+        "successes": 1,
+        "window_n": 1
+      },
+      "tool_beta": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 100.0,
+        "state": "OK",
+        "successes": 1,
+        "window_n": 1
+      }
+    },
+    "trajectory_id": "dev-smoke-21",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "action": "tool_beta",
+  "error_class": null,
+  "latency_ms": 180,
+  "policy_regret": 0.0,
+  "records_completed": 2,
+  "records_required": 3,
+  "response_text": "tool_beta",
+  "subject_id": "/root/six_seed_subagent_smoke/subject_18_a_t1",
+  "success": true,
+  "task_completed": false,
+  "terminal": false,
+  "terminal_classification": "RUNNING"
+}

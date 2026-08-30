@@ -1,0 +1,11 @@
+{
+  "accepted": true,
+  "action": "tool_beta",
+  "clairvoyant_regret_diagnostic": 12920.0,
+  "classification": "COMPLETED",
+  "error_class": "HTTP_503",
+  "latency_ms": 4200,
+  "policy_regret": 7389.654444444444,
+  "response_text": "tool_beta",
+  "success": false
+}

@@ -1,0 +1,20 @@
+{
+  "adapter": "gemini_generate_content_v1",
+  "body": {
+    "contents": [
+      {
+        "parts": [
+          {
+            "text": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: wait, tool_alpha, tool_beta\n"
+          }
+        ],
+        "role": "user"
+      }
+    ],
+    "generationConfig": {
+      "maxOutputTokens": 1024,
+      "temperature": 0.0
+    }
+  },
+  "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent"
+}

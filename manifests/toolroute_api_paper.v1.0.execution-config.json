@@ -1,0 +1,44 @@
+{
+  "schema_version": "toolroute-execution-config-v1",
+  "parent_manifest_sha256": "9fb8003e4742b3e94afd872a88522cbe5d238d13ae631c1f0f30c78705789218",
+  "purpose": "Hash-bound clarification of the effective provider request configuration for the ToolRoute paper v1.0 cohort and its first reviewed continuation block. It does not alter the parent manifest's prompts, conditions, schedule, or outcomes.",
+  "authorized_continuation_episode_grids": [
+    {"provider_label": "openai", "model_id": "gpt-5.6-sol", "seeds": [9, 10], "turns": [0, 1, 2, 3], "conditions": ["A", "B", "C"]},
+    {"provider_label": "anthropic", "model_id": "claude-sonnet-5", "seeds": [9, 10], "turns": [0, 1, 2, 3], "conditions": ["A", "B", "C"]},
+    {"provider_label": "google", "model_id": "gemini-3.7-flash", "seeds": [9, 10], "turns": [0, 1, 2, 3], "conditions": ["A", "B", "C"]}
+  ],
+  "provider_request_expectations": [
+    {
+      "provider_label": "openai",
+      "model_id": "gpt-5.6-sol",
+      "adapter": "openai_chat_completions_v1",
+      "required_body_fields": {
+        "model": "gpt-5.6-sol",
+        "max_completion_tokens": 1024
+      },
+      "forbidden_body_fields": ["temperature", "tools", "tool_choice", "function_call", "functions"]
+    },
+    {
+      "provider_label": "anthropic",
+      "model_id": "claude-sonnet-5",
+      "adapter": "anthropic_messages_v1",
+      "required_body_fields": {
+        "model": "claude-sonnet-5",
+        "max_tokens": 1024
+      },
+      "forbidden_body_fields": ["temperature", "tools", "tool_choice", "function_call", "functions"]
+    },
+    {
+      "provider_label": "google",
+      "model_id": "gemini-3.7-flash",
+      "adapter": "gemini_generate_content_v1",
+      "required_body_fields": {
+        "generationConfig": {
+          "temperature": 0.0,
+          "maxOutputTokens": 1024
+        }
+      },
+      "forbidden_body_fields": ["tools", "tool_choice", "function_call", "functions"]
+    }
+  ]
+}

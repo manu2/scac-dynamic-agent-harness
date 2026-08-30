@@ -1,0 +1,6 @@
+{
+  "condition": "A",
+  "message": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Choose exactly one action: tool_alpha, tool_beta, or wait. Return only the action label.\n",
+  "message_bytes": 184,
+  "visible_snapshot": null
+}

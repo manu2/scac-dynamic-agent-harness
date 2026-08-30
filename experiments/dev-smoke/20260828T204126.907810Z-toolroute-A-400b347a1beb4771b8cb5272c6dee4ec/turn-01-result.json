@@ -1,0 +1,8 @@
+{
+  "action": "tool_alpha",
+  "error_class": null,
+  "latency_ms": 4200,
+  "policy_regret": 11920.0,
+  "success": true,
+  "terminal": false
+}

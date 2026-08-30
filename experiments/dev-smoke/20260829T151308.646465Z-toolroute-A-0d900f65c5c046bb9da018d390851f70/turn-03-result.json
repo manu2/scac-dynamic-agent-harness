@@ -1,0 +1,15 @@
+{
+  "action": "tool_alpha",
+  "clairvoyant_regret_diagnostic": 0.0,
+  "error_class": null,
+  "latency_ms": 180,
+  "policy_regret": 3546.1899999999996,
+  "records_completed": 2,
+  "records_required": 3,
+  "response_text": "tool_alpha",
+  "subject_id": "/root/s34_a_t3",
+  "success": true,
+  "task_completed": false,
+  "terminal": true,
+  "terminal_classification": "DECISION_BUDGET_EXHAUSTED"
+}

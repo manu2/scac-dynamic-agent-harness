@@ -1,0 +1,14 @@
+{
+  "action": "wait",
+  "error_class": null,
+  "latency_ms": 500,
+  "policy_regret": 10220.0,
+  "records_completed": 1,
+  "records_required": 3,
+  "response_text": "wait",
+  "subject_id": "/root/six_seed_subagent_smoke/subject_18_b_t2",
+  "success": false,
+  "task_completed": false,
+  "terminal": false,
+  "terminal_classification": "RUNNING"
+}

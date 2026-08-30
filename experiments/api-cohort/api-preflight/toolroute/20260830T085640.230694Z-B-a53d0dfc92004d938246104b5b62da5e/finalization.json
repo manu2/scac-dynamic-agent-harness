@@ -1,0 +1,9 @@
+{
+  "artifact_sha256": {
+    "host.json": "b109771dc7f2479c74172ab0be051f9cd333f306cb63e5f00501f9a0cec00461",
+    "input.json": "517ddd27f13bef87c8be0f3b5c377e9736ab4c43d2c9b5d14479ec24f04a70d7",
+    "manifest.json": "44f1dc39a1e91a201fbbe0327fcde38b462b39c51484480a8396051552635edb",
+    "result.json": "76b358630a571918de74d4d33db6e791a051df1d175710b774d9b31929106e8f"
+  },
+  "classification": "REJECTED_MANIFEST_SCOPE"
+}

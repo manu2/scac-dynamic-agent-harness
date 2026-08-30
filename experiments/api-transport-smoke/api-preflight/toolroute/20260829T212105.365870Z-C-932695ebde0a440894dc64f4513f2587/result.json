@@ -1,0 +1,9 @@
+{
+  "accepted": false,
+  "classification": "PROVIDER_ERROR",
+  "provider_error": {
+    "exception_type": "HTTPError",
+    "http_status": 400,
+    "reason": "Bad Request"
+  }
+}

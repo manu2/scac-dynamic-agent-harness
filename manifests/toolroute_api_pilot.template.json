@@ -1,0 +1,44 @@
+{
+  "template_status": "NOT_FROZEN_NOT_AUTHORIZING",
+  "scenario": "ToolRoute-v0.6-api",
+  "selected_first_paper_models": [
+    {"provider_label": "openai", "model_id": "gpt-5.6-sol"},
+    {"provider_label": "anthropic", "model_id": "claude-sonnet-5"},
+    {"provider_label": "google", "model_id": "gemini-3.7-flash"}
+  ],
+  "state_delivery": "independent_full_checkpoint_only",
+  "provider": {
+    "label": "FILL_ME",
+    "model_id": "FILL_ME",
+    "endpoint_class": "OpenAI-compatible chat completions",
+    "temperature": 0.0,
+    "request_retry_policy": "no retry; every submitted request is retained"
+  },
+  "b_control": {
+    "construction": "same fixed telemetry envelope, field names, ordering, and tool rows as C; equal neutral values for equivalent tools",
+    "token_usage": "record provider-reported input tokens descriptively; no online token padding or token-count API calls"
+  },
+  "model_access": {
+    "tools": "none",
+    "filesystem": "none",
+    "schedule_or_oracle": "none",
+    "artifact_access": "none"
+  },
+  "conditions": ["A", "B", "C"],
+  "seed_policy": "FILL_ME",
+  "condition_randomization": "FILL_ME",
+  "action_parser": "exact listed label after whitespace stripping",
+  "observation_baseline": {
+    "version": "synthetic_host_probe_v0.6",
+    "probes_per_tool": 3,
+    "success_label_error_probability": 0.0,
+    "event_drop_probability": 0.0,
+    "delivery_delay_ms": 0
+  },
+  "sensitivity_grid": "FILL_ME",
+  "eligible_state_margin_ms": 50.0,
+  "primary_outcome": "observable_monitor_cost_v0.6 policy regret",
+  "secondary_outcome": "clairvoyant latent cost diagnostic only",
+  "inclusion_exclusion": "FILL_ME",
+  "analysis_and_power_plan": "FILL_ME"
+}

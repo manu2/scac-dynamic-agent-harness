@@ -1,0 +1,62 @@
+[
+  {
+    "action": "retry",
+    "outcome": {
+      "action": "retry",
+      "terminal": false,
+      "utility": 100,
+      "violation": null
+    },
+    "state": {
+      "remaining_quota": 2,
+      "remote_status": "OK",
+      "retry_after_ms": null,
+      "turn": 0
+    }
+  },
+  {
+    "action": "wait",
+    "outcome": {
+      "action": "wait",
+      "terminal": false,
+      "utility": -5,
+      "violation": null
+    },
+    "state": {
+      "remaining_quota": 1,
+      "remote_status": "HTTP_429",
+      "retry_after_ms": 1000,
+      "turn": 1
+    }
+  },
+  {
+    "action": "fallback",
+    "outcome": {
+      "action": "fallback",
+      "terminal": false,
+      "utility": 60,
+      "violation": null
+    },
+    "state": {
+      "remaining_quota": 1,
+      "remote_status": "HTTP_503",
+      "retry_after_ms": null,
+      "turn": 2
+    }
+  },
+  {
+    "action": "retry",
+    "outcome": {
+      "action": "retry",
+      "terminal": true,
+      "utility": 100,
+      "violation": null
+    },
+    "state": {
+      "remaining_quota": 1,
+      "remote_status": "OK",
+      "retry_after_ms": null,
+      "turn": 3
+    }
+  }
+]

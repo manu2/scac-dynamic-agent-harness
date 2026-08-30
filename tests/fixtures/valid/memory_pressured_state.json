@@ -1,0 +1,120 @@
+{
+  "schema": "scac-sst-v0.1",
+  "trajectory_id": "traj-mem-002",
+  "seq": 0,
+  "kind": "full_checkpoint",
+  "base_snapshot_id": null,
+  "observed_at_ms": 1787884200000,
+  "fresh_for_ms": 2000,
+  "reducer": {
+    "name": "scac-deterministic-reducer",
+    "version": "0.1.0"
+  },
+  "raw_event_hashes": [
+    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  ],
+  "derivation_provenance": {
+    "hardware.memory": [
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    ]
+  },
+  "hardware": {
+    "memory": {
+      "current_bytes": 241172480,
+      "peak_bytes": 73400320,
+      "max_bytes": 268435456,
+      "headroom_ratio": 0.1016,
+      "events_delta": {
+        "high": 5,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0
+      },
+      "psi_some_avg10": 6.8,
+      "psi_full_avg10": 0.0,
+      "psi_some_total_usec_delta": 0,
+      "psi_full_total_usec_delta": 0,
+      "state": "PRESSURED"
+    },
+    "cpu": {
+      "quota_cores": 2.0,
+      "period_usec": 100000,
+      "nr_throttled_delta": 0,
+      "throttled_usec_delta": 0,
+      "usage_usec_delta": 15000,
+      "psi_some_avg10": 0.0,
+      "psi_full_avg10": 0.0,
+      "state": "OK"
+    },
+    "gpu": {
+      "available": false
+    },
+    "ephemeral_disk": {
+      "free_bytes": 10737418240,
+      "used_bytes": 536870912,
+      "total_bytes": 11274289152,
+      "used_ratio": 0.0476,
+      "state": "OK"
+    },
+    "processes": {
+      "pids_current": 4,
+      "pids_max": 64,
+      "threads_current": 8
+    }
+  },
+  "tools": {
+    "query_db": {
+      "window_n": 10,
+      "successes": 10,
+      "failures": 0,
+      "history": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "consecutive_failures": 0,
+      "latency_ewma_ms": 42.5,
+      "last_error": "NONE",
+      "circuit": "CLOSED",
+      "state": "OK"
+    }
+  },
+  "runtime": {
+    "wall_remaining_ms": 60000,
+    "step": 0,
+    "pids_current": 4,
+    "pids_max": 64,
+    "threads_current": 8,
+    "last_exit": {
+      "code": 0,
+      "signal": null,
+      "class": "NONE"
+    },
+    "network": "ENABLED",
+    "filesystem": "READ_WRITE",
+    "state": "RUNNING"
+  },
+  "economics": {
+    "context_tokens_remaining": 120000,
+    "trajectory_tokens": 1250,
+    "input_tokens": 800,
+    "output_tokens": 450,
+    "cached_tokens": 400,
+    "estimated_cost_usd": 0.0042,
+    "budget_remaining_usd": 10.0,
+    "rate_limit_remaining": 100,
+    "rate_limit_reset_ms": 60000,
+    "state": "OK"
+  },
+  "recommended_constraints": [
+    "avoid new allocations above 16 MiB"
+  ],
+  "snapshot_id": "811137227df28abc45f80da66f80306017f469a66255c46fe81fec99bc22e6fc"
+}

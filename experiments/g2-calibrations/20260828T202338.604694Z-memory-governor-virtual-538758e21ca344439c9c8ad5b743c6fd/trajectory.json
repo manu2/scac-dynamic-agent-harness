@@ -1,0 +1,78 @@
+[
+  {
+    "action": {
+      "checkpoint": false,
+      "chunk_bytes": 256,
+      "workers": 2
+    },
+    "outcome": {
+      "processed_bytes": 512,
+      "success": true,
+      "terminal": false,
+      "violation": null
+    },
+    "state": {
+      "limit_bytes": 1024,
+      "occupied_bytes": 256,
+      "remaining_work_bytes": 1536,
+      "turn": 0
+    }
+  },
+  {
+    "action": {
+      "checkpoint": false,
+      "chunk_bytes": 128,
+      "workers": 2
+    },
+    "outcome": {
+      "processed_bytes": 256,
+      "success": true,
+      "terminal": false,
+      "violation": null
+    },
+    "state": {
+      "limit_bytes": 1024,
+      "occupied_bytes": 768,
+      "remaining_work_bytes": 1024,
+      "turn": 1
+    }
+  },
+  {
+    "action": {
+      "checkpoint": false,
+      "chunk_bytes": 256,
+      "workers": 2
+    },
+    "outcome": {
+      "processed_bytes": 512,
+      "success": true,
+      "terminal": false,
+      "violation": null
+    },
+    "state": {
+      "limit_bytes": 1024,
+      "occupied_bytes": 512,
+      "remaining_work_bytes": 768,
+      "turn": 2
+    }
+  },
+  {
+    "action": {
+      "checkpoint": false,
+      "chunk_bytes": 256,
+      "workers": 2
+    },
+    "outcome": {
+      "processed_bytes": 256,
+      "success": true,
+      "terminal": true,
+      "violation": null
+    },
+    "state": {
+      "limit_bytes": 1024,
+      "occupied_bytes": 256,
+      "remaining_work_bytes": 256,
+      "turn": 3
+    }
+  }
+]

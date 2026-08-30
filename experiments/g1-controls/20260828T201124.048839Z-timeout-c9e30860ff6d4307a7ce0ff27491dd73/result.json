@@ -1,0 +1,11 @@
+{
+  "classification": "WATCHDOG_TIMEOUT",
+  "detail": "host watchdog killed overdue worker",
+  "ended_at_ms": 288752843,
+  "name": "timeout",
+  "returncode": -9,
+  "started_at_ms": 288752689,
+  "status": "PASS",
+  "stderr": "",
+  "stdout": ""
+}

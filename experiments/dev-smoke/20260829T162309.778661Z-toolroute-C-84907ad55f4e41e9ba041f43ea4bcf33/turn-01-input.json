@@ -1,0 +1,101 @@
+{
+  "condition": "C",
+  "message": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: tool_beta, wait, tool_alpha\n=== HOST TELEMETRY [seq=1 kind=delta base=a0bd7c71 id=05966db5 obs=2022ms fresh=2000ms] ===\n[TOOLS]\n  tool_alpha: window=6 succ=6 consec_fail=0 latency_ewma=139.04ms last_err=NONE circuit=CLOSED\n  tool_beta: window=6 succ=3 consec_fail=3 latency_ewma=2141.76ms last_err=HTTP_503 circuit=OPEN retry_after=2000ms\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "message_bytes": 635,
+  "option_order": [
+    "tool_beta",
+    "wait",
+    "tool_alpha"
+  ],
+  "visible_snapshot": {
+    "base_snapshot_id": "a0bd7c719045ebfa9620822ed22b0b704c67b53e68f9f402b661f093d92f5dd0",
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "df36561723c34057a8e87c985f8c563cee03326121c790ac44aa5124390eae00",
+        "9597cb356305814ef01b7847717f60eee5772466f09079651170f405aa56dc2e",
+        "923d5e0eeb9f124445b67cf15d2e3d067cac820f741dbe962f21c6862ae5821b",
+        "16157c78092a7957c8f1a683fcc2d0be96a258bed38bc48c857f2debe28c8740",
+        "9440c3fbf55d314236e3420ac74e638518285a6082ad63bbe5ff511acc970ee6",
+        "613fa7038f064534063d647260037fc129b8c9e7945762134abe75fa5b1985d0"
+      ],
+      "tools.tool_beta": [
+        "3b922f7a1c6fe2f890c40c5b811300e8598dd307d5054f96e2f59be31bfd7813",
+        "d1a293b063375972b86e6b002ac8e31ee233f93cc9742b9c60e22689ffddc83f",
+        "1ff90b99c1428c3c99aa81c4b94653f1106cdfc6cc1dc791c835c511e01a4987",
+        "de78bca97ecd526beb62b3e5c5ee90590c456b309b658ed4a5734ce15d7498de",
+        "eb4471b48d79351b7e74fce3c740f35aa9e435e6398af088123324e9ee5e8e2f",
+        "b074218fa22d9bc293f6868f909430b89bc5db4d7020cdc93398a81f0c165c73"
+      ]
+    },
+    "fresh_for_ms": 2000,
+    "kind": "delta",
+    "observed_at_ms": 2022,
+    "raw_event_hashes": [
+      "16157c78092a7957c8f1a683fcc2d0be96a258bed38bc48c857f2debe28c8740",
+      "9440c3fbf55d314236e3420ac74e638518285a6082ad63bbe5ff511acc970ee6",
+      "613fa7038f064534063d647260037fc129b8c9e7945762134abe75fa5b1985d0",
+      "de78bca97ecd526beb62b3e5c5ee90590c456b309b658ed4a5734ce15d7498de",
+      "eb4471b48d79351b7e74fce3c740f35aa9e435e6398af088123324e9ee5e8e2f",
+      "b074218fa22d9bc293f6868f909430b89bc5db4d7020cdc93398a81f0c165c73"
+    ],
+    "recommended_constraints": [
+      "do not call tool_beta before circuit closes (wait 2000ms)"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 1,
+    "snapshot_id": "05966db5a018b49848d02b940016179d8a31fc3c86a629bfe25740a4c349506d",
+    "subsystem_observed_at_ms": {
+      "tool_span": 2012
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 139.04,
+        "state": "OK",
+        "successes": 6,
+        "window_n": 6
+      },
+      "tool_beta": {
+        "circuit": "OPEN",
+        "consecutive_failures": 3,
+        "failures": 3,
+        "history": [
+          true,
+          true,
+          true,
+          false,
+          false,
+          false
+        ],
+        "last_error": "HTTP_503",
+        "latency_ewma_ms": 2141.76,
+        "retry_after_ms": 2000,
+        "state": "DEGRADED",
+        "successes": 3,
+        "window_n": 6
+      }
+    },
+    "trajectory_id": "dev-smoke-54",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}

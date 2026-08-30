@@ -1,0 +1,5 @@
+{
+  "accepted": false,
+  "classification": "REJECTED_MANIFEST_SCOPE",
+  "reason": "ToolRoute authorization was revoked before provider request"
+}

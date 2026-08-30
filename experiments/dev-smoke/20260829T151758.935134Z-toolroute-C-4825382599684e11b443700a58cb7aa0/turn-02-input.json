@@ -1,0 +1,113 @@
+{
+  "condition": "C",
+  "message": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: tool_alpha, wait, tool_beta\n=== HOST TELEMETRY [seq=2 kind=delta base=f746d822 id=db84e270 obs=3022ms fresh=2000ms] ===\n[TOOLS]\n  tool_alpha: window=9 succ=9 consec_fail=0 latency_ewma=180.0ms last_err=NONE circuit=CLOSED\n  tool_beta: window=9 succ=4 consec_fail=4 latency_ewma=3125.21ms last_err=HTTP_503 circuit=OPEN retry_after=2000ms\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+  "message_bytes": 634,
+  "option_order": [
+    "tool_alpha",
+    "wait",
+    "tool_beta"
+  ],
+  "visible_snapshot": {
+    "base_snapshot_id": "f746d822281bb44e1a838441dbab31639d87dad8cb8664319582727104be1286",
+    "derivation_provenance": {
+      "tools.tool_alpha": [
+        "2f9a74567a294dd960f9db22533d6224a9c56f7a4d436a466283556b38c11779",
+        "1c6dcd4922ece6d613aeb76c9b1873012e3805abf8bb3f6d167b1265b80c71c6",
+        "cc1c5ab4db4d2c2c5ad9d1bf79335378830eb594e1167e03ebcc250e9c22a385",
+        "16157c78092a7957c8f1a683fcc2d0be96a258bed38bc48c857f2debe28c8740",
+        "9440c3fbf55d314236e3420ac74e638518285a6082ad63bbe5ff511acc970ee6",
+        "613fa7038f064534063d647260037fc129b8c9e7945762134abe75fa5b1985d0",
+        "f079cf77eb17b464db4ae02b34034530ed12e061c53b9253d94e3c7dd93ba95c",
+        "40f7f494673fcc442ac6f82f82241875733c020596e6aea446288850cc08bcfc",
+        "93109d9f225c698fab4f3ac15f988e64957d649b556ac39e81a285a9415b533c"
+      ],
+      "tools.tool_beta": [
+        "26565dc19177ad81b98448c87f3e764b0d9774831e086b477b433a557e764e1f",
+        "11d26bd81c416a26ccf0e8afb27a1ea2eb130e9418ee3d82869298fd3824abff",
+        "715893e5255240836890ac9e3e53aacd060bab8ca7c768250d337ee5cb8eabb9",
+        "de78bca97ecd526beb62b3e5c5ee90590c456b309b658ed4a5734ce15d7498de",
+        "eec32b46590ba123a72168ea42e803dc9e275887c656b00d67796e0514e8d174",
+        "b074218fa22d9bc293f6868f909430b89bc5db4d7020cdc93398a81f0c165c73",
+        "4a58a16ea48499c1737f7940640d09d060162b02f3aa3f7ca8b9fa865cb987ca",
+        "db6f4b9f4ea54632d81e6eab84283a0b9fa23c425b31677096075243b00860c6",
+        "f0019e14fb207ffc49aed7cda992ab0fe70fe55155af858d9c66aaab1901f1b5"
+      ]
+    },
+    "fresh_for_ms": 2000,
+    "kind": "delta",
+    "observed_at_ms": 3022,
+    "raw_event_hashes": [
+      "f079cf77eb17b464db4ae02b34034530ed12e061c53b9253d94e3c7dd93ba95c",
+      "40f7f494673fcc442ac6f82f82241875733c020596e6aea446288850cc08bcfc",
+      "93109d9f225c698fab4f3ac15f988e64957d649b556ac39e81a285a9415b533c",
+      "4a58a16ea48499c1737f7940640d09d060162b02f3aa3f7ca8b9fa865cb987ca",
+      "db6f4b9f4ea54632d81e6eab84283a0b9fa23c425b31677096075243b00860c6",
+      "f0019e14fb207ffc49aed7cda992ab0fe70fe55155af858d9c66aaab1901f1b5"
+    ],
+    "recommended_constraints": [
+      "do not call tool_beta before circuit closes (wait 2000ms)"
+    ],
+    "reducer": {
+      "name": "scac-deterministic-reducer",
+      "version": "0.1.0"
+    },
+    "schema": "scac-sst-v0.1",
+    "seq": 2,
+    "snapshot_id": "db84e270f85341cdafac874958225435c5a6f96211f3cff112db8a7030a34915",
+    "subsystem_observed_at_ms": {
+      "tool_span": 3012
+    },
+    "tools": {
+      "tool_alpha": {
+        "circuit": "CLOSED",
+        "consecutive_failures": 0,
+        "failures": 0,
+        "history": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "last_error": "NONE",
+        "latency_ewma_ms": 180.0,
+        "state": "OK",
+        "successes": 9,
+        "window_n": 9
+      },
+      "tool_beta": {
+        "circuit": "OPEN",
+        "consecutive_failures": 4,
+        "failures": 5,
+        "history": [
+          true,
+          true,
+          true,
+          false,
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "last_error": "HTTP_503",
+        "latency_ewma_ms": 3125.21,
+        "retry_after_ms": 2000,
+        "state": "DEGRADED",
+        "successes": 4,
+        "window_n": 9
+      }
+    },
+    "trajectory_id": "dev-smoke-35",
+    "unavailable_fields": [
+      "hardware.cpu",
+      "hardware.ephemeral_disk",
+      "hardware.memory",
+      "runtime.network"
+    ]
+  }
+}
