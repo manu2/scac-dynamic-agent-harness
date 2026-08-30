@@ -553,3 +553,27 @@
 - On turn 0, A/B selected `tool_alpha` (80.0 observable regret) and C selected
   `tool_beta` (0). On turns 1–3 all three conditions selected zero-regret
   actions; seed 7's turn-3 healthy route is alpha. Authorization is revoked.
+
+### 2026-08-30 — ToolRoute paper cohort v1.0 Seed-8 execution completed
+
+- Frozen paper manifest `manifests/toolroute_api_paper.v1.0.json` committed and
+  bound in `PROVENANCE.json` (SHA-256 `9fb8003e4742b3e94afd872a88522cbe5d238d13ae631c1f0f30c78705789218`).
+- Executed the first scheduled paper block (Seed 8, turns 0–3, A/B/C across
+  `gpt-5.6-sol`, `claude-sonnet-5`, and `gemini-3.7-flash` = 36 total decisions)
+  via isolated per-process invocations stored in `experiments/api-paper-v1.0-seed8/`.
+- **Integrity Audit:** Exactly 36/36 expected provider × turn × condition cells
+  completed exactly once; 0 provider errors; 0 malformed responses; all 36
+  `finalization.json` artifact digests verified; outer `pilot_manifest_sha256`
+  consistently bound; Condition B tool symmetry verified across all B prompts.
+- **Results Summary (Seed 8):**
+  - On Turn 0 (differential tool latency: `tool_beta` 100ms vs `tool_alpha` 180ms):
+    All three models chose `tool_alpha` under Condition A (80.0 ms regret) and
+    Condition B (80.0 ms regret), while choosing `tool_beta` under Condition C
+    (**0.00 ms regret**).
+  - On Turns 1, 2, and 3: All three models chose `tool_alpha` (0.00 ms regret)
+    across all conditions.
+  - Overall Mean Regret across Seed 8: Condition C = **0.00 ms**, Condition B = **20.00 ms**,
+    Condition A = **20.00 ms** across all three model families.
+  - Attention Tax ($B - A$) = **0.00 ms**; Epistemic Treatment Effect ($C - B$) = **-20.00 ms** (100% regret elimination).
+- Authorization immediately revoked in `PROVENANCE.json`.
+

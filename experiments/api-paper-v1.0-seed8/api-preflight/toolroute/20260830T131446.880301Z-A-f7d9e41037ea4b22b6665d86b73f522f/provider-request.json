@@ -1,0 +1,15 @@
+{
+  "adapter": "anthropic_messages_v1",
+  "anthropic_version": "2023-06-01",
+  "body": {
+    "max_tokens": 1024,
+    "messages": [
+      {
+        "content": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: wait, tool_beta, tool_alpha\n",
+        "role": "user"
+      }
+    ],
+    "model": "claude-sonnet-5"
+  },
+  "endpoint": "https://api.anthropic.com/v1/messages"
+}
