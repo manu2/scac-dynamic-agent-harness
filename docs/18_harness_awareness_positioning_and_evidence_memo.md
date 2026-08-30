@@ -13,9 +13,10 @@ plan on whether a route is slow, failing, rate-limited, resource-constrained,
 or economically infeasible.
 
 We call the remedy **Agent Harness Awareness**: a trustworthy feedback layer
-that converts host-owned execution facts into compact, decision-ready state for
-the agent. The central proposition is not that one telemetry table is a
-universal solution. It is that agents should be designed to reason over their
+that converts verified execution facts into compact, decision-ready state for
+the agent. It turns observability from a passive debugging artifact into an
+active control input. The central proposition is not that one telemetry table is
+a universal solution. It is that agents should be designed to reason over their
 operational world just as they reason over task semantics.
 
 This extends the Project SCAC **Substrate Awareness** thesis. Substrate
@@ -48,7 +49,7 @@ the state needed to reason about them.
 
 ## What ToolRoute establishes
 
-ToolRoute is the first empirical instance of Harness Awareness. It isolates an
+ToolRoute is an empirical instance of Harness Awareness. It isolates an
 operational routing decision: two functionally equivalent tools can differ in
 observed latency and reliability. The model makes one independent decision from
 the same task and current state under three conditions:
@@ -58,9 +59,13 @@ the same task and current state under three conditions:
   tools.**
 - **C — truthful, fresh, host-owned monitor state.**
 
-The B condition is essential. It separates the effect of **operationally useful
-state** from the effect of a longer prompt, a table-shaped interface, or the
-mere presence of technical language.
+The B condition is essential. It holds the telemetry-shaped envelope, field
+names, ordering, and tool rows fixed while removing their route-relevant
+contrast. It therefore tests whether the gain comes from **operationally useful
+state**, rather than from a longer prompt, a table-shaped interface, or the mere
+presence of technical language. It is a structural control, not an exact
+provider-token-matching claim; provider-reported input tokens are retained as a
+descriptive manipulation check.
 
 ### Completed evidence
 
@@ -90,6 +95,28 @@ better than when given task semantics alone or a structurally equivalent neutral
 table.** Three C decisions selected `wait`; they remain in the denominator and
 are part of the reported result.
 
+## Observability-to-control: the central distinction
+
+Modern observability primarily helps a human operator inspect, debug, or audit
+an agent after execution. Harness Awareness closes that loop: a selected,
+provenance-preserving view of execution state is supplied to the agent **before
+its next consequential decision**. The intended result is not a dashboard for
+the model; it is a compact operational state interface.
+
+This also answers the “why not middleware?” question. The proposal is a
+**split-plane architecture**:
+
+- The **data plane** (kernel, proxy, circuit breaker, retry policy) owns fast,
+  local, deterministic enforcement and transport recovery.
+- The **agent control plane** uses harness state when the response changes task
+  strategy: selecting a different tool, choosing a degraded-mode plan,
+  allocating a remaining deadline or budget, or changing the execution method.
+
+ToolRoute establishes the prerequisite for this architecture: models use
+verified current state to select a route. The benchmark does not claim to show
+that an LLM should replace a load balancer or that it has already performed
+every form of macro-adaptation.
+
 ## Relationship to existing agent research
 
 Harness Awareness complements rather than competes with the established
@@ -107,11 +134,29 @@ reason–act and tool-use programs.
 - **OpenTelemetry** supplies a mature instrumentation vocabulary for traces,
   metrics, and logs. Harness Awareness turns selected, provenance-preserving
   observability facts into an explicit decision interface for agents.
+- Recent agent-observability and telemetry systems reinforce that this is an
+  emerging area. Their central emphasis is instrumentation, diagnosis, or
+  domain-specific scheduling; ToolRoute tests the agent-facing information
+  channel itself with a neutral-structure control.
 
 This is a positioning distinction, not a claim that no prior work has ever
-exposed state to an agent. The contribution is the explicit paradigm, trusted
-state interface, and controlled evidence that useful harness state changes
-operational action selection.
+exposed state to an agent. The contribution is a general trust-separated state
+interface and controlled evidence that useful harness state changes operational
+action selection.
+
+## A minimal formal statement
+
+At decision time \(t\), let \(x_t\) denote task semantics, \(h_t\) the
+current harness state, and \(z_t = \phi(h_t)\) the verified compact telemetry
+delivered by the harness. Harness Awareness tests whether a policy with
+\(x_t, z_t\) has lower operational loss than a policy with task semantics alone
+or a neutral structural control. ToolRoute instantiates this question with
+observable monitor cost as the loss and route selection as the action.
+
+This is sufficient formal scaffolding for the paper. It should not claim that
+the current SST reducer solves an information-bottleneck objective, constitutes
+a sufficient statistic, or makes the environment fully observable. Those are
+promising research questions rather than completed results.
 
 ## Claims architecture
 
@@ -138,9 +183,9 @@ automation—rather than treating them as speculative afterthoughts.
 
 | Challenge | Why it matters | Strong response |
 | --- | --- | --- |
-| “C is merely a better-formatted prompt.” | A formatting effect would weaken the proposed mechanism. | B holds the envelope, field names, tool rows, and neutral values constant; the B→C contrast isolates route-relevant state. |
+| “C is merely a better-formatted prompt.” | A formatting effect would weaken the proposed mechanism. | B holds the envelope, field names, ordering, and tool rows fixed while neutralizing their route-relevant contrast; the B→C contrast tests the value of that state. |
 | “The monitor signal gives away the answer.” | A hidden recommendation would reduce this to instruction following. | C reports facts—window success, latency EWMA, error/circuit state, age—not a recommended action. The external oracle is outside model control. |
-| “The benchmark is synthetic.” | The evidence must be auditable and controllable. | This is an intentional first instantiation: seeded degradation permits exact counterfactual scoring, randomized order, and a clean causal ablation. The architecture is designed for real telemetry sources such as OpenTelemetry and cgroup signals. |
+| “The benchmark is synthetic.” | The evidence must be auditable and controllable. | This is an intentional first instantiation: seeded degradation permits exact scoring, randomized execution order, and a clean information ablation. ToolRoute uses a synthetic host-owned monitor, not a claim of live production telemetry. The architecture is designed for real telemetry sources such as OpenTelemetry and cgroup signals. |
 | “There are only two tools.” | Real harnesses can contain many choices. | Two equivalent routes isolate operational adaptation before introducing capability, schema, or task-complexity confounds. Scaling the action set is a direct next benchmark, not a conceptual change. |
 | “A few models could be idiosyncratic.” | A single-model result would be fragile. | The effect is reproduced across three independent provider/model families and six balanced seeds. |
 
@@ -177,6 +222,26 @@ Tool-Using Agents**
 4. Demonstrates large cross-model improvements from verified harness state and
    establishes an extensible evaluation program for dynamic agents.
 
+## Narrative spine for the manuscript
+
+1. **Problem:** Tool-using agents are often operationally blind: they act from
+   task semantics while the harness already knows whether the action is timely,
+   reliable, feasible, and affordable.
+2. **Idea:** Treat selected verified harness state as a first-class agent input,
+   separate from both untrusted tools and host enforcement.
+3. **Architecture:** A trust-separated harness reduces raw observations to a
+   fresh, bounded SST and exposes it at decision time; it does not prescribe an
+   action or surrender enforcement to the model.
+4. **Evidence:** A/B/C ToolRoute isolates the information channel. B→C is the
+   empirical centerpiece because both conditions carry the same type of
+   interface while only C carries route-relevant state.
+5. **Implication:** Harness Awareness supplies the control-plane information
+   needed for operational adaptation; it complements, rather than replaces,
+   fast deterministic middleware.
+6. **Program:** Resource adaptation, staleness-aware dispatch, budget-aware
+   orchestration, and multi-agent backpressure are the next dimensions of the
+   same architecture.
+
 ## References for positioning
 
 - Yao et al. *ReAct: Synergizing Reasoning and Acting in Language Models*
@@ -188,3 +253,9 @@ Tool-Using Agents**
 - Yao et al. *τ-bench: A Benchmark for Tool-Agent-User Interaction in
   Real-World Domains* (ICLR 2025). https://arxiv.org/abs/2406.12045
 - OpenTelemetry. *Specification*. https://opentelemetry.io/docs/specs/
+- Seyedghorban et al. *Observability and Fault Injection for LLM-Based
+  Multi-Agent Systems in Software Engineering* (2026).
+  https://arxiv.org/abs/2608.24271
+- Li et al. *Multi-Agentic AI for Fairness-Aware and Accelerated Multi-modal
+  Large Model Inference in Real-world Mobile Edge Networks* (2026).
+  https://arxiv.org/abs/2602.07215

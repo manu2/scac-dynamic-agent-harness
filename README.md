@@ -46,10 +46,9 @@ docs/                    design reviews and empirical reports
 
 ## Current status
 
-Gate G0 (Specification & Threat Model) is complete on branch
-`codex/g0-sst-schema`. ToolRoute v0.6 is run-ready as a narrow synthetic API
-study: independent full-checkpoint episodes, an observable-only primary oracle,
-precalibrated freshness/noise sensitivity, reservation-first artifact capture,
+Gate G0 (Specification & Threat Model) is complete. ToolRoute v1.0 collection
+is complete as a narrow synthetic API study: independent full-checkpoint
+episodes, an observable-only primary oracle, reservation-first artifact capture,
 and finalization hashes. Fresh-context subagent artifacts and the optional
 Toxiproxy adapter are retained development diagnostics—not empirical evidence.
 

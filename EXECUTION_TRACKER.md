@@ -712,3 +712,23 @@
 - The memo is a positioning artifact only; all quantitative claims remain
   traceable to the frozen 216-decision cohort and formal inference remains the
   next analysis step.
+
+### 2026-08-31 — Harness Awareness narrative contract and shareability review
+
+- Revised `docs/18_harness_awareness_positioning_and_evidence_memo.md` after an
+  adversarial positioning review. The fixed thesis is that Agent Harness
+  Awareness turns verified execution telemetry from a passive observability
+  artifact into an active control input for tool-using agents.
+- Added `docs/19_manuscript_narrative_contract.md`. It distinguishes the design
+  thesis, implemented architecture, measured ToolRoute result, systems
+  implication, and planned research program; it also records prohibited
+  overclaims and the required reviewer-facing qualifiers.
+- Corrected two wording risks before drafting: condition B is a neutral
+  same-shape structural control rather than an exact provider-token match, and
+  ToolRoute's monitor is synthetic host-owned state rather than a live
+  production telemetry claim. The intended split-plane architecture keeps fast
+  deterministic enforcement in middleware and uses harness state for
+  goal-level agent control decisions.
+- This documentation change does not modify the frozen cohort, inclusion rules,
+  artifacts, evaluator, or reported measurements. It prepares the repository
+  for reproducible analysis and collaborative manuscript work.

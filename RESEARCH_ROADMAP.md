@@ -53,9 +53,15 @@ Every snapshot enforces:
   recorded settings, including Gemini `temperature: 0.0`; analysis and
   manuscript framing remain before any follow-on protocol is considered.
 - **ToolRoute positioning:** `docs/18_harness_awareness_positioning_and_evidence_memo.md`
-  records the paper's broad Harness Awareness thesis, its relationship to the
-  prior Substrate Awareness work, completed evidence, and adversarial claim
-  boundaries. The next artifact is a reproducible frozen-cohort analysis report.
+  and `docs/19_manuscript_narrative_contract.md` record the paper's broad
+  Harness Awareness thesis, its relationship to the prior Substrate Awareness
+  work, completed evidence, and drafting claim boundaries. The core position is
+  that verified operational state is an active control input, not merely a
+  debugging artifact. ToolRoute establishes the route-selection instance of a
+  split-plane architecture; it does not claim live production telemetry,
+  replacement of deterministic middleware, or completed evidence for the other
+  state dimensions. The next artifact is a reproducible frozen-cohort analysis
+  report.
 - **G2 — scenarios (In progress):** seeded, model-free ToolRoute,
   MemoryGovernor, and RetryBudget simulators plus external oracles are locally
   calibrated without model calls. The local MemoryGovernor is explicitly virtual

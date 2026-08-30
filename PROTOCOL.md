@@ -1,7 +1,8 @@
 # Dynamic SCAC Experimental Protocol
 
 **Version:** design-v0.1
-**Status:** pre-pilot; provider calls prohibited
+**Status:** common design contract; the ToolRoute v1.0 cohort is complete and
+no further provider call is authorized without a separately reviewed protocol.
 
 ## Primary question
 
