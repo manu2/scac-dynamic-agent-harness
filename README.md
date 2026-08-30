@@ -53,10 +53,11 @@ precalibrated freshness/noise sensitivity, reservation-first artifact capture,
 and finalization hashes. Fresh-context subagent artifacts and the optional
 Toxiproxy adapter are retained development diagnostics—not empirical evidence.
 
-Provider trials remain deliberately unauthorized. The only remaining ToolRoute
-actions are to select the provider/model and its exact tokenizer, commit the
-completed pilot manifest and analysis plan, bind its hash in provenance through
-an explicit review, and run the separated canary then the frozen cohort. This
+Provider trials remain deliberately unauthorized. The selected first-paper
+cohort is GPT-5.6 Sol, Claude Sonnet 5, and Gemini 3.7 Flash. The only
+remaining ToolRoute actions are to pin each provider's exact tokenizer, commit
+the completed pilot manifest and analysis plan, bind its hash in provenance
+through an explicit review, and run the separated canary then the frozen cohort. This
 narrow ToolRoute exception does not close G1 globally or apply to
 MemoryGovernor, RetryBudget, or a combined study. See
 `docs/14_toolroute_v0_6_api_run_readiness.md`.

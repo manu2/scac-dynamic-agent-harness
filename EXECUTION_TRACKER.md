@@ -455,3 +455,13 @@
   not an API-level or harness-level incompatibility. Revoked the consumed
   authorization. Sonnet 5 is now the eligible Anthropic candidate pending a
   separately frozen balanced cohort protocol.
+
+### 2026-08-30 — First-paper model cohort selection
+
+- Selected the intended ToolRoute paper cohort: OpenAI GPT-5.6 Sol, Anthropic
+  Claude Sonnet 5, and Google Gemini 3.7 Flash. Terra and Opus remain retained
+  transport diagnostics only and are not candidates for the cohort.
+- Gemini Flash and Sonnet 5 have completed clean ToolRoute C-only transport
+  diagnostics. Sol has successful direct-API precedent in the separate static
+  study but needs one separately authorized ToolRoute C-only diagnostic before
+  the tokenizer-pinned A/B/C canary. Provider authorization remains false.

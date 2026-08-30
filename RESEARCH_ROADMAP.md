@@ -41,6 +41,10 @@ Every snapshot enforces:
   plan, and its reviewed provenance hash binding. The Linux cgroup-v2 proof is
   a MemoryGovernor requirement, not a blocker for this narrow synthetic
   ToolRoute pilot.
+- **Selected first-paper model cohort:** OpenAI `gpt-5.6-sol`, Anthropic
+  `claude-sonnet-5`, and Google `gemini-3.7-flash`. This selection is frozen
+  for the intended cohort, but provider authorization remains false until a
+  tokenizer-pinned balanced manifest is reviewed and hash-bound.
 - **G2 — scenarios (In progress):** seeded, model-free ToolRoute,
   MemoryGovernor, and RetryBudget simulators plus external oracles are locally
   calibrated without model calls. The local MemoryGovernor is explicitly virtual

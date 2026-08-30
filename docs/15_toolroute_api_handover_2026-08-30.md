@@ -4,6 +4,11 @@
 
 - Branch and remote head: `codex/g0-sst-schema`, commit `3b8a564`.
 - `PROVENANCE.json` has `toolroute_provider_trials_authorized: false`.
+- The selected first-paper cohort is GPT-5.6 Sol, Claude Sonnet 5, and Gemini
+  3.7 Flash. Terra and Opus are retained diagnostic history only. Sonnet and
+  Gemini have clean ToolRoute transport diagnostics; Sol has successful prior
+  project API precedent but still needs its own ToolRoute C-only smoke before a
+  balanced cohort.
 - `.env` is copied locally, mode 600, and ignored by Git. Never print, stage,
   hash, or copy it into an artifact.
 - Toxiproxy is frozen and out of scope. RetryBudget and MemoryGovernor are out

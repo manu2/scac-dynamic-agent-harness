@@ -1,6 +1,11 @@
 {
   "template_status": "NOT_FROZEN_NOT_AUTHORIZING",
   "scenario": "ToolRoute-v0.6-api",
+  "selected_first_paper_models": [
+    {"provider_label": "openai", "model_id": "gpt-5.6-sol"},
+    {"provider_label": "anthropic", "model_id": "claude-sonnet-5"},
+    {"provider_label": "google", "model_id": "gemini-3.7-flash"}
+  ],
   "state_delivery": "independent_full_checkpoint_only",
   "provider": {
     "label": "FILL_ME",
