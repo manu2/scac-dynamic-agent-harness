@@ -732,3 +732,16 @@
 - This documentation change does not modify the frozen cohort, inclusion rules,
   artifacts, evaluator, or reported measurements. It prepares the repository
   for reproducible analysis and collaborative manuscript work.
+
+### 2026-08-31 — Manuscript structure and terminology freeze
+
+- Extended `docs/19_manuscript_narrative_contract.md` with the agreed paper
+  structure: operational blindness and thesis; architecture; a standalone
+  ToolRoute controlled-information-ablation method; results; bounded
+  interpretation and agenda; and related work.
+- Fixed reviewer-facing terminology before drafting: describe ToolRoute as a
+  **controlled information ablation**, and describe the implemented boundary as
+  a **trust-separated harness interface**. Do not use an unqualified “causal
+  ablation” label or an L0/L2 “zero-trust” security claim, neither of which is
+  the evaluated result. This is a framing-only change; it does not modify any
+  code, frozen artifact, protocol, or cohort statistic.

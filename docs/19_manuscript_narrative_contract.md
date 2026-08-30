@@ -33,6 +33,31 @@ observability artifact into an active control input for tool-using agents.**
 6. Present future use cases as direct consequences of the interface, not as
    measured deployment savings or production incident reductions.
 
+## Recommended manuscript structure
+
+1. **Introduction — operational blindness to active control.** Define the
+   problem, introduce Harness Awareness as the dynamic extension of Substrate
+   Awareness, and state the contributions.
+2. **Harness Awareness architecture.** Describe the freshness-labelled SST,
+   trust-separated ownership, intended four-dimensional contract, and split
+   plane between deterministic enforcement and agent control.
+3. **ToolRoute — controlled information ablation.** Describe the seeded,
+   host-owned monitor; functionally equivalent routes; A/B/C conditions;
+   independent direct-provider decisions; externally owned observable-cost
+   oracle; randomization; and hash-finalized preservation.
+4. **Results.** Lead with the B-to-C result, then show all model-family rows,
+   completion outcomes, and retained `wait` selections.
+5. **Interpretation, boundaries, and research agenda.** State the synthetic,
+   two-route, zero-delivery-delay boundary directly, then develop scaling,
+   hardware/runtime/economic state, and multi-agent coordination as the next
+   instances of the same interface.
+6. **Related work.** Position the work against tool-use agents, interactive
+   agent benchmarks, and observability systems without claiming that no prior
+   agent has consumed state.
+
+The evaluation must have its own method section before results. The architecture
+is general; the frozen evidence is the ToolRoute tools-dimension instance.
+
 ## Evidence language
 
 Use:
@@ -41,6 +66,11 @@ Use:
   observable policy regret by 96.9% relative to the neutral same-shape control.”
 - “The effect reproduced across three provider/model families.”
 - “The result supports Harness Awareness as an operational decision interface.”
+- “ToolRoute is a controlled information ablation of the agent-facing
+  operational-state channel.”
+- “The implementation uses a trust-separated harness interface: the host owns
+  measurement, reduction, and enforcement; the model may consume but cannot
+  rewrite state.”
 - “ToolRoute demonstrates operative routing; the same contract is designed to
   extend to resource, runtime, and economic state.”
 
@@ -53,6 +83,12 @@ Do not use:
 - “replaces middleware,” “prevents outages,” “saves $X,” or “production-ready
   standard”; 
 - “exact token matched” or “same token geometry.”
+- “causal ablation” without qualifying the precise randomized information
+  intervention and its benchmark boundary; use “controlled information
+  ablation” instead.
+- “zero-trust L0/L2” unless a distinct, implemented security model with those
+  levels is formally specified and evaluated; use “trust-separated harness
+  interface.”
 
 ## Non-negotiable factual qualifiers
 

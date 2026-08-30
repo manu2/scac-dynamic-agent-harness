@@ -61,7 +61,10 @@ Every snapshot enforces:
   split-plane architecture; it does not claim live production telemetry,
   replacement of deterministic middleware, or completed evidence for the other
   state dimensions. The next artifact is a reproducible frozen-cohort analysis
-  report.
+  report. The manuscript is organized as architecture, a controlled
+  information-ablation method, results, and bounded systems agenda; it uses
+  “trust-separated harness interface,” not an unsupported L0/L2 zero-trust
+  claim.
 - **G2 — scenarios (In progress):** seeded, model-free ToolRoute,
   MemoryGovernor, and RetryBudget simulators plus external oracles are locally
   calibrated without model calls. The local MemoryGovernor is explicitly virtual
