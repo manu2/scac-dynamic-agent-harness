@@ -155,6 +155,19 @@ class ToolRouteAuthorization:
         raise PermissionError("episode is not explicitly authorized by the frozen manifest")
 
 
+@dataclass(frozen=True)
+class AuthorizationBoundTokenizer:
+    """Make provider-native token counting subject to live authorization."""
+
+    authorization: ToolRouteAuthorization
+    name: str
+    counter: Callable[[str], int]
+
+    def count(self, prompt: str) -> int:
+        self.authorization.verify_live()
+        return self.counter(prompt)
+
+
 class OpenAICompatibleProvider:
     """Small dependency-free chat-completions adapter for a later authorized run."""
 

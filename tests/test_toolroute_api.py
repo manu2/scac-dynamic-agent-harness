@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 from scac_harness.toolroute_api import (
     AnthropicMessagesProvider,
+    AuthorizationBoundTokenizer,
     GeminiGenerateContentProvider,
     OpenAICompatibleProvider,
     ProviderResponse,
@@ -68,6 +69,35 @@ def test_api_episode_uses_full_checkpoint_and_exact_token_b_control(tmp_path: Pa
     assert "tool_alpha: window=0 succ=0 consec_fail=0 latency_ewma=0.0ms" in b.prompt
     assert "tool_beta: window=0 succ=0 consec_fail=0 latency_ewma=0.0ms" in b.prompt
     assert "retry_after=" not in b.prompt
+
+
+def test_b_control_handles_uneven_padding_token_increments(tmp_path: Path) -> None:
+    # ``neutral`` costs two units, but ``.`` costs one.  A real tokenizer can
+    # behave similarly, so the builder must not assume a fixed one-token atom.
+    def uneven(text: str) -> int:
+        return len(text.split()) + text.count("neutral")
+    tokenizer = Tokenizer("uneven-test", uneven)
+    c = ToolRouteAPIEpisode(seed=0, turn=0, condition="C", experiments_root=tmp_path, tokenizer=tokenizer, model_id="mock", provider_label="mock")
+    b = ToolRouteAPIEpisode(seed=0, turn=0, condition="B", experiments_root=tmp_path, tokenizer=tokenizer, model_id="mock", provider_label="mock")
+    assert tokenizer.count(c.prompt) == tokenizer.count(b.prompt)
+
+
+def test_authorization_bound_tokenizer_blocks_counter_after_revocation(tmp_path: Path) -> None:
+    authorization = _authorization(tmp_path)
+    calls = []
+    tokenizer = AuthorizationBoundTokenizer(authorization, "test", lambda text: calls.append(text) or 1)
+    assert tokenizer.count("first") == 1
+    provenance = authorization.provenance_path
+    record = json.loads(provenance.read_text())
+    record["toolroute_provider_trials_authorized"] = False
+    provenance.write_text(json.dumps(record))
+    try:
+        tokenizer.count("must-not-reach-counter")
+    except PermissionError:
+        pass
+    else:
+        raise AssertionError("revoked authorization must reject native counting")
+    assert calls == ["first"]
 
 
 def test_api_episode_fails_closed_without_authorization_and_finalizes(tmp_path: Path) -> None:

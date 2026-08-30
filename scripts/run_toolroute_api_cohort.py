@@ -15,7 +15,7 @@ from pathlib import Path
 
 from scac_harness.toolroute_api import (
     AnthropicMessagesProvider, GeminiGenerateContentProvider,
-    OpenAICompatibleProvider, Tokenizer, ToolRouteAPIEpisode,
+    AuthorizationBoundTokenizer, OpenAICompatibleProvider, ToolRouteAPIEpisode,
     ToolRouteAuthorization,
 )
 
@@ -66,13 +66,9 @@ def main() -> None:
     authorization.verify_live()
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     provider = _provider(args.provider, args.model)
-    def verified_native_count(prompt: str) -> int:
-        # Token-count requests are provider requests too.  Recheck the frozen
-        # authorization immediately before each one, not only before generation.
-        authorization.verify_live()
-        return provider.count_tokens(prompt)
-
-    tokenizer = Tokenizer(f"{args.provider}-native-count-endpoint:{args.model}", verified_native_count)
+    tokenizer = AuthorizationBoundTokenizer(
+        authorization, f"{args.provider}-native-count-endpoint:{args.model}", provider.count_tokens,
+    )
     episodes = _episodes(manifest, args.provider, args.model)
     if not episodes:
         raise RuntimeError("no authorized episodes for requested provider/model")
