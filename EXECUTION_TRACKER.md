@@ -527,3 +527,19 @@
   per-episode end-to-end canary (one seed × four turns × A/B/C × three models),
   outside the paper denominator. It is not yet authorized. The full 24-state
   route-symmetry test for B passes locally.
+
+### 2026-08-30 — Fixed-structure v1.0 end-to-end canary completed
+
+- Authorized, executed, and then revoked exactly the 36 decisions in
+  `manifests/toolroute_api_canary.v1.0.json`: one seed × four turns × A/B/C ×
+  GPT-5.6 Sol, Claude Sonnet 5, and Gemini 3.7 Flash. All 36 completed with
+  exact-label parsing; every expected provider/turn/condition cell occurred
+  once, with no duplicates, no provider errors, and valid finalization hashes.
+- This one-seed engineering canary exhibited the intended contrast consistently
+  across all three models: on turns 0 and 3, A and B selected `tool_alpha`
+  (80.0 and 7453.81 observable regret), while C selected `tool_beta` (0).
+  On turns 1 and 2, all conditions selected zero-regret actions. This is
+  validation evidence only, not a treatment-effect estimate or paper data.
+- B/C prompt-character and provider-reported input-token values were retained
+  as descriptive checks. They are deliberately not forced equal. Authorization
+  is revoked; a new frozen paper manifest is required for further calls.

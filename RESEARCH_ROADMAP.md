@@ -33,11 +33,11 @@ Every snapshot enforces:
   controls are implemented. Timeout and deterministic tool-fault controls pass
   locally; the cgroup-v2 memory OOM-kill positive control is blocked pending a
   delegated Linux cgroup-v2 runner and cannot be substituted with a host limit.
-- **ToolRoute API readiness (Cohort frozen; authorization pending):** independent
+- **ToolRoute API readiness (Canary passed; cohort authorization pending):** independent
   full-checkpoint episodes, isolated remote-model access, mock-provider
   capture/finalization, observation-model calibration, and evaluator-defeat
   checks are complete. The remaining authorization inputs are a chosen
-  provider/model, a committed frozen fixed-structure A/B/C manifest/analysis
+  provider/model, a committed frozen fixed-structure A/B/C cohort manifest/analysis
   plan, and its reviewed provenance hash binding. The Linux cgroup-v2 proof is
   a MemoryGovernor requirement, not a blocker for this narrow synthetic
   ToolRoute pilot.

@@ -9,7 +9,7 @@
     "canonical_design_path": "docs/15_dynamic_agent_telemetry_whitepaper.md"
   },
   "provider_trials_authorized": false,
-  "toolroute_provider_trials_authorized": true,
-  "toolroute_pilot_manifest_sha256": "8df230a8950a4b4c04eb90733bbc82809a1691634b050144ed43e8c8c4ad456f",
-  "authorization_scope": "Only the 36 decisions declared by frozen manifests/toolroute_api_canary.v1.0.json are authorized. No retries, substitutions, other scenarios, or undeclared provider requests are authorized."
+  "toolroute_provider_trials_authorized": false,
+  "toolroute_pilot_manifest_sha256": null,
+  "authorization_scope": "No provider call is authorized. The fixed-structure v1.0 canary completed and was audited; any paper cohort requires a new frozen manifest and reviewed provenance hash binding."
 }

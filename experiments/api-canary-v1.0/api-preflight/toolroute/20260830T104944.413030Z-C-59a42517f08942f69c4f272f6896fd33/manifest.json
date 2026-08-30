@@ -1,0 +1,20 @@
+{
+  "condition": "C",
+  "kind": "toolroute_api_independent_full_checkpoint",
+  "model_id": "gemini-3.7-flash",
+  "observation_model": {
+    "delivery_delay_ms": 0,
+    "event_drop_probability": 0.0,
+    "probes_per_tool": 3,
+    "success_label_error_probability": 0.0,
+    "version": "synthetic_host_probe_v0.6"
+  },
+  "primary_oracle": "observable_monitor_cost_v0.6",
+  "provider_label": "google",
+  "provider_tools": "none",
+  "scenario": "ToolRoute-v1.0-api",
+  "secondary_oracle": "clairvoyant_latent_cost_diagnostic_only",
+  "seed": 6,
+  "state_delivery": "independent_full_checkpoint_only",
+  "turn": 2
+}
