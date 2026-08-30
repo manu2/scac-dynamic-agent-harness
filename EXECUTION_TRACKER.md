@@ -793,3 +793,17 @@
   `experiments/g2-calibrations/retrybudget-v0-2/`. It is not an agent trial and
   does not authorize fresh-subagent or provider execution. Open gates are
   recorded in the RetryBudget readiness document and issue ledger.
+
+### 2026-08-31 — RetryBudget v0.2 observation-contract hardening
+
+- Added a pure, scenario-owned independent-full-checkpoint A/B/C renderer.
+  A contains action semantics only; B contains the same host-state field
+  envelope and option order with neutral values; C contains exactly the state
+  projection used by the primary observable oracle. Non-zero observation loss
+  or corruption fails closed pending a separately calibrated model.
+- A focused counterbalancing test found that the first ordering implementation
+  did not put every action in every position across five seeds. It was replaced
+  before any subject/provider execution with a deterministic rotation that
+  proves that property. Recorded as RB-007.
+- RetryBudget now has 13 focused transition/observation tests; no agent prompt
+  was sent, no provider call was made, and no authorization state changed.

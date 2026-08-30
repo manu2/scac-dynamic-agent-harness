@@ -97,6 +97,18 @@ The first write-once oracle-following artifact is retained at
 It contains seven transitions, all five action types, zero action regret, and a
 terminal outcome.
 
+## Observation and prompt work in progress
+
+The v0.2 pure observation renderer now defines independent full-checkpoint A/B/C
+messages. A exposes only task/action semantics; B exposes the identical
+host-state field envelope and option order using `NEUTRAL` values; C exposes the
+complete state projection consumed by the primary oracle. Five adjacent seeds
+rotate every action through every option position for the same state. The
+baseline has zero delivery delay and zero loss/corruption. Non-zero observation
+loss/corruption fails closed until a separately calibrated sensitivity model is
+implemented. This is a development contract, not a frozen prompt/manifest for
+agent trials.
+
 ## Boundary and next gate
 
 New records belong under `experiments/g2-calibrations/retrybudget-v0-2/` and
