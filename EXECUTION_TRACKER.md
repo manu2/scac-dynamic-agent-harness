@@ -701,3 +701,14 @@
 - Final regression check: 107 tests passed. Authorization remains false/null.
   Collection is complete; this audit makes no inferential claim. The next work
   is frozen-cohort analysis and manuscript framing, not further provider calls.
+
+### 2026-08-30 — Harness Awareness positioning memo
+
+- Added `docs/18_harness_awareness_positioning_and_evidence_memo.md`, defining
+  Agent Harness Awareness as the dynamic extension of the prior Substrate
+  Awareness thesis. It maps the completed ToolRoute evidence to the broader
+  research program, identifies the B→C contrast as the decisive information
+  ablation, and records an adversarial claim check before manuscript drafting.
+- The memo is a positioning artifact only; all quantitative claims remain
+  traceable to the frozen 216-decision cohort and formal inference remains the
+  next analysis step.

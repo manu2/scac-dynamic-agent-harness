@@ -42,17 +42,20 @@ Every snapshot enforces:
   sampling controls are omitted while its Gemini requests explicitly set
   `temperature: 0.0`. Because that setting is identical across the seed-8
   Gemini A/B/C cells and is retained in each raw request, it is not a treatment
-  confound and seed 8 remains in the cohort. Authorization is revoked pending
-  a frozen execution-config clarification. The runner now hash-binds and checks
-  that clarification before each provider request; all later Gemini calls must
-  retain `temperature: 0.0`, not change to provider default. The Linux cgroup-v2
-  proof remains a MemoryGovernor requirement, not a blocker for this narrow
-  synthetic ToolRoute study.
+  confound and seed 8 remains in the cohort. The two subsequent continuation
+  blocks hash-bound execution configurations and retained Gemini
+  `temperature: 0.0`; authorization is now revoked after collection. The Linux
+  cgroup-v2 proof remains a MemoryGovernor requirement, not a blocker for this
+  narrow synthetic ToolRoute study.
 - **Selected first-paper model cohort:** OpenAI `gpt-5.6-sol`, Anthropic
   `claude-sonnet-5`, and Google `gemini-3.7-flash`. The model selection is
   retained. Provider authorization is false. The complete cohort used the
   recorded settings, including Gemini `temperature: 0.0`; analysis and
   manuscript framing remain before any follow-on protocol is considered.
+- **ToolRoute positioning:** `docs/18_harness_awareness_positioning_and_evidence_memo.md`
+  records the paper's broad Harness Awareness thesis, its relationship to the
+  prior Substrate Awareness work, completed evidence, and adversarial claim
+  boundaries. The next artifact is a reproducible frozen-cohort analysis report.
 - **G2 — scenarios (In progress):** seeded, model-free ToolRoute,
   MemoryGovernor, and RetryBudget simulators plus external oracles are locally
   calibrated without model calls. The local MemoryGovernor is explicitly virtual
