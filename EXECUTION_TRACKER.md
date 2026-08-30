@@ -638,3 +638,17 @@
 - Authorization revoked immediately in `PROVENANCE.json` (`toolroute_provider_trials_authorized: false`).
 - Seeds 11–13 remain held pending separate authorization.
 
+### 2026-08-30 — Independent audit of seeds 9–10 continuation
+
+- Independently verified all 72 directories against the expected 3-model ×
+  2-seed × 4-turn × A/B/C grid: no missing, duplicate, or out-of-scope cell;
+  every terminal classification was `COMPLETED`; every finalization hash,
+  parent-manifest hash, and execution-config hash verified.
+- Verified no provider-native tool/function field at any request depth, exact B
+  row symmetry, and exact cross-provider prompt and host-record equality for
+  each seed × turn × condition. Provider-local artifact order matches the
+  frozen salted ordering. The 107-test local suite passed after collection; no
+  audit provider calls were made.
+- No new protocol or capture issue was identified. The sole nonzero Condition-C
+  regret in seeds 9–10 is Gemini seed-9/turn-3 choosing `wait` (5816.47 ms);
+  it is a valid completed observation, not an artifact anomaly or a retry case.

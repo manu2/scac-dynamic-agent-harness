@@ -54,15 +54,15 @@ and finalization hashes. Fresh-context subagent artifacts and the optional
 Toxiproxy adapter are retained development diagnostics—not empirical evidence.
 
 The selected first-paper cohort is GPT-5.6 Sol, Claude Sonnet 5, and Gemini
-3.7 Flash. A frozen paper manifest was used for one complete seed-8 block
-(36 independent decisions), whose raw artifacts are retained under
-`experiments/api-paper-v1.0-seed8/`. Authorization is now deliberately
-revoked pending the next reviewed authorization. An audit found that the
+3.7 Flash. Frozen paper blocks for seeds 8–10 (108 independent decisions) are
+retained under `experiments/api-paper-v1.0-seed8/` and
+`experiments/api-paper-v1.0-seeds9-10/`. Authorization is deliberately
+revoked pending review before the final seeds 11–13. An audit found that the
 manifest's "sampling controls omitted" wording does not match the recorded
 Gemini requests, which explicitly use `temperature: 0.0`. This is a
 documentation deviation, not a condition confound: all Gemini A/B/C decisions
-use the same captured parameter. Seed 8 remains part of the paper cohort.
-Future Gemini calls must retain `temperature: 0.0`, and the effective settings
-must be stated in a frozen execution-config addendum before resumption. This
-narrow ToolRoute work does not close G1 globally or apply to MemoryGovernor,
-RetryBudget, or a combined study. See `docs/17_toolroute_v1_execution_config_clarification.md`.
+use the same captured parameter. Future Gemini calls must retain
+`temperature: 0.0`, with a newly frozen execution-config addendum that scopes
+only the final continuation. This narrow ToolRoute work does not close G1
+globally or apply to MemoryGovernor, RetryBudget, or a combined study. See
+`docs/17_toolroute_v1_execution_config_clarification.md`.
