@@ -1,0 +1,101 @@
+{
+  "manifest_status": "FROZEN_PAPER_COHORT_V1_0",
+  "scenario": "ToolRoute-v1.0-api-paper",
+  "cohort_size": "216 independent decisions: 3 models x 6 seeds x 4 turns x 3 conditions",
+  "purpose": "Frozen paper cohort for ToolRoute dynamic telemetry evaluation across GPT-5.6 Sol, Claude Sonnet 5, and Gemini 3.7 Flash.",
+  "state_delivery": "independent_full_checkpoint_only",
+  "provider_parameters": {
+    "sampling_controls": "omitted; provider defaults",
+    "max_output_tokens": 1024,
+    "tools": "none",
+    "request_retry_policy": "no retry; every submitted request is retained in paper denominator"
+  },
+  "b_control": {
+    "construction": "same fixed telemetry envelope, field names, ordering, and tool rows as C; tool_alpha and tool_beta have identical neutral values",
+    "token_usage": "provider-reported input-token usage retained descriptively; no padding or count-token request"
+  },
+  "authorized_episode_grids": [
+    {
+      "provider_label": "openai",
+      "model_id": "gpt-5.6-sol",
+      "seeds": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "turns": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "conditions": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "provider_label": "anthropic",
+      "model_id": "claude-sonnet-5",
+      "seeds": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "turns": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "conditions": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "provider_label": "google",
+      "model_id": "gemini-3.7-flash",
+      "seeds": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "turns": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "conditions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ],
+  "execution_randomization_salt": "toolroute-paper-v1.0-20260830",
+  "observation_baseline": {
+    "version": "synthetic_host_probe_v0.6",
+    "probes_per_tool": 3,
+    "success_label_error_probability": 0.0,
+    "event_drop_probability": 0.0,
+    "delivery_delay_ms": 0
+  },
+  "eligible_state_margin_ms": 50.0,
+  "primary_outcome": "observable_monitor_cost_v0.6 policy regret",
+  "secondary_outcome": "clairvoyant latent cost diagnostic only",
+  "inclusion_exclusion": "Every submitted request remains in the paper denominator; malformed and provider-error records are retained and reported separately; no retries.",
+  "analysis_and_power_plan": "Primary contrast: C\u2013A policy regret and completion rate. Secondary contrasts: C\u2013B (epistemic treatment effect) and B\u2013A (attention tax). Wilson intervals for binary completion; non-parametric permutation and rank tests for regret and latency."
+}
