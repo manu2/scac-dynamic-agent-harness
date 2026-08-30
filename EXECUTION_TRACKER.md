@@ -465,3 +465,20 @@
   diagnostics. Sol has successful direct-API precedent in the separate static
   study but needs one separately authorized ToolRoute C-only diagnostic before
   the tokenizer-pinned A/B/C canary. Provider authorization remains false.
+
+### 2026-08-30 — Structural-B correction and GPT-5.6 Sol transport diagnostic
+
+- Corrected a material setup defect (TR-030): the former API Condition B was
+  only opaque padding, not a table-structured neutral control. B now retains
+  C's telemetry envelope and fields while assigning equal benign health values
+  to both tools.
+- Added provider-native token-counter adapters: OpenAI input-token, Anthropic
+  Messages count-tokens, and Gemini countTokens. A frozen paper manifest must
+  retain the exact B/C count record before cohort generation; reported usage is
+  checked again where a provider supplies it. No paper cohort is authorized.
+- Authorized exactly one fresh C-only GPT-5.6 Sol diagnostic (seed 3, turn 1),
+  then revoked authorization after completion. It returned `tool_beta`, zero
+  observable regret, and 303 input / 5 output tokens. Terminal hashes verify:
+  `experiments/api-transport-smoke/api-preflight/toolroute/20260830T083610.523454Z-C-0c92df46ea004b49a621d0a20f1ddf6a`.
+- Sonnet 5 and Gemini Flash retain earlier clean C-only transport diagnostics;
+  those do not substitute for per-provider B/C native-count calibration.

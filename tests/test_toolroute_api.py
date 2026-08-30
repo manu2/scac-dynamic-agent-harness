@@ -5,6 +5,7 @@ import io
 import json
 from pathlib import Path
 from urllib.error import HTTPError
+from unittest.mock import patch
 
 from scac_harness.toolroute_api import (
     AnthropicMessagesProvider,
@@ -63,7 +64,10 @@ def test_api_episode_uses_full_checkpoint_and_exact_token_b_control(tmp_path: Pa
     assert c.snapshot["kind"] == "full_checkpoint"
     assert c.snapshot["base_snapshot_id"] is None
     assert c.tokenizer.count(c.prompt) == b.tokenizer.count(b.prompt)
-    assert "HOST TELEMETRY" in c.prompt and "HOST TELEMETRY" not in b.prompt
+    assert "HOST TELEMETRY" in c.prompt and "HOST TELEMETRY" in b.prompt
+    assert "tool_alpha: window=6 succ=6 consec_fail=0 latency_ewma=1000.0ms" in b.prompt
+    assert "tool_beta: window=6 succ=6 consec_fail=0 latency_ewma=1000.0ms" in b.prompt
+    assert "retry_after=" not in b.prompt
 
 
 def test_api_episode_fails_closed_without_authorization_and_finalizes(tmp_path: Path) -> None:
@@ -125,6 +129,36 @@ def test_openai_and_opus_default_requests_omit_sampling_controls() -> None:
     opus = AnthropicMessagesProvider(api_key="key", model="claude-opus-5", api_version="2023-06-01")
     assert "temperature" not in openai.request_record("x")["body"]
     assert "temperature" not in opus.request_record("x")["body"]
+
+
+class _CountResponse:
+    def __init__(self, payload: dict[str, int]) -> None:
+        self.payload = payload
+
+    def __enter__(self) -> "_CountResponse":
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        return None
+
+    def read(self) -> bytes:
+        return json.dumps(self.payload).encode("utf-8")
+
+
+def test_provider_native_token_counters_use_provider_count_endpoints() -> None:
+    providers_and_payloads = (
+        (OpenAICompatibleProvider(endpoint="https://api.openai.example/v1/chat/completions", api_key="key", model="gpt-5.6-sol"), {"input_tokens": 17}, "responses/input_tokens"),
+        (AnthropicMessagesProvider(api_key="key", model="claude-sonnet-5", api_version="2023-06-01"), {"input_tokens": 17}, "messages/count_tokens"),
+        (GeminiGenerateContentProvider(api_key="key", model="gemini-3.7-flash"), {"totalTokens": 17}, ":countTokens"),
+    )
+    for provider, payload, endpoint_fragment in providers_and_payloads:
+        captured = []
+        def opener(req: object, timeout: int) -> _CountResponse:
+            captured.append(req)
+            return _CountResponse(payload)
+        with patch("scac_harness.toolroute_api.request.urlopen", opener):
+            assert provider.count_tokens("choose tool_alpha") == 17
+        assert endpoint_fragment in captured[0].full_url
 
 
 def test_safe_provider_error_retains_structured_detail_but_redacts_key() -> None:

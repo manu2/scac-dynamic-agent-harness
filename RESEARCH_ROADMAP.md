@@ -37,7 +37,7 @@ Every snapshot enforces:
   full-checkpoint episodes, isolated remote-model access, mock-provider
   capture/finalization, observation-model calibration, and evaluator-defeat
   checks are complete. The remaining authorization inputs are a chosen
-  provider/model and its exact tokenizer, a committed frozen manifest/analysis
+  provider/model and its retained native B/C token-count calibration, a committed frozen manifest/analysis
   plan, and its reviewed provenance hash binding. The Linux cgroup-v2 proof is
   a MemoryGovernor requirement, not a blocker for this narrow synthetic
   ToolRoute pilot.

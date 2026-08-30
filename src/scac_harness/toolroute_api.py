@@ -89,6 +89,19 @@ class WhitespaceTokenizer:
         return len(text.split())
 
 
+class ProviderTokenCounter(Protocol):
+    """Provider-native input-token counter used to freeze a B/C control.
+
+    The count must be produced by the same provider/model family that will
+    receive the episode.  A local approximation is allowed only in unit tests
+    and never establishes a paper-cohort B/C match.
+    """
+
+    name: str
+
+    def count_tokens(self, prompt: str) -> int: ...
+
+
 @dataclass(frozen=True)
 class ToolRouteAuthorization:
     """A checked, immutable authorization for an API pilot invocation.
@@ -162,6 +175,25 @@ class OpenAICompatibleProvider:
             request_id=payload.get("id"), input_tokens=usage.get("prompt_tokens"), output_tokens=usage.get("completion_tokens"), raw_response=payload,
         )
 
+    def count_tokens(self, prompt: str) -> int:
+        """Use OpenAI's native Responses input-token counter.
+
+        Generation remains on Chat Completions for the retained transport
+        preflights.  The counter is used only to match the *same user prompt*
+        between B and C; a frozen paper manifest must record that distinction.
+        """
+        endpoint = "https://api.openai.com/v1/responses/input_tokens"
+        body = {"model": self.model, "input": [{"role": "user", "content": prompt}]}
+        req = request.Request(endpoint, data=json.dumps(body).encode("utf-8"), method="POST", headers={
+            "Authorization": f"Bearer {self._api_key}", "Content-Type": "application/json",
+        })
+        with request.urlopen(req, timeout=60) as response:  # nosec B310: explicitly authorized calibration only
+            payload = json.loads(response.read().decode("utf-8"))
+        value = payload.get("input_tokens")
+        if not isinstance(value, int):
+            raise ValueError("OpenAI input-token counter returned no integer input_tokens")
+        return value
+
 
 class AnthropicMessagesProvider:
     """Dependency-free Anthropic Messages adapter; tools are never supplied."""
@@ -196,6 +228,19 @@ class AnthropicMessagesProvider:
         usage = payload.get("usage", {})
         return ProviderResponse(text=text, request_id=payload.get("id"), input_tokens=usage.get("input_tokens"), output_tokens=usage.get("output_tokens"), raw_response=payload)
 
+    def count_tokens(self, prompt: str) -> int:
+        endpoint = "https://api.anthropic.com/v1/messages/count_tokens"
+        body = {"model": self.model, "messages": [{"role": "user", "content": prompt}]}
+        req = request.Request(endpoint, data=json.dumps(body).encode("utf-8"), method="POST", headers={
+            "x-api-key": self._api_key, "anthropic-version": self.api_version, "content-type": "application/json",
+        })
+        with request.urlopen(req, timeout=60) as response:  # nosec B310: explicitly authorized calibration only
+            payload = json.loads(response.read().decode("utf-8"))
+        value = payload.get("input_tokens")
+        if not isinstance(value, int):
+            raise ValueError("Anthropic token counter returned no integer input_tokens")
+        return value
+
 
 class GeminiGenerateContentProvider:
     """Dependency-free Gemini REST adapter; tools and server-side state are omitted."""
@@ -229,6 +274,17 @@ class GeminiGenerateContentProvider:
         if isinstance(output, int) and isinstance(usage.get("promptTokenCount"), int):
             output -= usage["promptTokenCount"]
         return ProviderResponse(text=text, request_id=payload.get("responseId"), input_tokens=usage.get("promptTokenCount"), output_tokens=output, raw_response=payload)
+
+    def count_tokens(self, prompt: str) -> int:
+        endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{self.model}:countTokens?key={self._api_key}"
+        body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}]}
+        req = request.Request(endpoint, data=json.dumps(body).encode("utf-8"), method="POST", headers={"content-type": "application/json"})
+        with request.urlopen(req, timeout=60) as response:  # nosec B310: explicitly authorized calibration only
+            payload = json.loads(response.read().decode("utf-8"))
+        value = payload.get("totalTokens")
+        if not isinstance(value, int):
+            raise ValueError("Gemini token counter returned no integer totalTokens")
+        return value
 
 
 def _safe_provider_error(exc: Exception, api_key: str) -> dict[str, object]:
@@ -383,10 +439,25 @@ class ToolRouteAPIEpisode:
         )
 
     def _neutral_prompt(self, task: str, target_tokens: int) -> str:
-        prefix = task + "[NEUTRAL STRUCTURAL CONTROL]\n"
+        # Keep the exact telemetry envelope and field layout visible in C, but
+        # replace every route-relevant value with the same benign value for
+        # both tools.  B therefore controls for telemetry-shaped attention and
+        # prompt length without encoding an action preference.
+        neutral = self.rendered
+        lines = []
+        for line in neutral.splitlines():
+            if line.startswith("  tool_alpha:") or line.startswith("  tool_beta:"):
+                tool = line.split(":", 1)[0].strip()
+                lines.append(
+                    f"  {tool}: window=6 succ=6 consec_fail=0 latency_ewma=1000.0ms "
+                    "last_err=NONE circuit=CLOSED age=10ms"
+                )
+            else:
+                lines.append(line)
+        prefix = task + "\n".join(lines) + "\n[CONTROL_PADDING]"
         prompt = prefix
         while self.tokenizer.count(prompt) < target_tokens:
-            prompt += " opaque"
+            prompt += " neutral"
         if self.tokenizer.count(prompt) != target_tokens:
             raise ValueError("tokenizer cannot construct an exactly token-matched B control")
         return prompt

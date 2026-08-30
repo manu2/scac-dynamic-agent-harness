@@ -11,5 +11,5 @@
   "provider_trials_authorized": false,
   "toolroute_provider_trials_authorized": false,
   "toolroute_pilot_manifest_sha256": null,
-  "authorization_scope": "No provider call is authorized. The one C-only Claude Sonnet 5 transport-smoke attempt under manifests/toolroute_api_transport_smoke_sonnet.v0.6.json is finalized; any follow-up requires a new frozen manifest and reviewed provenance hash binding."
+  "authorization_scope": "No provider call is authorized. The C-only GPT-5.6 Sol transport smoke under manifests/toolroute_api_transport_smoke_sol.v0.7.json is finalized; any follow-up requires a new frozen manifest and reviewed provenance hash binding."
 }

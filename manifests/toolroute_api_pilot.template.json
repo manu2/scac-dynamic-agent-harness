@@ -17,7 +17,7 @@
   "tokenizer": {
     "name": "FILL_ME",
     "version": "FILL_ME",
-    "b_control": "exact provider-tokenizer match"
+    "b_control": "structurally parallel equal-tool telemetry table; exact provider-native B/C input-token match, retained before generation and rechecked from provider usage where available"
   },
   "model_access": {
     "tools": "none",
