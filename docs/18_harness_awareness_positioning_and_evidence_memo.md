@@ -146,6 +146,14 @@ reason–act and tool-use programs.
   tool-health state, does that information change the next route selection
   relative to a neutral same-shape control?
 
+This is close architectural overlap, not an orthogonality or priority claim.
+The manuscript must cite Agent-Native Telemetry prominently and say precisely
+that its reported evaluation concerns representation, transport, context/query
+efficiency, and integrity, while ToolRoute reports a controlled behavioral
+information ablation. Neither paper's reported result makes the other
+redundant; neither justifies a claim to have invented agent-consumable
+operational telemetry.
+
 This is a positioning distinction, not a claim that no prior work has ever
 exposed state to an agent. The contribution is a general trust-separated state
 interface and controlled evidence that useful harness state changes operational

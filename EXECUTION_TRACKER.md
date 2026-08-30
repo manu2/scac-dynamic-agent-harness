@@ -759,3 +759,15 @@
   compared with a neutral same-shape state control. This is a positioning
   update only and does not alter the frozen cohort or claim priority over all
   prior state-aware agents.
+- A direct reading of the adjacent paper verified that it exposes compact,
+  verified records through agent access paths. Therefore characterize it as a
+  close architectural neighbor, not as unrelated work. Its reported headline
+  measurements are representation/transport/context/query/integrity metrics;
+  do not claim it reports no possible agent use beyond those stated results.
+  ToolRoute's distinct contribution remains the controlled behavioral
+  information ablation, bounded to its frozen synthetic benchmark.
+- Publication priority is high: retain the frozen ToolRoute cohort, complete
+  RetryBudget only if it meets its independent protocol requirements, then move
+  directly to frozen-cohort analysis, manuscript, artifact release, and arXiv
+  submission. Do not delay first publication for speculative production
+  architecture or Toxiproxy extensions.
