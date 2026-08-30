@@ -131,7 +131,10 @@ class ToolRouteAuthorization:
         episodes = manifest.get("authorized_episodes")
         target = {"seed": seed, "turn": turn, "condition": condition, "model_id": model_id, "provider_label": provider_label}
         if isinstance(episodes, list) and target in episodes:
-            return
+            if self.execution_config_allows_episode(seed=seed, turn=turn, condition=condition,
+                                                    model_id=model_id, provider_label=provider_label):
+                return
+            raise PermissionError("episode is outside the hash-bound execution-config continuation scope")
         # A Cartesian episode grid is equally explicit but avoids an error-prone
         # 216-row manifest.  Every dimension is frozen; no wildcard model,
         # provider, seed, turn, or condition is accepted.
@@ -143,8 +146,25 @@ class ToolRouteAuthorization:
                 if (grid.get("model_id") == model_id and grid.get("provider_label") == provider_label
                     and seed in grid.get("seeds", []) and turn in grid.get("turns", [])
                     and condition in grid.get("conditions", [])):
-                    return
+                    if self.execution_config_allows_episode(seed=seed, turn=turn, condition=condition,
+                                                            model_id=model_id, provider_label=provider_label):
+                        return
+                    raise PermissionError("episode is outside the hash-bound execution-config continuation scope")
         raise PermissionError("episode is not explicitly authorized by the frozen manifest")
+
+    def execution_config_allows_episode(
+        self, *, seed: int, turn: int, condition: Condition, model_id: str, provider_label: str,
+    ) -> bool:
+        """Return whether the config's explicit continuation scope includes this episode."""
+        if self.execution_config is None:
+            return True
+        grids = self.execution_config.get("authorized_continuation_episode_grids")
+        if not isinstance(grids, list):
+            return False
+        return any(isinstance(grid, Mapping)
+                   and grid.get("model_id") == model_id and grid.get("provider_label") == provider_label
+                   and seed in grid.get("seeds", []) and turn in grid.get("turns", [])
+                   and condition in grid.get("conditions", []) for grid in grids)
 
     def verify_request_configuration(self, *, provider_label: str, model_id: str, request_record: Mapping[str, object]) -> None:
         """Fail closed when a hash-bound execution config disagrees with a request."""

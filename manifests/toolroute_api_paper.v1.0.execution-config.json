@@ -1,7 +1,12 @@
 {
   "schema_version": "toolroute-execution-config-v1",
   "parent_manifest_sha256": "9fb8003e4742b3e94afd872a88522cbe5d238d13ae631c1f0f30c78705789218",
-  "purpose": "Hash-bound clarification of the effective provider request configuration for the ToolRoute paper v1.0 cohort. It does not alter the parent manifest's authorized episodes, prompts, conditions, schedule, or outcomes.",
+  "purpose": "Hash-bound clarification of the effective provider request configuration for the ToolRoute paper v1.0 cohort and its first reviewed continuation block. It does not alter the parent manifest's prompts, conditions, schedule, or outcomes.",
+  "authorized_continuation_episode_grids": [
+    {"provider_label": "openai", "model_id": "gpt-5.6-sol", "seeds": [9, 10], "turns": [0, 1, 2, 3], "conditions": ["A", "B", "C"]},
+    {"provider_label": "anthropic", "model_id": "claude-sonnet-5", "seeds": [9, 10], "turns": [0, 1, 2, 3], "conditions": ["A", "B", "C"]},
+    {"provider_label": "google", "model_id": "gemini-3.7-flash", "seeds": [9, 10], "turns": [0, 1, 2, 3], "conditions": ["A", "B", "C"]}
+  ],
   "provider_request_expectations": [
     {
       "provider_label": "openai",

@@ -602,13 +602,14 @@
 
 - Added frozen companion
   `manifests/toolroute_api_paper.v1.0.execution-config.json` (SHA-256
-  `7fad2b017d85ff302e697a6cb13187bdd5921a8a17677a2d213af51f128d38e0`),
+  `d1cba39f9aec08082d52207aef79a8c0845ff2fccecf528dcf7ebb8bfec45f78`),
   which binds the parent paper manifest and declares the effective request
   fields for all three providers.
 - The cohort runner now requires this companion. Authorization checks its hash
   before every request, records its hash in every future episode, and rejects a
   locally constructed request whose adapter/body disagrees with the declaration.
   `PROVENANCE.json` remains false/null; no provider call was made.
-- Full local suite: 106 passed. The existing seed-8 artifacts are immutable and
-  remain included; the next authorization may run only the remaining seeds
-  9–13 under this same effective configuration.
+- Full local suite: 107 passed. The existing seed-8 artifacts are immutable and
+  remain included; the next authorization may run only seeds 9–10 (72
+  decisions) under this same effective configuration. Seeds 11–13 require a
+  subsequent reviewed continuation configuration.

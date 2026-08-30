@@ -7,7 +7,7 @@ This record clarifies, without altering, the frozen paper manifest
 `9fb8003e4742b3e94afd872a88522cbe5d238d13ae631c1f0f30c78705789218`).
 The machine-enforced companion is
 `manifests/toolroute_api_paper.v1.0.execution-config.json` (SHA-256
-`7fad2b017d85ff302e697a6cb13187bdd5921a8a17677a2d213af51f128d38e0`);
+`d1cba39f9aec08082d52207aef79a8c0845ff2fccecf528dcf7ebb8bfec45f78`);
 its SHA-256 must be bound in `PROVENANCE.json` before a later cohort episode is
 authorized.
 It applies to the seed-8 paper block only and to any later authorized episode
@@ -38,4 +38,6 @@ so would introduce the actual cohort discontinuity. Before any resumption, the
 authorization record must bind this clarification along with the original
 manifest and must state that all remaining Gemini calls retain
 `temperature: 0.0`. The paper methods and artifact release must report the
-effective settings above and this clarification.
+effective settings above and this clarification. This first continuation
+configuration intentionally permits only seeds 9–10 (72 decisions); seeds
+11–13 require a later, separately reviewed continuation configuration.

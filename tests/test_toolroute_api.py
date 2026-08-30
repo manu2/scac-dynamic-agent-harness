@@ -55,10 +55,14 @@ def _configured_authorization(tmp_path: Path, *, expected_prompt: str = "choose 
     manifest = tmp_path / "frozen-paper-manifest.json"
     manifest.write_text(json.dumps({"authorized_episodes": [
         {"seed": 50, "turn": 1, "condition": "C", "model_id": "mock", "provider_label": "mock"},
+        {"seed": 51, "turn": 1, "condition": "C", "model_id": "mock", "provider_label": "mock"},
     ]}) + "\n")
     config = tmp_path / "execution-config.json"
     config.write_text(json.dumps({
         "parent_manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest(),
+        "authorized_continuation_episode_grids": [{
+            "provider_label": "mock", "model_id": "mock", "seeds": [50], "turns": [1], "conditions": ["C"],
+        }],
         "provider_request_expectations": [{
             "provider_label": "mock", "model_id": "mock", "adapter": "test",
             "required_body_fields": {"prompt": expected_prompt},
@@ -252,6 +256,16 @@ def test_authorization_rejects_execution_config_changed_after_load(tmp_path: Pat
         assert "execution config" in str(exc)
     else:
         raise AssertionError("changed execution config was accepted")
+
+
+def test_execution_config_narrows_a_parent_manifest_to_its_reviewed_continuation_scope(tmp_path: Path) -> None:
+    authorization = _configured_authorization(tmp_path)
+    provider = RecordingProvider("tool_beta")
+    episode = ToolRouteAPIEpisode(seed=51, turn=1, condition="C", experiments_root=tmp_path,
+                                  model_id="mock", provider_label="mock")
+    result = episode.run(provider, authorization=authorization)
+    assert result["classification"] == "REJECTED_MANIFEST_SCOPE"
+    assert provider.prompts == []
 
 
 def test_observation_model_is_versioned_and_supports_nonzero_noise(tmp_path: Path) -> None:

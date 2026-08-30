@@ -85,7 +85,9 @@ def main() -> None:
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     assert isinstance(authorization.execution_config, dict)
     provider = _provider(args.provider, args.model, authorization.execution_config)
-    episodes = _episodes(manifest, args.provider, args.model)
+    episodes = [item for item in _episodes(manifest, args.provider, args.model)
+                if authorization.execution_config_allows_episode(seed=item[0], turn=item[1], condition=item[2],
+                                                                 model_id=args.model, provider_label=args.provider)]
     requested = (args.only_seed, args.only_turn, args.only_condition)
     if any(value is not None for value in requested):
         if any(value is None for value in requested):
