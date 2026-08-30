@@ -66,16 +66,23 @@ def main() -> None:
     authorization.verify_live()
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     provider = _provider(args.provider, args.model)
-    tokenizer = Tokenizer(f"{args.provider}-native-count-endpoint:{args.model}", provider.count_tokens)
+    def verified_native_count(prompt: str) -> int:
+        # Token-count requests are provider requests too.  Recheck the frozen
+        # authorization immediately before each one, not only before generation.
+        authorization.verify_live()
+        return provider.count_tokens(prompt)
+
+    tokenizer = Tokenizer(f"{args.provider}-native-count-endpoint:{args.model}", verified_native_count)
     episodes = _episodes(manifest, args.provider, args.model)
     if not episodes:
         raise RuntimeError("no authorized episodes for requested provider/model")
     for seed, turn, condition in episodes:
+        authorization.verify_live()
         episode = ToolRouteAPIEpisode(seed=seed, turn=turn, condition=condition, experiments_root=args.experiments_root,
                                       tokenizer=tokenizer, model_id=args.model, provider_label=args.provider)
         result = episode.run(provider, authorization=authorization)
         print(json.dumps({"seed": seed, "turn": turn, "condition": condition,
-                          "classification": result["classification"], "directory": str(episode.directory)}))
+                          "classification": result["classification"], "directory": str(episode.directory)}, flush=True)
 
 
 if __name__ == "__main__":

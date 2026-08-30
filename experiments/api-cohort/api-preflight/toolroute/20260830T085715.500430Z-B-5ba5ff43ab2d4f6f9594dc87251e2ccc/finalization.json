@@ -1,0 +1,7 @@
+{
+  "artifact_sha256": {
+    "manifest.json": "4ea4bd6ef4ee95e1c7b0a6064611f211a14fe876bfa439306da2303f13dc5c54",
+    "setup-error.json": "d50365caf881bc6c0fb659776d31d1fd4f0898cbad31cc6987829fe94f276d8e"
+  },
+  "classification": "REJECTED_TOKEN_CONTROL_SETUP"
+}

@@ -422,7 +422,17 @@ class ToolRouteAPIEpisode:
         if ToolRouteOracle.observable_margin(self.snapshot) < _MIN_OBSERVABLE_MARGIN:
             raise RuntimeError("observable-oracle calibration failed")
         self.options = _option_order(seed, turn)
-        self.prompt = self._prompt()
+        try:
+            self.prompt = self._prompt()
+        except Exception as exc:
+            # Reservation happens before any provider contact.  A tokenizer
+            # mismatch is still an attempted setup and must be terminal.
+            self._write_once("setup-error.json", {
+                "classification": "REJECTED_TOKEN_CONTROL_SETUP",
+                "exception_type": type(exc).__name__, "reason": str(exc),
+            })
+            self._finalize("REJECTED_TOKEN_CONTROL_SETUP")
+            raise
         self._write_once("input.json", {
             "condition": condition, "prompt": self.prompt, "prompt_tokens": tokenizer.count(self.prompt),
             "option_order": list(self.options), "visible_snapshot": self.snapshot if condition == "C" else None,
@@ -468,10 +478,25 @@ class ToolRouteAPIEpisode:
             else:
                 lines.append(line)
         prefix = task + "\n".join(lines)
-        prompt = prefix
-        while self.tokenizer.count(prompt) < target_tokens:
-            prompt += " neutral"
-        if self.tokenizer.count(prompt) != target_tokens:
+        prompt, current = prefix, self.tokenizer.count(prefix)
+        # Provider tokenizers are discrete and need not assign one token to the
+        # same padding atom.  Greedily use only empirically observed deltas
+        # that do not overshoot the target; fail closed if none is available.
+        padding_atoms = (" neutral", " .", " 0", " x", " _", "\n")
+        while current < target_tokens:
+            remaining = target_tokens - current
+            choices: list[tuple[int, str]] = []
+            for atom in padding_atoms:
+                candidate_count = self.tokenizer.count(prompt + atom)
+                delta = candidate_count - current
+                if 0 < delta <= remaining:
+                    choices.append((delta, atom))
+            if not choices:
+                break
+            delta, atom = max(choices)
+            prompt += atom
+            current += delta
+        if current != target_tokens:
             raise ValueError("tokenizer cannot construct an exactly token-matched B control")
         return prompt
 

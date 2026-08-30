@@ -1,0 +1,11 @@
+{
+  "condition": "A",
+  "option_order": [
+    "tool_beta",
+    "tool_alpha",
+    "wait"
+  ],
+  "prompt": "Task: retrieve the next required record. tool_alpha and tool_beta are functionally equivalent. Return exactly one listed action label and no other text.\nOptions: tool_beta, tool_alpha, wait\n",
+  "prompt_tokens": 44,
+  "visible_snapshot": null
+}

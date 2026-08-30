@@ -496,3 +496,18 @@
   deterministic test tokenizer after repairing a turn-0 one-token overshoot.
   The complete local test suite passes (101 tests). The next action is an
   authorized provider block; no cohort request has yet been submitted.
+
+### 2026-08-30 — v0.7 Gemini canary invalidated; authorization-control repair
+
+- A Gemini v0.7 canary began under the frozen manifest. Twelve model decisions
+  completed before the operator revoked authorization after observing an
+  in-progress native-token setup concern. Twenty-eight later reservations were
+  rejected before model generation; one interrupted B setup reservation was
+  recovered and terminally finalized. All 41 directories now have finalization
+  hashes. This mixed, interrupted block is retained as engineering evidence and
+  excluded from every paper denominator.
+- Identified TR-031: the runner rechecked authorization before generation but
+  not before each provider-native token-count request. It has been corrected to
+  recheck before every count and episode, and setup failures now finalize
+  automatically. The exact old runner was terminated; authorization remains
+  revoked. A revised manifest and fresh cohort are required before any restart.

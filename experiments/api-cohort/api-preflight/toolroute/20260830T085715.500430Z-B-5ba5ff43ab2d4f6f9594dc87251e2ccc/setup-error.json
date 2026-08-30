@@ -1,0 +1,5 @@
+{
+  "classification": "REJECTED_TOKEN_CONTROL_SETUP",
+  "exception_type": "RecoveredInterruptedSetup",
+  "reason": "native token-control construction terminated before prompt capture"
+}
