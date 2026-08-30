@@ -444,3 +444,14 @@
   tool-less Anthropic Messages path and omitted sampling controls. It exists
   solely to determine whether the refusal is Opus-specific or a Claude/prompt
   compatibility issue; it is not paper data.
+
+### 2026-08-30 — Completed Claude Sonnet 5 prompt-acceptance diagnostic
+
+- Sonnet 5 completed the authorized seed-2/turn-1/C call normally with
+  `stop_reason: end_turn`: it selected `tool_beta`, incurred zero observable
+  regret, and used 610 input / 7 output tokens. All terminal hashes verify.
+- The same direct Anthropic Messages path therefore works for the ToolRoute
+  prompt. The earlier empty Opus response is model-specific prompt refusal,
+  not an API-level or harness-level incompatibility. Revoked the consumed
+  authorization. Sonnet 5 is now the eligible Anthropic candidate pending a
+  separately frozen balanced cohort protocol.
