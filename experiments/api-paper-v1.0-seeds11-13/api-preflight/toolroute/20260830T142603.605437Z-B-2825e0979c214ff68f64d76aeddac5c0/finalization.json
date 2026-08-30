@@ -1,0 +1,11 @@
+{
+  "artifact_sha256": {
+    "host.json": "7ceca88658a926c045c5c94ae1222688ba6e01f1dc520e396548c58c41d1c20d",
+    "input.json": "28dea077492782af86a52986033146d2fa27165ebbe89ebbdaeb59097fd1cd72",
+    "manifest.json": "8a84b28d7ae11e469b33f4fbadfd8987d2f2c7cc6e0606defd5986189cfd79fa",
+    "provider-request.json": "efc16fb7022b740bc18ffe1fe4990a87880060feac49ced1ab524400913555d0",
+    "provider-response.json": "f7b53d41204e6c7bae8f418b53ab699d3a97dda02170aa8db13ffafd9f1fd42b",
+    "result.json": "8768041b67a7cd115d39efbb8c0a314918ecef0d02a0d51f3418da96e146be25"
+  },
+  "classification": "COMPLETED"
+}

@@ -663,3 +663,28 @@
 - `PROVENANCE.json` remains false/null. No provider call is authorized by this
   commit; the final execution agent must verify, bind, and later revoke this
   companion's hash.
+
+### 2026-08-30 — ToolRoute paper cohort v1.0 final continuation seeds 11–13 completed
+
+- Authorized, executed, audited, and revoked the 108 decisions in the final paper
+  continuation block: Seeds 11, 12, and 13 across four turns, A/B/C conditions,
+  and three models (`gpt-5.6-sol`, `claude-sonnet-5`, `gemini-3.7-flash`).
+- Artifacts stored under `experiments/api-paper-v1.0-seeds11-13/`.
+- **Integrity Audit:** Exactly 108/108 unique expected cells completed once (36 per
+  model); 0 provider errors; 0 malformed responses; all 108 `finalization.json`
+  artifact hashes valid; outer `pilot_manifest_sha256` (`9fb8003e...`) and
+  `execution_config_sha256` (`0a12df01...`) hashes verified; 0 tool/function
+  declarations; symmetric B tool rows; 0 retries.
+- **Factual Results Summary (Seeds 11–13):**
+  - **`gpt-5.6-sol`:** Condition C: mean regret 151.00 ms (91.7% call success, 186.7 ms latency);
+    Condition B: mean regret 4,414.99 ms (75.0% success, 1,506.7 ms latency);
+    Condition A: mean regret 7,241.95 ms (58.3% success, 2,176.7 ms latency).
+  - **`claude-sonnet-5`:** Condition C: mean regret 151.00 ms (91.7% call success, 186.7 ms latency);
+    Condition B: mean regret 7,241.95 ms (58.3% success, 2,176.7 ms latency);
+    Condition A: mean regret 7,241.95 ms (58.3% success, 2,176.7 ms latency).
+  - **`gemini-3.7-flash`:** Condition C: mean regret 0.00 ms (100.0% call success, 160.0 ms latency);
+    Condition B: mean regret 7,241.95 ms (58.3% success, 2,176.7 ms latency);
+    Condition A: mean regret 7,241.95 ms (58.3% success, 2,176.7 ms latency).
+- Authorization revoked immediately in `PROVENANCE.json` (`toolroute_provider_trials_authorized: false`).
+- All 216 planned paper cohort decisions across Seeds 8–13 are now executed and finalized.
+

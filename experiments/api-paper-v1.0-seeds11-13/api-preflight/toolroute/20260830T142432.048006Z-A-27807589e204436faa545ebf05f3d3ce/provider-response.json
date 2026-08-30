@@ -1,0 +1,42 @@
+{
+  "input_tokens": 45,
+  "output_tokens": 40,
+  "raw_response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "annotations": [],
+          "content": "tool_alpha",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788099872,
+    "id": "chatcmpl-EIakS0IRdxRKcOihXGEPal0SlpXdo",
+    "model": "gpt-5.6-sol",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 40,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 29,
+        "rejected_prediction_tokens": 0
+      },
+      "prompt_tokens": 45,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "total_tokens": 85
+    }
+  },
+  "request_id": "chatcmpl-EIakS0IRdxRKcOihXGEPal0SlpXdo",
+  "text": "tool_alpha"
+}

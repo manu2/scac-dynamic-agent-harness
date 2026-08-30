@@ -1,0 +1,38 @@
+{
+  "input_tokens": 359,
+  "output_tokens": 255,
+  "raw_response": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "tool_alpha",
+              "thoughtSignature": "EqMHCqAHARFNMg9JFps+BBnmkEvEG2cpNuULj/Pl+ymYW9IUSc3pg4C3Q3fCZ0DxTa3c7hZoFUAF0ZeOWLIRz51Y8E2FZziBDEUbqhleNJJv5SMyE3kIPClNdUNuBGWTHXISYkwnrkEsOr3e6ktZDC5uALfSDGK0c7M2CBmm4bLKRK8tXWYg5/CbjYbVPK8EuJgceMeP/LTCQ2a4P/DPxGB4sRrkDUqO4VQ6IhnJarH3Rj73f7zuEXpZadYAVvwMKrkiCWaFMAlYZ/9nd/5HnXLcikS7uaxBlicXKhULc0ueu9BXWiWM0zFHKVJMH3nK/EOXnZP3eRkMJ9iA/906flTqL7QcO5gyfsD8MYAEvcLYPUDatdU7YEY0Um/RdGk6rykA+n0iq/wCkQiD/uFwf6pN2o+C0KIKRM64C0m0MFshm1gSEiy9NgMW+VGtBSG2IR1D86m3v9KpZZcOGYFf3oOm7lZhia0u3U4vLSlDC8kj2yj3gBZS2euvF6rlpPnJAIlzii7LGPeQ4ejANmU6agbpDrrrtWBfQQNE3+zWURPwnqPLdB0hEviPvSd7cdNQvrvH5PkpKesevFJzQ3CAyzh2EjlfTX53cm53VwCzuLF4KmUwUklEZ2ibDmTa7HgwswaZ2hPgXPIPsbZJatCebM+sqxGeu93xXHBbtu05HI0XcEMF8wdDAcT5x45NR9U+cv+ZmfSs2O4mYODRZBAmswNSpnuUhN+RYMJFGUNVfs1U1ef7QVZqADyBFRN+pm0Up4Z/N/8fG0UsEE9SD6HwjdThZqvQOE8oHRyVzYt2n6JwzyivIFmHcNDe6Xz61DG/Lcnwp3BR1GGzChucvgONY6CIveNQ2GEO0HQ+ept3Px+LgUggVKoG0gT+JrjIujw2E4+MMdSOu2O1NGL2LGdn27k+Tdz8lPdOWXCS9DIYbtdKww+pY4S5qJ33ZQw9SCSBo0dpaSPIkRii2iAdK1ymGeBqg8QHrWYflrQpG5/8Elu15j02mbgeFGn3IDcO50zYljzP4tVLGwEM3qA4+YMK/NZ0LLBXZ4kr0fOSb8GhK2+jMZKoBhTi0UArHdHg2PQ3AE5Zc9VIipjQlBA0ZEIyNgMTQ3KZV+d5AcaqCy+zvIcl2AG9IDL0sQDiko0U+hRuqQV7zD8MxuG6QkCn2FBXt8ENwnCzNwaLtl19iuMrNYUggq8Ju9JVekUD+nUfwGoArhxPaXQ8gin6ncZatmkJGsY2Quw2Rg=="
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "modelVersion": "gemini-3.7-flash",
+    "responseId": "cT6UasKrB4msg8UPvLm-gQI",
+    "usageMetadata": {
+      "candidatesTokenCount": 3,
+      "promptTokenCount": 359,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 359
+        }
+      ],
+      "serviceTier": "standard",
+      "thoughtsTokenCount": 252,
+      "totalTokenCount": 614
+    }
+  },
+  "request_id": "cT6UasKrB4msg8UPvLm-gQI",
+  "text": "tool_alpha"
+}
