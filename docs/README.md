@@ -17,6 +17,9 @@ state their cohort and measurement boundaries explicitly.
 - `18_harness_awareness_positioning_and_evidence_memo.md` and
   `19_manuscript_narrative_contract.md`: authoritative positioning and drafting
   guidance for the completed ToolRoute cohort.
+- `20_retrybudget_v0_2_design_and_readiness.md` and
+  `21_retrybudget_issue_ledger.md`: active, separate RetryBudget redesign and
+  readiness records; RetryBudget is not authorized for agent trials.
 
 `10_toolroute_v0_4_status_and_next_gate.md` is retained as historical
 development context; its v0.4 status does not control the v0.6 API path.

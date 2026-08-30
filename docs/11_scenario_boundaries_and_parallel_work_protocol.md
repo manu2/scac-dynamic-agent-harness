@@ -21,20 +21,26 @@ review in one scenario must never be reported as a pass for another.
 
 | Scenario | Current state | Explicit boundary | Next permitted work |
 |---|---|---|---|
-| ToolRoute v0.4 | Local fresh-subagent engineering smoke only; no empirical data | Synthetic probes; shared-workspace subjects; B is byte- not tokenizer-matched | ToolRoute-specific API gate: full checkpoints, isolated provider runner, tokenizer B control, mock/evaluator tests, frozen manifest |
-| RetryBudget v0.1 | Deterministic model-free calibration only | No fresh-subagent or provider run is authorized | Repair/freeze causal transition and utility/oracle design; add evaluator-defeat tests and a scenario issue ledger |
+| ToolRoute v1.0 | Frozen 216-decision direct-provider cohort complete; authorization revoked | Synthetic host-owned monitor; tools dimension only; no pooling with other scenarios | Frozen-cohort analysis, manuscript, and artifact release; no new provider calls without a reviewed protocol |
+| RetryBudget v0.2 | Deterministic transition/oracle hardening and archived developer calibration only | No fresh-subagent or provider run is authorized | Freeze/calibrate observation and A/B/C contracts; add manifest, prompt/capture, inclusion, and readiness packet |
 | MemoryGovernor | Virtual deterministic calibration only | Makes no cgroup-enforcement claim | Run only after Linux G1; then create a separately frozen observation/oracle contract |
 
 ## RetryBudget mandatory design review
 
-The current implementation is not a ready experiment. Its `wait` action
-advances the schedule rather than preserving the pending request; `fallback`
-has sufficiently high utility to risk an unconditional-policy shortcut; and
-the oracle returns binary regret. A RetryBudget owner must resolve or justify
-each property in a new scenario contract before collecting any agent behavior.
-They must also test fixed-action baselines (`always retry`, `always wait`,
-`always fallback`, `always checkpoint`, `always terminate`) and demonstrate
-that no telemetry-blind baseline nearly matches the oracle by construction.
+RetryBudget v0.1 is historical calibration only. Its `wait` action advanced the
+schedule rather than preserving the pending request; `fallback` risked an
+unconditional-policy shortcut; and its oracle returned binary regret. v0.2
+replaces those semantics with a pending-work state machine and numeric,
+observable dynamic-programming oracle. Its developer calibration establishes
+all five actions as uniquely optimal somewhere and separates fixed policies from
+the oracle; those checks must be repeated on the separately frozen seed block.
+
+The implementation is still not a ready agent experiment. A RetryBudget owner
+must freeze a scenario-owned observation model, A/B/C prompt contract, artifact
+manifest, exact prompt capture, inclusion rules, and analysis plan before any
+agent behavior is collected. The current issue ledger and readiness contract are
+`docs/21_retrybudget_issue_ledger.md` and
+`docs/20_retrybudget_v0_2_design_and_readiness.md`.
 
 ## Rules for contributors
 

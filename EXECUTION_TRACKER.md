@@ -771,3 +771,25 @@
   directly to frozen-cohort analysis, manuscript, artifact release, and arXiv
   submission. Do not delay first publication for speculative production
   architecture or Toxiproxy extensions.
+
+### 2026-08-31 — RetryBudget v0.2 transition and oracle hardening
+
+- Began scenario-owned work on `codex/retrybudget-hardening` from the clean
+  shared `main` state. ToolRoute remains merged and frozen; no shared SST,
+  ToolRoute simulator, ToolRoute artifact, or provider authorization was
+  changed.
+- Replaced future-use RetryBudget v0.1 semantics with a pending-work lifecycle:
+  `wait` preserves the work item and logical deadline/quota state until its
+  visible recovery boundary; fallback has declared alternative utility;
+  checkpoint preserves declared partial-work value; and termination can recover
+  only previously checkpointed value.
+- Replaced binary regret with a finite, numeric observable dynamic-programming
+  oracle whose inputs are the state fields future condition C must receive.
+  Developer tests establish one unique best calibration state per action,
+  deterministic transitions, explicit deadline/invalid outcomes, and fixed
+  policy separation. Across seeds 0--11 the oracle totals 4,200 utility versus
+  1,860 for the strongest fixed policy; this is a design calibration only.
+- Preserved the first v0.2 write-once oracle-following calibration under
+  `experiments/g2-calibrations/retrybudget-v0-2/`. It is not an agent trial and
+  does not authorize fresh-subagent or provider execution. Open gates are
+  recorded in the RetryBudget readiness document and issue ledger.

@@ -70,6 +70,14 @@ Every snapshot enforces:
   calibrated without model calls. The local MemoryGovernor is explicitly virtual
   and makes no cgroup-enforcement claim. Clean-container reproduction and
   context-isolated leakage/evaluator-defeat reviews remain pending.
+- **RetryBudget v0.2 (transition/oracle hardening):** the v0.1 fixed-row
+  calibration is superseded for future work. v0.2 preserves pending work across
+  waits, uses a numeric observable dynamic-programming oracle, and gives all
+  five actions explicit lifecycle semantics. Its first developer calibration
+  and fixed-policy separation pass are retained, but its observation model,
+  A/B/C contract, manifest, inclusion rules, and agent-trial authorization are
+  still open. See `docs/20_retrybudget_v0_2_design_and_readiness.md` and
+  `docs/21_retrybudget_issue_ledger.md`.
 - **Scenario isolation:** each scenario has an independent action/oracle,
   calibration, development, and provider-readiness contract. ToolRoute v0.4
   hardening does not close RetryBudget or MemoryGovernor readiness. New
