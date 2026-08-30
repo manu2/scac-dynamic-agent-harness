@@ -33,10 +33,10 @@ Every snapshot enforces:
   controls are implemented. Timeout and deterministic tool-fault controls pass
   locally; the cgroup-v2 memory OOM-kill positive control is blocked pending a
   delegated Linux cgroup-v2 runner and cannot be substituted with a host limit.
-- **ToolRoute API cohort (paused after seeds 8–10):** independent full-checkpoint
+- **ToolRoute API cohort (collection complete; analysis pending):** independent full-checkpoint
   episodes, isolated remote-model access, capture/finalization, observation-model
-  calibration, and evaluator-defeat checks are complete. Three 36-decision
-  blocks (seeds 8–10; 108 decisions) were executed from a committed,
+  calibration, and evaluator-defeat checks are complete. Six 36-decision
+  blocks (seeds 8–13; 216 decisions) were executed from a committed,
   hash-bound manifest and are preserved.
   Independent audit found a documentation discrepancy: the manifest says
   sampling controls are omitted while its Gemini requests explicitly set
@@ -50,9 +50,9 @@ Every snapshot enforces:
   synthetic ToolRoute study.
 - **Selected first-paper model cohort:** OpenAI `gpt-5.6-sol`, Anthropic
   `claude-sonnet-5`, and Google `gemini-3.7-flash`. The model selection is
-  retained. Provider authorization is false pending review and a new,
-  hash-bound execution-config continuation scope for seeds 11–13; it must keep
-  the already executed settings.
+  retained. Provider authorization is false. The complete cohort used the
+  recorded settings, including Gemini `temperature: 0.0`; analysis and
+  manuscript framing remain before any follow-on protocol is considered.
 - **G2 — scenarios (In progress):** seeded, model-free ToolRoute,
   MemoryGovernor, and RetryBudget simulators plus external oracles are locally
   calibrated without model calls. The local MemoryGovernor is explicitly virtual

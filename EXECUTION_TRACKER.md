@@ -688,3 +688,16 @@
 - Authorization revoked immediately in `PROVENANCE.json` (`toolroute_provider_trials_authorized: false`).
 - All 216 planned paper cohort decisions across Seeds 8–13 are now executed and finalized.
 
+### 2026-08-30 — Independent final paper-cohort audit
+
+- Verified the full planned cohort end to end: 36 seed-8 + 72 seeds-9–10 +
+  108 seeds-11–13 artifacts = exactly 216 unique provider × seed × turn ×
+  condition cells, with no missing, duplicate, or out-of-scope record.
+- Every result is `COMPLETED`; every finalization digest verifies; every block
+  carries the parent manifest hash and the appropriate continuation-config hash.
+  Cross-provider prompt and host records match for each seed × turn ×
+  condition; B rows are symmetric; no request contains an API-native
+  tool/function field; and no retry occurred.
+- Final regression check: 107 tests passed. Authorization remains false/null.
+  Collection is complete; this audit makes no inferential claim. The next work
+  is frozen-cohort analysis and manuscript framing, not further provider calls.
