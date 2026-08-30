@@ -60,6 +60,9 @@ def main() -> None:
     parser.add_argument("--provenance", type=Path, default=Path("PROVENANCE.json"))
     parser.add_argument("--dotenv", type=Path, default=Path(".env"))
     parser.add_argument("--experiments-root", type=Path, default=Path("experiments/api-cohort"))
+    parser.add_argument("--only-seed", type=int)
+    parser.add_argument("--only-turn", type=int)
+    parser.add_argument("--only-condition", choices=("A", "B", "C"))
     args = parser.parse_args()
     _load_dotenv(args.dotenv)
     authorization = ToolRouteAuthorization.load(provenance_path=args.provenance, pilot_manifest_path=args.manifest)
@@ -70,6 +73,11 @@ def main() -> None:
         authorization, f"{args.provider}-native-count-endpoint:{args.model}", provider.count_tokens,
     )
     episodes = _episodes(manifest, args.provider, args.model)
+    requested = (args.only_seed, args.only_turn, args.only_condition)
+    if any(value is not None for value in requested):
+        if any(value is None for value in requested):
+            raise ValueError("--only-seed, --only-turn, and --only-condition must be supplied together")
+        episodes = [item for item in episodes if item == requested]
     if not episodes:
         raise RuntimeError("no authorized episodes for requested provider/model")
     for seed, turn, condition in episodes:
