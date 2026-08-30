@@ -78,7 +78,7 @@ def main() -> None:
                                       tokenizer=tokenizer, model_id=args.model, provider_label=args.provider)
         result = episode.run(provider, authorization=authorization)
         print(json.dumps({"seed": seed, "turn": turn, "condition": condition,
-                          "classification": result["classification"], "directory": str(episode.directory)}, flush=True)
+                          "classification": result["classification"], "directory": str(episode.directory)}), flush=True)
 
 
 if __name__ == "__main__":
