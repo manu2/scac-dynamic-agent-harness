@@ -745,3 +745,17 @@
   ablation” label or an L0/L2 “zero-trust” security claim, neither of which is
   the evaluated result. This is a framing-only change; it does not modify any
   code, frozen artifact, protocol, or cohort statistic.
+
+### 2026-08-31 — Related-work differentiation update
+
+- Added He and Yu, *Agent-Native Telemetry: Verifiable State-Delta Evidence for
+  Autonomous Operations* (arXiv:2608.16178), as the closest identified
+  adjacent work. It is evidence that the operational-telemetry-for-agents area
+  is emerging; it must be discussed rather than ignored.
+- Fixed the manuscript distinction: Agent-Native Telemetry evaluates a verified
+  compact telemetry architecture's transport, context, query, and integrity
+  properties. ToolRoute evaluates a separate behavioral question: whether
+  verified current tool-health information changes an agent's next route choice
+  compared with a neutral same-shape state control. This is a positioning
+  update only and does not alter the frozen cohort or claim priority over all
+  prior state-aware agents.

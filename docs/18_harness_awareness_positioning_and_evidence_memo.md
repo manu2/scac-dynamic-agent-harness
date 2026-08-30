@@ -138,6 +138,13 @@ reason–act and tool-use programs.
   emerging area. Their central emphasis is instrumentation, diagnosis, or
   domain-specific scheduling; ToolRoute tests the agent-facing information
   channel itself with a neutral-structure control.
+- **Agent-Native Telemetry** is the closest adjacent proposal: it develops a
+  verified, compact state-delta evidence architecture and agent access paths
+  for autonomous operations. Its reported evaluation centers on telemetry
+  transport, context, query, and integrity properties. ToolRoute's distinct
+  empirical question is behavioral: when an agent is shown verified current
+  tool-health state, does that information change the next route selection
+  relative to a neutral same-shape control?
 
 This is a positioning distinction, not a claim that no prior work has ever
 exposed state to an agent. The contribution is a general trust-separated state
@@ -259,3 +266,5 @@ Tool-Using Agents**
 - Li et al. *Multi-Agentic AI for Fairness-Aware and Accelerated Multi-modal
   Large Model Inference in Real-world Mobile Edge Networks* (2026).
   https://arxiv.org/abs/2602.07215
+- He and Yu. *Agent-Native Telemetry: Verifiable State-Delta Evidence for
+  Autonomous Operations* (2026). https://arxiv.org/abs/2608.16178

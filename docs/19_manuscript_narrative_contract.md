@@ -53,7 +53,10 @@ observability artifact into an active control input for tool-using agents.**
    instances of the same interface.
 6. **Related work.** Position the work against tool-use agents, interactive
    agent benchmarks, and observability systems without claiming that no prior
-   agent has consumed state.
+   agent has consumed state. Discuss Agent-Native Telemetry as the closest
+   compact, verified telemetry architecture and distinguish ToolRoute's
+   controlled behavioral information-ablation question from its systems
+   transport, integrity, and context-efficiency evaluation.
 
 The evaluation must have its own method section before results. The architecture
 is general; the frozen evidence is the ToolRoute tools-dimension instance.
