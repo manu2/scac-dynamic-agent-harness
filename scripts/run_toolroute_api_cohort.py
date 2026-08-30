@@ -79,7 +79,8 @@ def main() -> None:
     for seed, turn, condition in episodes:
         authorization.verify_live()
         episode = ToolRouteAPIEpisode(seed=seed, turn=turn, condition=condition, experiments_root=args.experiments_root,
-                                      model_id=args.model, provider_label=args.provider)
+                                      model_id=args.model, provider_label=args.provider,
+                                      pilot_manifest_sha256=authorization.pilot_manifest_sha256)
         result = episode.run(provider, authorization=authorization)
         print(json.dumps({"seed": seed, "turn": turn, "condition": condition,
                           "classification": result["classification"], "directory": str(episode.directory)}), flush=True)

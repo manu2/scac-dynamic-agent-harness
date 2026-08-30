@@ -330,6 +330,7 @@ class ToolRouteAPIEpisode:
     def __init__(
         self, *, seed: int, turn: int, condition: Condition, experiments_root: Path,
         model_id: str, provider_label: str,
+        pilot_manifest_sha256: str | None = None,
         observation_model: ToolRouteObservationModel = ToolRouteObservationModel(),
     ) -> None:
         if turn not in range(4):
@@ -344,6 +345,7 @@ class ToolRouteAPIEpisode:
             "kind": "toolroute_api_independent_full_checkpoint", "scenario": "ToolRoute-v1.0-api",
             "seed": seed, "turn": turn, "condition": condition, "model_id": model_id,
             "provider_label": provider_label,
+            "pilot_manifest_sha256": pilot_manifest_sha256,
             "state_delivery": "independent_full_checkpoint_only", "provider_tools": "none",
             "observation_model": asdict(observation_model),
             "primary_oracle": "observable_monitor_cost_v0.6", "secondary_oracle": "clairvoyant_latent_cost_diagnostic_only",

@@ -95,6 +95,12 @@ def test_api_episode_captures_raw_response_and_scores_visible_oracle(tmp_path: P
         assert hashlib.sha256((episode.directory / filename).read_bytes()).hexdigest() == digest
 
 
+def test_api_episode_retains_outer_pilot_manifest_hash(tmp_path: Path) -> None:
+    episode = ToolRouteAPIEpisode(seed=50, turn=1, condition="C", experiments_root=tmp_path,
+                                  model_id="mock", provider_label="mock", pilot_manifest_sha256="a" * 64)
+    assert json.loads((episode.directory / "manifest.json").read_text())["pilot_manifest_sha256"] == "a" * 64
+
+
 def test_api_episode_archives_malformed_provider_response(tmp_path: Path) -> None:
     episode = ToolRouteAPIEpisode(seed=50, turn=1, condition="C", experiments_root=tmp_path, model_id="mock", provider_label="mock")
     result = episode.run(RecordingProvider("choose tool_beta"), authorization=_authorization(tmp_path))
