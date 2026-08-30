@@ -5,6 +5,11 @@
 This record clarifies, without altering, the frozen paper manifest
 `manifests/toolroute_api_paper.v1.0.json` (SHA-256
 `9fb8003e4742b3e94afd872a88522cbe5d238d13ae631c1f0f30c78705789218`).
+The machine-enforced companion is
+`manifests/toolroute_api_paper.v1.0.execution-config.json` (SHA-256
+`7fad2b017d85ff302e697a6cb13187bdd5921a8a17677a2d213af51f128d38e0`);
+its SHA-256 must be bound in `PROVENANCE.json` before a later cohort episode is
+authorized.
 It applies to the seed-8 paper block only and to any later authorized episode
 that is explicitly bound to this clarification.
 

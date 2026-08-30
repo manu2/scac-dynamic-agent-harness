@@ -42,10 +42,11 @@ Every snapshot enforces:
   `temperature: 0.0`. Because that setting is identical across the seed-8
   Gemini A/B/C cells and is retained in each raw request, it is not a treatment
   confound and seed 8 remains in the cohort. Authorization is revoked pending
-  a frozen execution-config clarification; all later Gemini calls must retain
-  `temperature: 0.0`, not change to provider default. The Linux cgroup-v2 proof
-  remains a MemoryGovernor requirement, not a blocker for this narrow synthetic
-  ToolRoute study.
+  a frozen execution-config clarification. The runner now hash-binds and checks
+  that clarification before each provider request; all later Gemini calls must
+  retain `temperature: 0.0`, not change to provider default. The Linux cgroup-v2
+  proof remains a MemoryGovernor requirement, not a blocker for this narrow
+  synthetic ToolRoute study.
 - **Selected first-paper model cohort:** OpenAI `gpt-5.6-sol`, Anthropic
   `claude-sonnet-5`, and Google `gemini-3.7-flash`. The model selection is
   retained. Provider authorization is false pending a reviewed execution-config

@@ -51,6 +51,30 @@ def _authorization(tmp_path: Path) -> ToolRouteAuthorization:
     return ToolRouteAuthorization.load(provenance_path=provenance, pilot_manifest_path=manifest)
 
 
+def _configured_authorization(tmp_path: Path, *, expected_prompt: str = "choose tool_alpha") -> ToolRouteAuthorization:
+    manifest = tmp_path / "frozen-paper-manifest.json"
+    manifest.write_text(json.dumps({"authorized_episodes": [
+        {"seed": 50, "turn": 1, "condition": "C", "model_id": "mock", "provider_label": "mock"},
+    ]}) + "\n")
+    config = tmp_path / "execution-config.json"
+    config.write_text(json.dumps({
+        "parent_manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest(),
+        "provider_request_expectations": [{
+            "provider_label": "mock", "model_id": "mock", "adapter": "test",
+            "required_body_fields": {"prompt": expected_prompt},
+            "forbidden_body_fields": ["tools"],
+        }],
+    }) + "\n")
+    provenance = tmp_path / "provenance.json"
+    provenance.write_text(json.dumps({
+        "toolroute_provider_trials_authorized": True,
+        "toolroute_pilot_manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest(),
+        "toolroute_execution_config_sha256": hashlib.sha256(config.read_bytes()).hexdigest(),
+    }))
+    return ToolRouteAuthorization.load(provenance_path=provenance, pilot_manifest_path=manifest,
+                                       execution_config_path=config)
+
+
 def test_api_episode_uses_structurally_parallel_neutral_b_control(tmp_path: Path) -> None:
     c = ToolRouteAPIEpisode(seed=50, turn=1, condition="C", experiments_root=tmp_path, model_id="mock", provider_label="mock")
     b = ToolRouteAPIEpisode(seed=50, turn=1, condition="B", experiments_root=tmp_path, model_id="mock", provider_label="mock")
@@ -101,6 +125,12 @@ def test_api_episode_retains_outer_pilot_manifest_hash(tmp_path: Path) -> None:
     assert json.loads((episode.directory / "manifest.json").read_text())["pilot_manifest_sha256"] == "a" * 64
 
 
+def test_api_episode_retains_outer_execution_config_hash(tmp_path: Path) -> None:
+    episode = ToolRouteAPIEpisode(seed=50, turn=1, condition="C", experiments_root=tmp_path,
+                                  model_id="mock", provider_label="mock", execution_config_sha256="b" * 64)
+    assert json.loads((episode.directory / "manifest.json").read_text())["execution_config_sha256"] == "b" * 64
+
+
 def test_api_episode_archives_malformed_provider_response(tmp_path: Path) -> None:
     episode = ToolRouteAPIEpisode(seed=50, turn=1, condition="C", experiments_root=tmp_path, model_id="mock", provider_label="mock")
     result = episode.run(RecordingProvider("choose tool_beta"), authorization=_authorization(tmp_path))
@@ -138,6 +168,24 @@ def test_openai_and_opus_default_requests_omit_sampling_controls() -> None:
     opus = AnthropicMessagesProvider(api_key="key", model="claude-opus-5", api_version="2023-06-01")
     assert "temperature" not in openai.request_record("x")["body"]
     assert "temperature" not in opus.request_record("x")["body"]
+
+
+def test_frozen_paper_execution_config_matches_all_effective_provider_requests() -> None:
+    config_path = Path("manifests/toolroute_api_paper.v1.0.execution-config.json")
+    config = json.loads(config_path.read_text())
+    authorization = ToolRouteAuthorization(
+        provenance_path=Path("PROVENANCE.json"), pilot_manifest_path=Path("manifests/toolroute_api_paper.v1.0.json"),
+        pilot_manifest_sha256=config["parent_manifest_sha256"], execution_config_path=config_path,
+        execution_config_sha256=hashlib.sha256(config_path.read_bytes()).hexdigest(), execution_config=config,
+    )
+    providers = (
+        ("openai", "gpt-5.6-sol", OpenAICompatibleProvider(endpoint="https://api.openai.example/v1/chat/completions", api_key="key", model="gpt-5.6-sol")),
+        ("anthropic", "claude-sonnet-5", AnthropicMessagesProvider(api_key="key", model="claude-sonnet-5", api_version="2023-06-01")),
+        ("google", "gemini-3.7-flash", GeminiGenerateContentProvider(api_key="key", model="gemini-3.7-flash", temperature=0.0)),
+    )
+    for label, model, provider in providers:
+        authorization.verify_request_configuration(provider_label=label, model_id=model,
+                                                   request_record=provider.request_record("choose tool_alpha"))
 
 
 def test_safe_provider_error_retains_structured_detail_but_redacts_key() -> None:
@@ -179,6 +227,31 @@ def test_api_episode_rejects_an_undeclared_paid_episode(tmp_path: Path) -> None:
     result = episode.run(RecordingProvider("tool_beta"), authorization=_authorization(tmp_path))
     assert result["classification"] == "REJECTED_MANIFEST_SCOPE"
     assert (episode.directory / "finalization.json").exists()
+
+
+def test_api_episode_rejects_request_configuration_that_differs_from_bound_addendum(tmp_path: Path) -> None:
+    authorization = _configured_authorization(tmp_path, expected_prompt="not this episode prompt")
+    provider = RecordingProvider("tool_beta")
+    episode = ToolRouteAPIEpisode(seed=50, turn=1, condition="C", experiments_root=tmp_path,
+                                  model_id="mock", provider_label="mock")
+    result = episode.run(provider, authorization=authorization)
+    assert result["classification"] == "REJECTED_EXECUTION_CONFIG"
+    assert provider.prompts == []
+    assert (episode.directory / "provider-request.json").exists()
+    assert (episode.directory / "finalization.json").exists()
+
+
+def test_authorization_rejects_execution_config_changed_after_load(tmp_path: Path) -> None:
+    authorization = _configured_authorization(tmp_path)
+    assert authorization.execution_config_sha256 is not None
+    assert authorization.execution_config_path is not None
+    authorization.execution_config_path.write_text("{}\n")
+    try:
+        authorization.verify_live()
+    except PermissionError as exc:
+        assert "execution config" in str(exc)
+    else:
+        raise AssertionError("changed execution config was accepted")
 
 
 def test_observation_model_is_versioned_and_supports_nonzero_noise(tmp_path: Path) -> None:

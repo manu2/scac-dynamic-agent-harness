@@ -84,16 +84,33 @@ class ToolRouteAuthorization:
     provenance_path: Path
     pilot_manifest_path: Path
     pilot_manifest_sha256: str
+    execution_config_path: Path | None = None
+    execution_config_sha256: str | None = None
+    execution_config: Mapping[str, object] | None = None
 
     @classmethod
-    def load(cls, *, provenance_path: Path, pilot_manifest_path: Path) -> "ToolRouteAuthorization":
+    def load(
+        cls, *, provenance_path: Path, pilot_manifest_path: Path,
+        execution_config_path: Path | None = None,
+    ) -> "ToolRouteAuthorization":
         provenance = json.loads(Path(provenance_path).read_text(encoding="utf-8"))
         digest = hashlib.sha256(Path(pilot_manifest_path).read_bytes()).hexdigest()
         if not provenance.get("toolroute_provider_trials_authorized", False):
             raise PermissionError("toolroute_provider_trials_authorized=false")
         if provenance.get("toolroute_pilot_manifest_sha256") != digest:
             raise PermissionError("frozen ToolRoute pilot manifest hash does not match provenance")
-        return cls(Path(provenance_path), Path(pilot_manifest_path), digest)
+        if execution_config_path is None:
+            if provenance.get("toolroute_execution_config_sha256") is not None:
+                raise PermissionError("execution-config hash is bound in provenance but no execution config was supplied")
+            return cls(Path(provenance_path), Path(pilot_manifest_path), digest)
+        config_path = Path(execution_config_path)
+        config_digest = hashlib.sha256(config_path.read_bytes()).hexdigest()
+        config = json.loads(config_path.read_text(encoding="utf-8"))
+        if not isinstance(config, Mapping) or config.get("parent_manifest_sha256") != digest:
+            raise PermissionError("execution config is not bound to the frozen ToolRoute manifest")
+        if provenance.get("toolroute_execution_config_sha256") != config_digest:
+            raise PermissionError("frozen ToolRoute execution-config hash does not match provenance")
+        return cls(Path(provenance_path), Path(pilot_manifest_path), digest, config_path, config_digest, config)
 
     def verify_live(self) -> None:
         """Recheck both immutable inputs immediately before a provider request."""
@@ -103,6 +120,10 @@ class ToolRouteAuthorization:
             raise PermissionError("ToolRoute authorization was revoked before provider request")
         if current_digest != self.pilot_manifest_sha256 or provenance.get("toolroute_pilot_manifest_sha256") != current_digest:
             raise PermissionError("frozen ToolRoute pilot manifest changed before provider request")
+        if self.execution_config_path is not None:
+            current_config_digest = hashlib.sha256(self.execution_config_path.read_bytes()).hexdigest()
+            if current_config_digest != self.execution_config_sha256 or provenance.get("toolroute_execution_config_sha256") != current_config_digest:
+                raise PermissionError("frozen ToolRoute execution config changed before provider request")
 
     def verify_episode(self, *, seed: int, turn: int, condition: Condition, model_id: str, provider_label: str) -> None:
         """Fail closed unless this exact paid episode is declared in the manifest."""
@@ -124,6 +145,30 @@ class ToolRouteAuthorization:
                     and condition in grid.get("conditions", [])):
                     return
         raise PermissionError("episode is not explicitly authorized by the frozen manifest")
+
+    def verify_request_configuration(self, *, provider_label: str, model_id: str, request_record: Mapping[str, object]) -> None:
+        """Fail closed when a hash-bound execution config disagrees with a request."""
+        if self.execution_config is None:
+            return
+        entries = self.execution_config.get("provider_request_expectations")
+        if not isinstance(entries, list):
+            raise PermissionError("execution config lacks provider request expectations")
+        expected = next((entry for entry in entries if isinstance(entry, Mapping)
+                         and entry.get("provider_label") == provider_label and entry.get("model_id") == model_id), None)
+        if expected is None:
+            raise PermissionError("provider/model is not declared in execution config")
+        if request_record.get("adapter") != expected.get("adapter"):
+            raise PermissionError("provider adapter differs from execution config")
+        body = request_record.get("body")
+        required = expected.get("required_body_fields")
+        if not isinstance(body, Mapping) or not isinstance(required, Mapping):
+            raise PermissionError("execution config request shape is invalid")
+        for field, value in required.items():
+            if body.get(field) != value:
+                raise PermissionError(f"provider request field {field!r} differs from execution config")
+        forbidden = expected.get("forbidden_body_fields", [])
+        if not isinstance(forbidden, list) or any(field in body for field in forbidden):
+            raise PermissionError("provider request contains a forbidden execution-config field")
 
 
 class OpenAICompatibleProvider:
@@ -331,6 +376,7 @@ class ToolRouteAPIEpisode:
         self, *, seed: int, turn: int, condition: Condition, experiments_root: Path,
         model_id: str, provider_label: str,
         pilot_manifest_sha256: str | None = None,
+        execution_config_sha256: str | None = None,
         observation_model: ToolRouteObservationModel = ToolRouteObservationModel(),
     ) -> None:
         if turn not in range(4):
@@ -346,6 +392,7 @@ class ToolRouteAPIEpisode:
             "seed": seed, "turn": turn, "condition": condition, "model_id": model_id,
             "provider_label": provider_label,
             "pilot_manifest_sha256": pilot_manifest_sha256,
+            "execution_config_sha256": execution_config_sha256,
             "state_delivery": "independent_full_checkpoint_only", "provider_tools": "none",
             "observation_model": asdict(observation_model),
             "primary_oracle": "observable_monitor_cost_v0.6", "secondary_oracle": "clairvoyant_latent_cost_diagnostic_only",
@@ -448,7 +495,16 @@ class ToolRouteAPIEpisode:
         request_record = getattr(provider, "request_record", None)
         if not callable(request_record):
             raise TypeError("provider must expose a sanitized request_record")
-        self._write_once("provider-request.json", dict(request_record(self.prompt)))
+        recorded_request = dict(request_record(self.prompt))
+        self._write_once("provider-request.json", recorded_request)
+        try:
+            authorization.verify_request_configuration(
+                provider_label=self.provider_label, model_id=self.model_id, request_record=recorded_request,
+            )
+        except PermissionError as exc:
+            result = {"accepted": False, "classification": "REJECTED_EXECUTION_CONFIG", "reason": str(exc)}
+            self._write_once("result.json", result); self._finalize(result["classification"])
+            return result
         try:
             response = provider.complete(self.prompt)
         except Exception as exc:

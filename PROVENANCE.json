@@ -11,5 +11,6 @@
   "provider_trials_authorized": false,
   "toolroute_provider_trials_authorized": false,
   "toolroute_pilot_manifest_sha256": null,
+  "toolroute_execution_config_sha256": null,
   "authorization_scope": "No provider call is authorized. The ToolRoute paper cohort v1.0 seed-8 block (36 decisions) completed and was audited; any subsequent execution requires a new reviewed authorization."
 }

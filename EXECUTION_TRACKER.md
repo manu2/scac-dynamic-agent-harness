@@ -597,3 +597,18 @@
   and raw requests preserve it. Seed 8 remains in the paper cohort. Before
   resumption, freeze an execution-config clarification and retain the same
   `temperature: 0.0` setting for all later Gemini calls.
+
+### 2026-08-30 — ToolRoute v1.0 execution-config enforcement
+
+- Added frozen companion
+  `manifests/toolroute_api_paper.v1.0.execution-config.json` (SHA-256
+  `7fad2b017d85ff302e697a6cb13187bdd5921a8a17677a2d213af51f128d38e0`),
+  which binds the parent paper manifest and declares the effective request
+  fields for all three providers.
+- The cohort runner now requires this companion. Authorization checks its hash
+  before every request, records its hash in every future episode, and rejects a
+  locally constructed request whose adapter/body disagrees with the declaration.
+  `PROVENANCE.json` remains false/null; no provider call was made.
+- Full local suite: 106 passed. The existing seed-8 artifacts are immutable and
+  remain included; the next authorization may run only the remaining seeds
+  9–13 under this same effective configuration.

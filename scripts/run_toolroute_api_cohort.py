@@ -27,13 +27,27 @@ def _load_dotenv(path: Path) -> None:
             os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
 
 
-def _provider(label: str, model: str):
+def _provider(label: str, model: str, execution_config: dict[str, object]):
+    entries = execution_config.get("provider_request_expectations", [])
+    expected = next((entry for entry in entries if isinstance(entry, dict)
+                     and entry.get("provider_label") == label and entry.get("model_id") == model), None)
+    if expected is None:
+        raise PermissionError("provider/model is not declared in the execution config")
+    body = expected.get("required_body_fields")
+    if not isinstance(body, dict):
+        raise PermissionError("execution config has invalid provider fields")
     if label == "openai":
-        return OpenAICompatibleProvider(endpoint="https://api.openai.com/v1/chat/completions", api_key=os.environ["OPENAI_API_KEY"], model=model)
+        return OpenAICompatibleProvider(endpoint="https://api.openai.com/v1/chat/completions", api_key=os.environ["OPENAI_API_KEY"],
+                                        model=model, temperature=body.get("temperature"), max_output_tokens=body["max_completion_tokens"])
     if label == "anthropic":
-        return AnthropicMessagesProvider(api_key=os.environ["ANTHROPIC_API_KEY"], model=model, api_version="2023-06-01")
+        return AnthropicMessagesProvider(api_key=os.environ["ANTHROPIC_API_KEY"], model=model, api_version="2023-06-01",
+                                         temperature=body.get("temperature"), max_output_tokens=body["max_tokens"])
     if label == "google":
-        return GeminiGenerateContentProvider(api_key=os.environ.get("GEMINI_API_KEY") or os.environ["GOOGLE_API_KEY"], model=model)
+        generation = body.get("generationConfig")
+        if not isinstance(generation, dict):
+            raise PermissionError("Gemini execution config lacks generationConfig")
+        return GeminiGenerateContentProvider(api_key=os.environ.get("GEMINI_API_KEY") or os.environ["GOOGLE_API_KEY"], model=model,
+                                             temperature=generation["temperature"], max_output_tokens=generation["maxOutputTokens"])
     raise ValueError(f"unknown provider: {label}")
 
 
@@ -56,6 +70,7 @@ def main() -> None:
     parser.add_argument("--provider", choices=("openai", "anthropic", "google"), required=True)
     parser.add_argument("--model", required=True)
     parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--execution-config", type=Path, required=True)
     parser.add_argument("--provenance", type=Path, default=Path("PROVENANCE.json"))
     parser.add_argument("--dotenv", type=Path, default=Path(".env"))
     parser.add_argument("--experiments-root", type=Path, default=Path("experiments/api-cohort"))
@@ -64,10 +79,12 @@ def main() -> None:
     parser.add_argument("--only-condition", choices=("A", "B", "C"))
     args = parser.parse_args()
     _load_dotenv(args.dotenv)
-    authorization = ToolRouteAuthorization.load(provenance_path=args.provenance, pilot_manifest_path=args.manifest)
+    authorization = ToolRouteAuthorization.load(provenance_path=args.provenance, pilot_manifest_path=args.manifest,
+                                                execution_config_path=args.execution_config)
     authorization.verify_live()
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
-    provider = _provider(args.provider, args.model)
+    assert isinstance(authorization.execution_config, dict)
+    provider = _provider(args.provider, args.model, authorization.execution_config)
     episodes = _episodes(manifest, args.provider, args.model)
     requested = (args.only_seed, args.only_turn, args.only_condition)
     if any(value is not None for value in requested):
@@ -80,7 +97,8 @@ def main() -> None:
         authorization.verify_live()
         episode = ToolRouteAPIEpisode(seed=seed, turn=turn, condition=condition, experiments_root=args.experiments_root,
                                       model_id=args.model, provider_label=args.provider,
-                                      pilot_manifest_sha256=authorization.pilot_manifest_sha256)
+                                      pilot_manifest_sha256=authorization.pilot_manifest_sha256,
+                                      execution_config_sha256=authorization.execution_config_sha256)
         result = episode.run(provider, authorization=authorization)
         print(json.dumps({"seed": seed, "turn": turn, "condition": condition,
                           "classification": result["classification"], "directory": str(episode.directory)}), flush=True)
