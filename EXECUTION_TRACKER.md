@@ -4,10 +4,10 @@
 
 - **Current stage:** G1 enforcement implementation and capability-gated controls (In progress; branch `codex/g0-sst-schema`).
 - **Provider calls:** not authorized for any further call. One seed-8 ToolRoute
-  paper-block attempt (36 completed decisions) is retained and under a recorded
-  manifest/execution-deviation review.
+  paper-block attempt (36 completed decisions) is retained; resumption requires
+  an execution-config clarification and fresh authorization.
 - **Empirical trials:** 36 submitted ToolRoute paper-cohort attempts retained
-  under `experiments/api-paper-v1.0-seed8/`; not eligible to extend as v1.0.
+  under `experiments/api-paper-v1.0-seed8/`; eligible to remain in the cohort.
 - **Upstream design basis:** `manu2/Context-Aware-Agent-Experiment` commit
   `f35173d29375216af88c708687efbcc51f36398a`.
 
@@ -592,7 +592,8 @@
   provider call was made by this audit.
 - Found TR-033: the frozen v1.0 manifest states that sampling controls are
   omitted/provider-default, but every recorded Gemini request contains
-  `generationConfig.temperature: 0.0`. This is not a within-Gemini A/B/C
-  confound, but it is a material mismatch between the frozen protocol and the
-  executed request. The seed-8 artifacts remain immutable and readable; the
-  v1.0 cohort is closed rather than silently amended or extended.
+  `generationConfig.temperature: 0.0`. This is a documentation deviation, not
+  a within-Gemini A/B/C confound: all three conditions share the same setting
+  and raw requests preserve it. Seed 8 remains in the paper cohort. Before
+  resumption, freeze an execution-config clarification and retain the same
+  `temperature: 0.0` setting for all later Gemini calls.

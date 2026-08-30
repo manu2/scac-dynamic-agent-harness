@@ -37,17 +37,20 @@ Every snapshot enforces:
   episodes, isolated remote-model access, capture/finalization, observation-model
   calibration, and evaluator-defeat checks are complete. A 36-decision seed-8
   block was executed from a committed, hash-bound manifest and is preserved.
-  Independent audit found a manifest/execution discrepancy: it declares omitted
-  sampling controls while its Gemini requests explicitly set `temperature: 0.0`.
-  Authorization is revoked and no later seed may be appended to that cohort.
-  Resolve this prospectively with an exact provider-configuration manifest and
-  a fresh cohort, or report seed 8 as an excluded engineering diagnostic. The
-  Linux cgroup-v2 proof remains a MemoryGovernor requirement, not a blocker for
-  this narrow synthetic ToolRoute study.
+  Independent audit found a documentation discrepancy: the manifest says
+  sampling controls are omitted while its Gemini requests explicitly set
+  `temperature: 0.0`. Because that setting is identical across the seed-8
+  Gemini A/B/C cells and is retained in each raw request, it is not a treatment
+  confound and seed 8 remains in the cohort. Authorization is revoked pending
+  a frozen execution-config clarification; all later Gemini calls must retain
+  `temperature: 0.0`, not change to provider default. The Linux cgroup-v2 proof
+  remains a MemoryGovernor requirement, not a blocker for this narrow synthetic
+  ToolRoute study.
 - **Selected first-paper model cohort:** OpenAI `gpt-5.6-sol`, Anthropic
   `claude-sonnet-5`, and Google `gemini-3.7-flash`. The model selection is
-  retained, but the v1.0 paper manifest is closed after seed 8; provider
-  authorization is false pending a new reviewed, exact-configuration manifest.
+  retained. Provider authorization is false pending a reviewed execution-config
+  clarification, after which the same cohort may resume with the already
+  executed settings.
 - **G2 — scenarios (In progress):** seeded, model-free ToolRoute,
   MemoryGovernor, and RetryBudget simulators plus external oracles are locally
   calibrated without model calls. The local MemoryGovernor is explicitly virtual

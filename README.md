@@ -57,11 +57,12 @@ The selected first-paper cohort is GPT-5.6 Sol, Claude Sonnet 5, and Gemini
 3.7 Flash. A frozen paper manifest was used for one complete seed-8 block
 (36 independent decisions), whose raw artifacts are retained under
 `experiments/api-paper-v1.0-seed8/`. Authorization is now deliberately
-revoked: an independent audit found that the manifest's "sampling controls
-omitted" statement does not match the recorded Gemini requests, which include
-`temperature: 0.0`. The block is preserved but must not be pooled into a
-continued cohort unless this deviation is resolved prospectively with a new
-manifest and a fresh cohort. This narrow ToolRoute work does not close G1
-globally or apply to MemoryGovernor, RetryBudget, or a combined study. See
-`docs/14_toolroute_v0_6_api_run_readiness.md` and
-`docs/07_toolroute_hardening_issue_ledger.md`.
+revoked pending the next reviewed authorization. An audit found that the
+manifest's "sampling controls omitted" wording does not match the recorded
+Gemini requests, which explicitly use `temperature: 0.0`. This is a
+documentation deviation, not a condition confound: all Gemini A/B/C decisions
+use the same captured parameter. Seed 8 remains part of the paper cohort.
+Future Gemini calls must retain `temperature: 0.0`, and the effective settings
+must be stated in a frozen execution-config addendum before resumption. This
+narrow ToolRoute work does not close G1 globally or apply to MemoryGovernor,
+RetryBudget, or a combined study. See `docs/17_toolroute_v1_execution_config_clarification.md`.
