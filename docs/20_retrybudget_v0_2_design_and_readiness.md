@@ -1,7 +1,7 @@
 # RetryBudget v0.2 Design and Readiness Contract
 
-**Status:** transition/oracle implementation and first archived calibration
-complete; not authorized for fresh-subagent or provider trials.
+**Status:** development-canary-ready and intentionally provider-disabled. It
+is not authorized for a paper cohort.
 
 ## Question
 
@@ -87,15 +87,17 @@ The transition/oracle implementation is `RetryBudget-v0.2`. Its focused test
 suite verifies deterministic transitions; uniquely optimal calibration states
 for all five actions; pending-work preservation across `wait`; numeric regret;
 checkpoint/termination recovery semantics; explicit invalid/deadline outcomes;
-and fixed-action baseline separation. Across developer calibration seeds 0--11,
-the observable-oracle policy totals 4,200 utility and the best fixed policy
-(`always checkpoint`) totals 1,860, a 55.7% gap. This is a development
+and fixed-action baseline separation. Across seed-varying developer calibration
+seeds 0--11, the observable-oracle policy totals 4,371 utility and the best
+fixed policy (`always checkpoint`) totals 2,007, a 54.1% gap. This is a development
 calibration, not an agent-result denominator or a frozen main-study seed block.
 
-The first write-once oracle-following artifact is retained at
+The first pre-finalization oracle-following artifact is retained at
 `experiments/g2-calibrations/retrybudget-v0-2/20260830T202837.478701Z-retrybudget-v0-2-990b98475ab3441989de0f481ba2e796/`.
-It contains seven transitions, all five action types, zero action regret, and a
-terminal outcome.
+It is historical only. The current seed-61 calibration is retained at
+`experiments/g2-calibrations/retrybudget-v0-2/20260830T205316.217706Z-retrybudget-v0-2-b63c79c940a3479fa06481451fb92dab/`.
+It contains seven transitions, all five action types, zero action regret, a
+terminal outcome, and verified finalization hashes.
 
 ## Observation and prompt work in progress
 
@@ -106,8 +108,10 @@ complete state projection consumed by the primary oracle. Five adjacent seeds
 rotate every action through every option position for the same state. The
 baseline has zero delivery delay and zero loss/corruption. Non-zero observation
 loss/corruption fails closed until a separately calibrated sensitivity model is
-implemented. This is a development contract, not a frozen prompt/manifest for
-agent trials.
+implemented. The control is structurally matched rather than token-identical;
+actual provider input-token usage will be retained as a descriptive
+manipulation check. This is a development contract, not a frozen paper-cohort
+prompt.
 
 ## Local-only execution mechanism
 
@@ -121,9 +125,20 @@ It has seven full-checkpoint decisions, zero oracle regret, valid finalization
 hashes, and `provider_calls: prohibited`. It validates execution capture only;
 it is not a subagent trajectory or paper evidence.
 
-## Boundary and next gate
+## Provider-canary boundary and next gate
+
+The committed `manifests/retrybudget_api_canary.v0.2.json` permits, once
+separately authorized, exactly one **development-only** Gemini 3.7 Flash,
+condition-C, seed-61 trajectory with at most seven generations. Its runner
+reserves a write-once directory before execution; records every current prompt,
+host-only state/oracle, sanitized request, response/error, exact-label result,
+and terminal hash manifest; and rechecks live authorization before every paid
+generation. Its primary episode outcome is realized cumulative utility versus
+the oracle episode utility, not a sum of local dynamic-program gaps. See the
+runbook and pre-provider audit for the remaining authorization and review
+requirements.
 
 New records belong under `experiments/g2-calibrations/retrybudget-v0-2/` and
-must preserve historical v0.1 artifacts unchanged. Passing this packet only
-permits a separate readiness review; it does not authorize provider calls or
-pooling with ToolRoute.
+`experiments/api-preflight/retrybudget-v0-2/`; historical records remain
+immutable. Passing this packet permits only a separate readiness review. It
+does not authorize a provider call or pooling with ToolRoute.

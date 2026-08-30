@@ -22,7 +22,7 @@ review in one scenario must never be reported as a pass for another.
 | Scenario | Current state | Explicit boundary | Next permitted work |
 |---|---|---|---|
 | ToolRoute v1.0 | Frozen 216-decision direct-provider cohort complete; authorization revoked | Synthetic host-owned monitor; tools dimension only; no pooling with other scenarios | Frozen-cohort analysis, manuscript, and artifact release; no new provider calls without a reviewed protocol |
-| RetryBudget v0.2 | Deterministic transition/oracle hardening and archived developer calibration only | No fresh-subagent or provider run is authorized | Freeze/calibrate observation and A/B/C contracts; add manifest, prompt/capture, inclusion, and readiness packet |
+| RetryBudget v0.2 | Development-canary-ready; deterministic lifecycle/oracle, prompt/capture, and one Gemini C-only manifest are committed | Provider authorization remains false; no paper cohort is frozen | Independent review, one narrowly authorized C-only Gemini canary, then a separately frozen A/B/C paper protocol |
 | MemoryGovernor | Virtual deterministic calibration only | Makes no cgroup-enforcement claim | Run only after Linux G1; then create a separately frozen observation/oracle contract |
 
 ## RetryBudget mandatory design review
@@ -35,12 +35,15 @@ observable dynamic-programming oracle. Its developer calibration establishes
 all five actions as uniquely optimal somewhere and separates fixed policies from
 the oracle; those checks must be repeated on the separately frozen seed block.
 
-The implementation is still not a ready agent experiment. A RetryBudget owner
-must freeze a scenario-owned observation model, A/B/C prompt contract, artifact
-manifest, exact prompt capture, inclusion rules, and analysis plan before any
-agent behavior is collected. The current issue ledger and readiness contract are
-`docs/21_retrybudget_issue_ledger.md` and
-`docs/20_retrybudget_v0_2_design_and_readiness.md`.
+The baseline observation model, A/B/C prompt contract, exact prompt capture,
+artifact runner, and C-only development canary manifest are now committed. The
+canary remains hard-disabled: an independent review and a narrow protocol/
+provenance authorization are required before its one provider trajectory. A
+paper cohort still requires its own frozen inclusion rules and episode-level
+analysis plan. The current issue ledger, readiness contract, and pre-provider
+audit are `docs/21_retrybudget_issue_ledger.md`,
+`docs/20_retrybudget_v0_2_design_and_readiness.md`, and
+`docs/23_retrybudget_preprovider_audit.md`.
 
 ## Rules for contributors
 

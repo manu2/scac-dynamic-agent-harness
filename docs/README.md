@@ -20,6 +20,11 @@ state their cohort and measurement boundaries explicitly.
 - `20_retrybudget_v0_2_design_and_readiness.md` and
   `21_retrybudget_issue_ledger.md`: active, separate RetryBudget redesign and
   readiness records; RetryBudget is not authorized for agent trials.
+- `22_retrybudget_gemini_canary_runbook.md`: prepared C-only Gemini development
+  canary; it remains hard-disabled until separately reviewed and authorized.
+- `23_retrybudget_preprovider_audit.md`: self-review of the RetryBudget
+  lifecycle, oracle, prompt control, artifacts, and one-trajectory Gemini
+  canary boundary.
 
 `10_toolroute_v0_4_status_and_next_gate.md` is retained as historical
 development context; its v0.4 status does not control the v0.6 API path.

@@ -1,0 +1,72 @@
+{
+  "initial_states": [
+    {
+      "checkpoint_available": false,
+      "checkpoint_recovery_utility": 52,
+      "checkpointed": true,
+      "deadline_remaining_ms": 403,
+      "decision_steps_remaining": 3,
+      "fallback_available": false,
+      "fallback_utility": 0,
+      "primary_status": "HTTP_503",
+      "remaining_quota": 0,
+      "retry_after_ms": null,
+      "work_item": 0
+    },
+    {
+      "checkpoint_available": true,
+      "checkpoint_recovery_utility": 51,
+      "checkpointed": false,
+      "deadline_remaining_ms": 1213,
+      "decision_steps_remaining": 3,
+      "fallback_available": true,
+      "fallback_utility": 57,
+      "primary_status": "OK",
+      "remaining_quota": 1,
+      "retry_after_ms": null,
+      "work_item": 1
+    },
+    {
+      "checkpoint_available": true,
+      "checkpoint_recovery_utility": 29,
+      "checkpointed": false,
+      "deadline_remaining_ms": 389,
+      "decision_steps_remaining": 3,
+      "fallback_available": true,
+      "fallback_utility": 55,
+      "primary_status": "HTTP_429",
+      "remaining_quota": 1,
+      "retry_after_ms": 980,
+      "work_item": 2
+    },
+    {
+      "checkpoint_available": true,
+      "checkpoint_recovery_utility": 40,
+      "checkpointed": false,
+      "deadline_remaining_ms": 1173,
+      "decision_steps_remaining": 3,
+      "fallback_available": true,
+      "fallback_utility": 66,
+      "primary_status": "HTTP_429",
+      "remaining_quota": 1,
+      "retry_after_ms": 294,
+      "work_item": 3
+    },
+    {
+      "checkpoint_available": true,
+      "checkpoint_recovery_utility": 54,
+      "checkpointed": false,
+      "deadline_remaining_ms": 436,
+      "decision_steps_remaining": 3,
+      "fallback_available": false,
+      "fallback_utility": 0,
+      "primary_status": "HTTP_503",
+      "remaining_quota": 1,
+      "retry_after_ms": null,
+      "work_item": 4
+    }
+  ],
+  "oracle": "observable_dynamic_program_v0.2",
+  "scenario": "RetryBudget-v0.2",
+  "seed": 61
+}

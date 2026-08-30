@@ -12,5 +12,7 @@
   "toolroute_provider_trials_authorized": false,
   "toolroute_pilot_manifest_sha256": null,
   "toolroute_execution_config_sha256": null,
-  "authorization_scope": "No provider call is authorized. The ToolRoute paper cohort v1.0 final continuation block (seeds 11-13, 108 decisions) completed and was audited; any subsequent execution requires a new reviewed authorization."
+  "retrybudget_provider_trials_authorized": false,
+  "retrybudget_pilot_manifest_sha256": null,
+  "authorization_scope": "No provider call is authorized. The ToolRoute paper cohort v1.0 final continuation block (seeds 11-13, 108 decisions) completed and was audited; any subsequent execution requires a new reviewed authorization. RetryBudget v0.2 has no provider authorization."
 }

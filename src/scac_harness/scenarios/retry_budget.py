@@ -231,7 +231,7 @@ class RetryBudgetSimulator:
 
     def __init__(self, seed: int = 0) -> None:
         self.seed = seed
-        templates = list(self.TEMPLATES)
+        templates = list(self._seeded_templates(seed))
         random.Random(seed).shuffle(templates)
         self._initial_states = tuple(
             replace(template, work_item=index) for index, template in enumerate(templates)
@@ -239,6 +239,32 @@ class RetryBudgetSimulator:
         self._index = 0
         self._state = self._initial_states[0]
         self._terminal = False
+
+    @classmethod
+    def _seeded_templates(cls, seed: int) -> tuple[RetryState, ...]:
+        """Vary observable magnitudes while preserving every action regime.
+
+        A seed must not merely reorder five identical prompts: that would make
+        a nominal multi-seed block a repetition study. Every generated state is
+        still checked against the observable oracle in tests.
+        """
+        rng = random.Random(f"retrybudget-v0.2:{seed}")
+        retry_fallback = 50 + rng.randrange(16)
+        wait_fallback = 50 + rng.randrange(21)
+        wait_after = 100 + rng.randrange(201)
+        wait_deadline = wait_after + 600 + rng.randrange(401)
+        fallback_deadline = 250 + rng.randrange(251)
+        fallback_recovery = fallback_deadline + 400 + rng.randrange(401)
+        fallback_utility = 55 + rng.randrange(21)
+        checkpoint_value = 45 + rng.randrange(21)
+        terminate_value = 45 + rng.randrange(21)
+        return (
+            RetryState(0, 3, 900 + rng.randrange(401), "OK", 1, None, True, retry_fallback, True, False, 40 + rng.randrange(21)),
+            RetryState(1, 3, wait_deadline, "HTTP_429", 1, wait_after, True, wait_fallback, True, False, 40 + rng.randrange(21)),
+            RetryState(2, 3, fallback_deadline, "HTTP_429", 1, fallback_recovery, True, fallback_utility, True, False, 20 + rng.randrange(21)),
+            RetryState(3, 3, 300 + rng.randrange(201), "HTTP_503", 1, None, False, 0, True, False, checkpoint_value),
+            RetryState(4, 3, 300 + rng.randrange(201), "HTTP_503", 0, None, False, 0, False, True, terminate_value),
+        )
 
     @property
     def state(self) -> RetryState:

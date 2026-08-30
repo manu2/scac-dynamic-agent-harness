@@ -1,0 +1,219 @@
+[
+  {
+    "action": "terminate",
+    "action_values": {
+      "checkpoint": 47,
+      "fallback": 22,
+      "retry": 22,
+      "terminate": 52,
+      "wait": 0
+    },
+    "outcome": {
+      "action": "terminate",
+      "completed_work": false,
+      "terminal": false,
+      "utility": 52,
+      "violation": null
+    },
+    "regret": 0,
+    "state": {
+      "checkpoint_available": false,
+      "checkpoint_recovery_utility": 52,
+      "checkpointed": true,
+      "deadline_remaining_ms": 403,
+      "decision_steps_remaining": 3,
+      "fallback_available": false,
+      "fallback_utility": 0,
+      "primary_status": "HTTP_503",
+      "remaining_quota": 0,
+      "retry_after_ms": null,
+      "work_item": 0
+    }
+  },
+  {
+    "action": "retry",
+    "action_values": {
+      "checkpoint": 95,
+      "fallback": 57,
+      "retry": 100,
+      "terminate": 0,
+      "wait": 0
+    },
+    "outcome": {
+      "action": "retry",
+      "completed_work": true,
+      "terminal": false,
+      "utility": 100,
+      "violation": null
+    },
+    "regret": 0,
+    "state": {
+      "checkpoint_available": true,
+      "checkpoint_recovery_utility": 51,
+      "checkpointed": false,
+      "deadline_remaining_ms": 1213,
+      "decision_steps_remaining": 3,
+      "fallback_available": true,
+      "fallback_utility": 57,
+      "primary_status": "OK",
+      "remaining_quota": 1,
+      "retry_after_ms": null,
+      "work_item": 1
+    }
+  },
+  {
+    "action": "fallback",
+    "action_values": {
+      "checkpoint": 50,
+      "fallback": 55,
+      "retry": 25,
+      "terminate": 0,
+      "wait": 0
+    },
+    "outcome": {
+      "action": "fallback",
+      "completed_work": true,
+      "terminal": false,
+      "utility": 55,
+      "violation": null
+    },
+    "regret": 0,
+    "state": {
+      "checkpoint_available": true,
+      "checkpoint_recovery_utility": 29,
+      "checkpointed": false,
+      "deadline_remaining_ms": 389,
+      "decision_steps_remaining": 3,
+      "fallback_available": true,
+      "fallback_utility": 55,
+      "primary_status": "HTTP_429",
+      "remaining_quota": 1,
+      "retry_after_ms": 980,
+      "work_item": 2
+    }
+  },
+  {
+    "action": "wait",
+    "action_values": {
+      "checkpoint": 90,
+      "fallback": 66,
+      "retry": 65,
+      "terminate": 0,
+      "wait": 95
+    },
+    "outcome": {
+      "action": "wait",
+      "completed_work": false,
+      "terminal": false,
+      "utility": -5,
+      "violation": null
+    },
+    "regret": 0,
+    "state": {
+      "checkpoint_available": true,
+      "checkpoint_recovery_utility": 40,
+      "checkpointed": false,
+      "deadline_remaining_ms": 1173,
+      "decision_steps_remaining": 3,
+      "fallback_available": true,
+      "fallback_utility": 66,
+      "primary_status": "HTTP_429",
+      "remaining_quota": 1,
+      "retry_after_ms": 294,
+      "work_item": 3
+    }
+  },
+  {
+    "action": "retry",
+    "action_values": {
+      "checkpoint": 95,
+      "fallback": 66,
+      "retry": 100,
+      "terminate": 0,
+      "wait": 0
+    },
+    "outcome": {
+      "action": "retry",
+      "completed_work": true,
+      "terminal": false,
+      "utility": 100,
+      "violation": null
+    },
+    "regret": 0,
+    "state": {
+      "checkpoint_available": true,
+      "checkpoint_recovery_utility": 40,
+      "checkpointed": false,
+      "deadline_remaining_ms": 879,
+      "decision_steps_remaining": 2,
+      "fallback_available": true,
+      "fallback_utility": 66,
+      "primary_status": "OK",
+      "remaining_quota": 1,
+      "retry_after_ms": null,
+      "work_item": 3
+    }
+  },
+  {
+    "action": "checkpoint",
+    "action_values": {
+      "checkpoint": 49,
+      "fallback": 19,
+      "retry": 29,
+      "terminate": 0,
+      "wait": 0
+    },
+    "outcome": {
+      "action": "checkpoint",
+      "completed_work": false,
+      "terminal": false,
+      "utility": -5,
+      "violation": null
+    },
+    "regret": 0,
+    "state": {
+      "checkpoint_available": true,
+      "checkpoint_recovery_utility": 54,
+      "checkpointed": false,
+      "deadline_remaining_ms": 436,
+      "decision_steps_remaining": 3,
+      "fallback_available": false,
+      "fallback_utility": 0,
+      "primary_status": "HTTP_503",
+      "remaining_quota": 1,
+      "retry_after_ms": null,
+      "work_item": 4
+    }
+  },
+  {
+    "action": "terminate",
+    "action_values": {
+      "checkpoint": 49,
+      "fallback": 24,
+      "retry": 34,
+      "terminate": 54,
+      "wait": 0
+    },
+    "outcome": {
+      "action": "terminate",
+      "completed_work": false,
+      "terminal": true,
+      "utility": 54,
+      "violation": null
+    },
+    "regret": 0,
+    "state": {
+      "checkpoint_available": false,
+      "checkpoint_recovery_utility": 54,
+      "checkpointed": true,
+      "deadline_remaining_ms": 436,
+      "decision_steps_remaining": 2,
+      "fallback_available": false,
+      "fallback_utility": 0,
+      "primary_status": "HTTP_503",
+      "remaining_quota": 1,
+      "retry_after_ms": null,
+      "work_item": 4
+    }
+  }
+]

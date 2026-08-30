@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from pathlib import Path
 
 import pytest
@@ -96,6 +97,21 @@ def test_retry_budget_is_seed_deterministic() -> None:
     assert rollout_oracle_policy(17) == rollout_oracle_policy(17)
 
 
+def test_seeds_vary_observable_magnitudes_without_losing_unique_best_actions() -> None:
+    first = RetryBudgetSimulator(seed=1).initial_states
+    second = RetryBudgetSimulator(seed=2).initial_states
+    first_signatures = {
+        (state.deadline_remaining_ms, state.retry_after_ms, state.fallback_utility, state.checkpoint_recovery_utility)
+        for state in first
+    }
+    second_signatures = {
+        (state.deadline_remaining_ms, state.retry_after_ms, state.fallback_utility, state.checkpoint_recovery_utility)
+        for state in second
+    }
+    assert first_signatures != second_signatures
+    assert all(len(RetryBudgetOracle.best_actions(state)) == 1 for state in (*first, *second))
+
+
 def test_retry_budget_calibration_is_archived_before_actions(tmp_path: Path) -> None:
     record = record_calibration(tmp_path, RetryBudgetSimulator(seed=5))
     manifest = json.loads((record / "manifest.json").read_text())
@@ -103,3 +119,9 @@ def test_retry_budget_calibration_is_archived_before_actions(tmp_path: Path) -> 
     assert manifest["scenario"] == "RetryBudget-v0.2"
     assert {row["action"] for row in trajectory} == set(RetryBudgetOracle.ACTIONS)
     assert all(row["regret"] == 0 for row in trajectory)
+    finalization = json.loads((record / "finalization.json").read_text())
+    assert finalization["classification"] == "COMPLETED"
+    assert finalization["artifact_sha256"] == {
+        filename: hashlib.sha256((record / filename).read_bytes()).hexdigest()
+        for filename in ("manifest.json", "trajectory.json")
+    }

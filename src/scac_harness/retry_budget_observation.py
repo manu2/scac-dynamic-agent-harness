@@ -16,7 +16,6 @@ from scac_harness.scenarios.retry_budget import RetryAction, RetryBudgetOracle, 
 RetryBudgetCondition = Literal["A", "B", "C"]
 _CONDITIONS: tuple[RetryBudgetCondition, ...] = ("A", "B", "C")
 _FIELD_NAMES: tuple[str, ...] = (
-    "work_item",
     "decision_steps_remaining",
     "deadline_remaining_ms",
     "primary_status",
@@ -40,8 +39,8 @@ class RetryBudgetObservationModel:
     value_corruption_probability: float = 0.0
 
     def __post_init__(self) -> None:
-        if self.delivery_delay_ms < 0:
-            raise ValueError("delivery_delay_ms must be non-negative")
+        if self.delivery_delay_ms != 0:
+            raise ValueError("non-zero delivery delay is not calibrated for RetryBudget v0.2")
         for value in (self.missing_field_probability, self.value_corruption_probability):
             if not 0.0 <= value < 1.0:
                 raise ValueError("observation probabilities must be in [0, 1)")
@@ -67,7 +66,9 @@ def observable_projection(state: RetryState, model: RetryBudgetObservationModel)
     """
     if model.missing_field_probability != 0.0 or model.value_corruption_probability != 0.0:
         raise NotImplementedError("RetryBudget v0.2 non-zero observation perturbation is not calibrated")
-    projection = asdict(state)
+    # ``work_item`` is simulator bookkeeping, not an oracle input. It must not
+    # become an accidental visible code for the underlying action regime.
+    projection = {name: value for name, value in asdict(state).items() if name != "work_item"}
     projection["observation_source"] = model.version
     projection["delivery_delay_ms"] = model.delivery_delay_ms
     projection["state_delivery"] = "independent_full_checkpoint"

@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import hashlib
 import json
+import os
 from pathlib import Path
 import re
 from uuid import uuid4
@@ -27,4 +29,18 @@ def archive_calibration(
         with (directory / filename).open("x", encoding="utf-8") as handle:
             json.dump(value, handle, indent=2, sort_keys=True)
             handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+    # Provider trajectories already use a terminal hash manifest. G2
+    # calibrations must have the same tamper-evident closeout so a later review
+    # can distinguish a complete calibration from an interrupted write.
+    artifact_hashes = {
+        filename: hashlib.sha256((directory / filename).read_bytes()).hexdigest()
+        for filename in ("manifest.json", "trajectory.json")
+    }
+    with (directory / "finalization.json").open("x", encoding="utf-8") as handle:
+        json.dump({"classification": "COMPLETED", "artifact_sha256": artifact_hashes}, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+        handle.flush()
+        os.fsync(handle.fileno())
     return directory

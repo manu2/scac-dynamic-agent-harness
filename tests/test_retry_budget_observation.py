@@ -38,6 +38,7 @@ def test_a_has_no_host_state_and_c_exposes_oracle_inputs() -> None:
     assert projection["primary_status"] == state.primary_status
     assert projection["retry_after_ms"] == state.retry_after_ms
     assert projection["checkpoint_recovery_utility"] == state.checkpoint_recovery_utility
+    assert "work_item" not in projection
 
 
 def test_option_positions_are_balanced_across_five_adjacent_seeds() -> None:
@@ -56,3 +57,5 @@ def test_uncalibrated_observation_noise_fails_closed() -> None:
         observable_projection(
             _state(), RetryBudgetObservationModel(missing_field_probability=0.1)
         )
+    with pytest.raises(ValueError, match="delivery delay"):
+        RetryBudgetObservationModel(delivery_delay_ms=1)

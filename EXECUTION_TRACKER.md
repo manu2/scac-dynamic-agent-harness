@@ -822,3 +822,32 @@
 - No provider adapter, authorization, manifest, observation-noise calibration,
   or agent-result inclusion rule has been added. RetryBudget remains blocked
   from fresh-subagent and provider collection pending its readiness packet.
+
+### 2026-08-31 — RetryBudget v0.2 pre-provider hardening and self-audit
+
+- Completed a ToolRoute-informed, scenario-owned self-review without any
+  provider or subagent call. The main methodological correction is that this
+  multi-step lifecycle scores primary performance as **realized episode utility
+  versus oracle episode utility**; local dynamic-program action gaps remain
+  diagnostics and are not summed.
+- Fixed pre-trial risks: seeds now vary visible state magnitudes rather than
+  only reorder templates; simulator bookkeeping `work_item` is excluded from
+  the model-visible C state; non-zero delay/missingness/corruption fails closed;
+  a provider runner rechecks provenance and manifest authorization before every
+  generation; and G2 archives now carry fsynced terminal SHA-256 finalization.
+- Added a scenario-owned reservation-first provider runner, Gemini 3.7 Flash
+  C-only seed-61 development manifest, and runbook. It validates endpoint,
+  adapter, no-native-tools/system-instruction policy, temperature, output cap,
+  exact labels, redacted provider/runner errors, and terminal artifacts before
+  any future transport request. `PROVENANCE.json` is explicitly false/null, so
+  the launcher fails before contacting a provider.
+- Recalibrated seed 61 with the hardened archive at
+  `experiments/g2-calibrations/retrybudget-v0-2/20260830T205316.217706Z-retrybudget-v0-2-b63c79c940a3479fa06481451fb92dab/`;
+  its two payload hashes verify. Across developer seeds 0--11, the observable
+  oracle totals 4,371 utility versus 2,007 for the strongest fixed policy
+  (54.1% gap). This is calibration only, not model evidence.
+- Local verification passed: **132 tests**, static compilation, and whitespace
+  checks. The independent review target is the frozen canary manifest digest
+  `1301282d9945f57556c5578f35dc84f26ef87043a209625eb1f7a5e8ae010d54`.
+  The only next provider action, if separately approved, is one development-only
+  Gemini C trajectory; it cannot enter a paper denominator.

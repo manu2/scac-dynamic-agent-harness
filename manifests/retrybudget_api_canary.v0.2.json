@@ -1,0 +1,39 @@
+{
+  "analysis_status": "development_only_not_paper_evidence",
+  "authorized_trajectory_grids": [
+    {
+      "conditions": [
+        "C"
+      ],
+      "model_id": "gemini-3.7-flash",
+      "provider_label": "google",
+      "seeds": [
+        61
+      ]
+    }
+  ],
+  "description": "One full C-only RetryBudget v0.2 trajectory to validate direct Gemini transport, exact-label parsing, state progression, and finalization before any A/B/C pilot. This is development-only and excluded from every paper denominator.",
+  "expected_trajectory_count": 1,
+  "max_provider_generations": 7,
+  "provider_request_expectations": [
+    {
+      "adapter": "gemini_generate_content_v1",
+      "endpoint_suffix": "/models/gemini-3.7-flash:generateContent",
+      "forbidden_body_fields": [
+        "tools",
+        "systemInstruction"
+      ],
+      "model_id": "gemini-3.7-flash",
+      "provider_label": "google",
+      "required_body_fields": {
+        "generationConfig": {
+          "maxOutputTokens": 16,
+          "temperature": 0.0
+        }
+      }
+    }
+  ],
+  "scenario": "RetryBudget-v0.2",
+  "state_delivery": "independent_full_checkpoint_only",
+  "version": "retrybudget-api-canary-v0.2"
+}
