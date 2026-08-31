@@ -101,6 +101,69 @@ service remediation), many uncontrolled service dependencies, substantial setup
 time, and an incompatible oracle. It would therefore dilute rather than
 strengthen the clean ToolRoute question.
 
+## Practical harness assessment and complexity
+
+The existing SCAC harness is sufficient for a **transport-realistic controlled
+replication**, not a production agent platform. That is the appropriate target.
+It already owns the causal boundaries required by the paper: condition rendering,
+host-only reduction, a tool executor, external evaluation, reservation-first
+archives, and finalization hashes. It also already contains a native local HTTP
+span capture path and a Toxiproxy transport strategy.
+
+The missing work is a small integration adapter, not a new agent framework:
+
+1. Replace the current direct HTTP-event construction for this extension with
+   an OpenTelemetry-instrumented HTTP client and local span exporter.
+2. Add a pure span-to-ToolRoute adapter that maps only the standard fields in
+   the table above, preserving raw spans and a reducer-input record.
+3. Add a persistent coordinator that owns two loopback services and proxies
+   from monitor through selected action. Its visible task can be a normal
+   read-only redundant-API task: retrieve the same customer/order record from
+   either of two schema-compatible regional endpoints.
+4. Add model-free lifecycle, redaction, order-balance, and oracle-margin tests;
+   only then freeze a separate provider manifest.
+
+This is **low-to-medium complexity** (roughly one focused engineering day),
+because it extends existing boundaries. It does *not* need Docker, Kubernetes,
+the OpenTelemetry Collector, an external vendor, or a complete agent framework.
+
+| Candidate | What it establishes | Complexity now | Decision |
+|---|---|---:|---|
+| Native local HTTP + OTel SDK + Toxiproxy | Real socket calls, standard spans, controlled faults, host-to-agent state reduction | Low-medium | **Recommended** |
+| MCP server plus provider-native function-calling loop | Modern protocol/tool-call mechanics in addition to telemetry | Medium-high; provider-specific schemas and loop semantics | Defer |
+| Testcontainers + Toxiproxy | Containerized integration-test topology | Medium; requires Docker | Defer |
+| Astronomy Shop + Collector/Jaeger/Prometheus | Multi-service production-like observability and diagnosis | High; changes task/oracle | Reject for this paper |
+| Kubernetes + Chaos Mesh | Pod, resource, DNS, and network chaos | Very high; Linux/Kubernetes control plane | Future work |
+
+The local machine currently has a runnable Toxiproxy binary but no visible
+Docker, Docker Compose, or Kubernetes command. That reinforces the minimal
+native path: Testcontainers and Chaos Mesh would require environment setup in
+addition to experiment work.
+
+### What is and is not realistic
+
+The services can be intentionally simple and still be useful. Each route returns
+the same read-only JSON record through a genuine HTTP request; they represent
+two regional replicas or a primary/fallback API. The *transport* is real TCP/HTTP,
+the telemetry is standard OTel span data, and the injected degradation uses a
+widely used chaos-testing proxy. The data payload and fault schedule are
+controlled so route utility remains auditable. This is a transport-realistic
+integration test, not a claim that the toy record service reproduces a complete
+production workload.
+
+Using a deliberately minimal harness is a strength here. A full framework can
+silently retry, choose fallback, cache responses, or rewrite tool calls; then a
+measured improvement cannot be attributed cleanly to agent-visible telemetry.
+The SCAC coordinator exposes only the strategic choice. Deterministic recovery
+and safety remain outside the model.
+
+MCP is relevant as a deployment adapter, not a prerequisite for the experiment:
+an MCP client would translate a discovered tool into the same HTTP call and the
+host-side snapshot policy would remain unchanged. Native provider function
+calling similarly changes action syntax, not the information treatment. Both
+are worthwhile later compatibility tests, but would add provider-specific
+confounds to this pre-approval replication.
+
 ## Sources
 
 - OpenTelemetry Python instrumentation libraries:

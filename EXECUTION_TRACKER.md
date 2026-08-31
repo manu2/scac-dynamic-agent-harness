@@ -823,3 +823,8 @@
   tractable route-selection question with diagnosis/remediation confounds.
   The retained candidate, its exact scope, lifecycle fix, claim boundary, and
   sources are in `docs/24_otel_transport_replication_research_note.md`.
+- Completed a practical complexity comparison: the native OTel-SDK plus
+  Toxiproxy path is a focused extension of existing boundaries; MCP/native
+  provider tool loops, Testcontainers, the Astronomy Shop, and Kubernetes chaos
+  are intentionally deferred because they change the experimental unit or need
+  unavailable environment infrastructure.
