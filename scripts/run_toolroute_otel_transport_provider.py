@@ -67,6 +67,13 @@ def main() -> None:
         regime=args.regime, toxiproxy_server=args.toxiproxy_server,
         experiments_root=args.experiments_root, condition=args.condition,
         decision_callback=decide, run_kind="provider_pilot",
+        run_metadata={
+            "provider_label": "google",
+            "model_id": args.model,
+            "pilot_manifest_path": str(args.manifest),
+            "pilot_manifest_sha256": authorization.manifest_sha256,
+            "authorization": "manifest_hash_bound_before_provider_request",
+        },
     )
     print(f"trial_directory={directory}")
 

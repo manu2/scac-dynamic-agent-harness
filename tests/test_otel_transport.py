@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from scac_harness.otel_transport_authorization import OTelTransportAuthorization
+from scac_harness.otel_transport_manifest import validate_cross_model_pilot_manifest
 from scac_harness.otel_transport import OTEL_HTTP_SOURCE, event_from_http_client_span
 
 
@@ -74,3 +75,13 @@ def test_transport_provider_authorization_is_separate_and_fail_closed(tmp_path: 
         authorization.verify_request_configuration(
             provider_label="google", model_id="gemini", request_record={"adapter": "test", "body": {"temperature": 0.0, "tools": []}},
         )
+
+
+def test_v02_transport_manifest_is_complete_and_rejects_triads_with_changed_order() -> None:
+    manifest_path = Path(__file__).parents[1] / "manifests" / "toolroute_otel_transport_pilot.v0.2.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    validate_cross_model_pilot_manifest(manifest)
+    changed = json.loads(json.dumps(manifest))
+    changed["authorized_episodes"][3]["option_order"] = ["tool_beta", "tool_alpha", "wait"]
+    with pytest.raises(ValueError, match="option order"):
+        validate_cross_model_pilot_manifest(changed)

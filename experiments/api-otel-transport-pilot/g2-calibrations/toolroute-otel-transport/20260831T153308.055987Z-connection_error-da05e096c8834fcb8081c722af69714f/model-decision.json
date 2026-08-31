@@ -1,0 +1,9 @@
+{
+  "decision_source": "external_subject",
+  "observable_best_actions": [
+    "tool_beta"
+  ],
+  "observable_margin_ms": 20001.71,
+  "policy_regret": 0.0,
+  "selected_action": "tool_beta"
+}

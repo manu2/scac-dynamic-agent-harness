@@ -1,7 +1,9 @@
 # Standards-based ToolRoute transport-replication research note
 
-**Status:** implemented and model-free validated on 2026-08-31. Provider
-authorization remains false; no provider request has been made on this path.
+**Status:** model-free validated and a nine-decision Gemini v0.1 provider
+pilot completed on 2026-09-01. Provider authorization is currently false. The
+v0.1 artifacts are preliminary integration evidence; a fresh, counterbalanced
+v0.2 cohort is required before cross-model reporting.
 
 ## Decision question
 
@@ -121,6 +123,31 @@ sanitized request/response, and report all attempts under the separate draft
 manifest. `scripts/run_toolroute_otel_transport_provider.py` exists for that
 stage and is fail-closed until the manifest SHA-256 is bound to the separate
 provenance authorization field.
+
+## Gemini v0.1 provider-pilot result and disposition
+
+Nine Gemini 3.7 Flash calls completed across the three regimes and A/B/C under
+`experiments/api-otel-transport-pilot/g2-calibrations/toolroute-otel-transport/`.
+Direct post-run audit verified every finalization hash, the six real OTel spans
+per episode, the parsed provider label, and the post-decision live action. The
+descriptive means were A 6,768.67 ms regret with 2/3 successful actions, B
+6,767.90 ms with 2/3, and C 0.00 ms with 3/3. In the latency and connection
+faults, C selected the reported healthy route; in the beta-503 fault all
+conditions selected the healthy alpha route.
+
+This is promising live integration evidence, but it is **not** a cross-model
+cohort. Audit found that v0.1 had an alpha-first listing pattern, an unbound
+episode-level authorization metadata record, and misleading self-reported
+external-subject check flags. The raw facts are retained rather than rewritten;
+they remain useful to demonstrate the end-to-end path. They are not pooled with
+the primary synthetic cohort or a later replication result.
+
+`manifests/toolroute_otel_transport_pilot.v0.2.json` and
+`docs/25_toolroute_otel_transport_v0_2_runbook.md` replace v0.1 for the fresh
+cross-provider replication. v0.2 locks route assignment, option order, model,
+provider, and per-model sequence before authorization, records the manifest and
+Toxiproxy binary hashes per episode, and separates infrastructure checks from
+the model's observed outcome.
 
 ## Why not the full OpenTelemetry Astronomy Shop demo?
 

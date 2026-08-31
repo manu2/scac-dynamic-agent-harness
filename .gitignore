@@ -7,5 +7,9 @@ dist/
 *.egg-info/
 .env
 
+# Local architecture-specific Toxiproxy executable. Each experiment records its
+# SHA-256; the binary itself is intentionally not part of source control.
+tools/toxiproxy-server
+
 # Raw experiments are retained, but transient scratch files are not.
 experiments/**/scratch/

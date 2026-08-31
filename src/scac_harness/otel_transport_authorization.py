@@ -55,7 +55,29 @@ class OTelTransportAuthorization:
         }
         episodes = manifest.get("authorized_episodes")
         if not isinstance(episodes, list) or target not in episodes:
-            raise PermissionError("episode is outside the frozen OTel transport manifest")
+            # v0.2+ manifest entries carry an immutable episode id and other
+            # execution fields in addition to the shared authorization tuple.
+            if not isinstance(episodes, list) or not any(
+                isinstance(item, Mapping) and all(item.get(key) == value for key, value in target.items())
+                for item in episodes
+            ):
+                raise PermissionError("episode is outside the frozen OTel transport manifest")
+
+    def episode_spec(self, *, episode_id: str) -> dict[str, object]:
+        """Return one fully declared execution spec after scope verification."""
+        manifest = json.loads(self.manifest_path.read_text(encoding="utf-8"))
+        episodes = manifest.get("authorized_episodes")
+        episode = next((item for item in episodes if isinstance(item, Mapping) and item.get("episode_id") == episode_id), None) if isinstance(episodes, list) else None
+        if not isinstance(episode, Mapping):
+            raise PermissionError("episode id is outside the frozen OTel transport manifest")
+        required = ("regime", "condition", "model_id", "provider_label", "faulted_tool", "option_order", "sequence")
+        if any(key not in episode for key in required):
+            raise PermissionError("frozen episode specification is incomplete")
+        self.verify_episode(
+            regime=str(episode["regime"]), condition=str(episode["condition"]),
+            model_id=str(episode["model_id"]), provider_label=str(episode["provider_label"]),
+        )
+        return {str(key): value for key, value in episode.items()}
 
     def verify_request_configuration(
         self, *, provider_label: str, model_id: str, request_record: Mapping[str, object],

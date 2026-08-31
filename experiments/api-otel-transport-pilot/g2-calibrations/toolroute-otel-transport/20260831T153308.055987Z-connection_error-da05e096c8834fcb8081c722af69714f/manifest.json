@@ -1,0 +1,17 @@
+{
+  "condition": "C",
+  "coordinator": "single_process_persistent_backend_toxiproxy_otel_v0.1",
+  "fault_schedule": {
+    "enabled": false,
+    "proxy": "alpha"
+  },
+  "instrumentation": "opentelemetry-instrumentation-requests",
+  "kind": "toolroute_otel_transport_provider_pilot_v0.1",
+  "not_pooled_with_toolroute_v1.0": true,
+  "not_provider_evidence": true,
+  "primary_oracle": "observable_monitor_cost_v0.6",
+  "probes_per_tool": 3,
+  "reducer_source_required": "otel_requests_http_client_span_v1",
+  "regime": "connection_error",
+  "scenario": "ToolRoute-OTel-Transport-v0.1"
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": "toolroute-otel-transport-pilot-v0.1",
-  "status": "DRAFT_NOT_AUTHORIZED",
+  "status": "COMPLETED_REVOKED_PRELIMINARY",
   "purpose": "Separate, socket-backed ToolRoute replication pilot. It is excluded from the frozen synthetic v1.0 cohort and must never be pooled with it.",
   "design": {
     "episode_mode": "independent_single_decision_persistent_transport_coordinator",

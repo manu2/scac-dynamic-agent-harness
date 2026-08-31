@@ -20,7 +20,7 @@ import socket
 import subprocess
 from threading import Thread
 import time
-from typing import Callable, Literal
+from typing import Callable, Literal, Mapping
 from uuid import uuid4
 
 from scac_harness.http_tools import ToxiproxyClient
@@ -102,11 +102,11 @@ def _wait_ready(base_url: str, process: subprocess.Popen[bytes]) -> None:
     raise TimeoutError("toxiproxy-server did not become ready")
 
 
-def _task() -> str:
+def _task(options: tuple[str, str, str]) -> str:
     return (
         "Task: retrieve customer record C-042. tool_alpha and tool_beta expose the same read-only record API. "
         "Return exactly one listed action label and no other text.\n"
-        "Options: tool_alpha, tool_beta, wait\n"
+        "Options: " + ", ".join(options) + "\n"
     )
 
 
@@ -124,8 +124,8 @@ def _neutral_telemetry(rendered: str) -> str:
     return "\n".join(lines)
 
 
-def _condition_inputs(snapshot: dict[str, object]) -> dict[str, dict[str, object]]:
-    task = _task()
+def _condition_inputs(snapshot: dict[str, object], *, options: tuple[str, str, str]) -> dict[str, dict[str, object]]:
+    task = _task(options)
     rendered = render_tier2_envelope(snapshot)
     return {
         "A": {"prompt": task, "visible_snapshot": None},
@@ -141,12 +141,24 @@ def _run_regime(
     *, regime: Regime, toxiproxy_server: Path, experiments_root: Path,
     condition: Condition = "C", decision_callback: DecisionCallback | None = None,
     run_kind: str = "model_free_calibration",
+    faulted_tool: str | None = None,
+    option_order: tuple[str, str, str] = _ACTIONS,
+    run_metadata: Mapping[str, object] | None = None,
 ) -> Path:
+    if faulted_tool is None:
+        faulted_tool = "tool_beta" if regime == "http_error" else "tool_alpha"
+    if faulted_tool not in {"tool_alpha", "tool_beta"}:
+        raise ValueError("faulted_tool must be tool_alpha or tool_beta")
+    if len(option_order) != len(_ACTIONS) or set(option_order) != set(_ACTIONS):
+        raise ValueError("option_order must contain each action exactly once")
+    if not toxiproxy_server.is_file() or not os.access(toxiproxy_server, os.X_OK):
+        raise ValueError("toxiproxy_server must name an executable local binary")
+    toxiproxy_sha256 = hashlib.sha256(toxiproxy_server.read_bytes()).hexdigest()
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     directory = experiments_root / "g2-calibrations" / "toolroute-otel-transport" / f"{stamp}-{regime}-{uuid4().hex}"
     directory.mkdir(parents=True, mode=0o700)
-    alpha_status = 200
-    beta_status = 503 if regime == "http_error" else 200
+    alpha_status = 503 if regime == "http_error" and faulted_tool == "tool_alpha" else 200
+    beta_status = 503 if regime == "http_error" and faulted_tool == "tool_beta" else 200
     alpha_backend, _ = _start_backend(alpha_status)
     beta_backend, _ = _start_backend(beta_status)
     admin_port, alpha_port, beta_port = _free_port(), _free_port(), _free_port()
@@ -160,20 +172,25 @@ def _run_regime(
             "kind": f"toolroute_otel_transport_{run_kind}_v0.1",
             "scenario": "ToolRoute-OTel-Transport-v0.1",
             "regime": regime,
-            "not_provider_evidence": True,
+            "evidence_class": "model_free_transport_positive_control" if decision_callback is None else "provider_transport_pilot",
             "not_pooled_with_toolroute_v1.0": True,
             "coordinator": "single_process_persistent_backend_toxiproxy_otel_v0.1",
             "instrumentation": "opentelemetry-instrumentation-requests",
+            "toxiproxy_binary_sha256": toxiproxy_sha256,
             "reducer_source_required": "otel_requests_http_client_span_v1",
             "probes_per_tool": _PROBES_PER_TOOL,
             "condition": condition,
+            "option_order": list(option_order),
+            "faulted_tool": faulted_tool,
             "fault_schedule": {
-                "latency": {"proxy": "alpha", "latency_ms": 300},
-                "connection_error": {"proxy": "alpha", "enabled": False},
-                "http_error": {"backend": "beta", "http_status": 503},
+                "latency": {"proxy": faulted_tool.removeprefix("tool_"), "latency_ms": 300},
+                "connection_error": {"proxy": faulted_tool.removeprefix("tool_"), "enabled": False},
+                "http_error": {"backend": faulted_tool.removeprefix("tool_"), "http_status": 503},
             }[regime],
             "primary_oracle": "observable_monitor_cost_v0.6",
         }
+        if run_metadata is not None:
+            manifest["provider_run"] = dict(run_metadata)
         _write_once(directory, "manifest.json", manifest)
         process = subprocess.Popen(
             [str(toxiproxy_server), "-host", "127.0.0.1", "-port", str(admin_port)],
@@ -183,10 +200,11 @@ def _run_regime(
         _wait_ready(admin_url, process)
         client.create_proxy(name="alpha", listen=f"127.0.0.1:{alpha_port}", upstream=f"127.0.0.1:{alpha_backend.server_port}")
         client.create_proxy(name="beta", listen=f"127.0.0.1:{beta_port}", upstream=f"127.0.0.1:{beta_backend.server_port}")
+        proxy_name = faulted_tool.removeprefix("tool_")
         if regime == "latency":
-            client.add_latency(proxy="alpha", latency_ms=300)
+            client.add_latency(proxy=proxy_name, latency_ms=300)
         elif regime == "connection_error":
-            client.set_enabled(proxy="alpha", enabled=False)
+            client.set_enabled(proxy=proxy_name, enabled=False)
 
         urls = {"tool_alpha": f"http://127.0.0.1:{alpha_port}/customer/C-042", "tool_beta": f"http://127.0.0.1:{beta_port}/customer/C-042"}
         monitor_results: list[OTelHTTPToolResult] = []
@@ -199,7 +217,7 @@ def _run_regime(
                 trajectory_id=f"toolroute-otel-transport-{regime}", seq=0, events=events,
                 observed_at_ms=max(event.timestamp_ms for event in events),
             )
-            condition_inputs = _condition_inputs(snapshot)
+            condition_inputs = _condition_inputs(snapshot, options=option_order)
             best_actions = ToolRouteOracle.observable_best_actions(snapshot)
             if len(best_actions) != 1:
                 raise RuntimeError("transport calibration requires one observable best action")
@@ -229,6 +247,7 @@ def _run_regime(
             "observable_best_actions": sorted(best_actions),
             "observable_margin_ms": ToolRouteOracle.observable_margin(snapshot),
             "policy_regret": ToolRouteOracle.observable_regret(snapshot, selected_action),
+            "selected_action_is_observable_best": selected_action in best_actions,
         })
         if action_result is not None:
             _write_once(directory, "raw-otel-action-span.json", {"tool_id": action_result.tool_id, "span": action_result.raw_span})
@@ -243,17 +262,15 @@ def _run_regime(
         assert isinstance(tool_state, dict)
         b_tool_lines = [line for line in str(condition_inputs["B"]["prompt"]).splitlines() if line.startswith("  tool_")]
         c_tool_lines = [line for line in str(condition_inputs["C"]["prompt"]).splitlines() if line.startswith("  tool_")]
-        checks = {
+        infrastructure_checks = {
             "each_tool_has_three_standard_otel_spans": all(
                 sum(result.tool_id == tool for result in monitor_results) == _PROBES_PER_TOOL for tool in urls
             ),
             "every_reducer_event_is_otel_derived": all(event.source == "otel_requests_http_client_span_v1" for event in events),
             "observable_margin_is_actionable": ToolRouteOracle.observable_margin(snapshot) >= _MIN_MARGIN_MS,
-            "oracle_selected_action_has_zero_regret": ToolRouteOracle.observable_regret(snapshot, selected_action) == 0.0 if decision_callback is None else True,
-            "live_action_matches_telemetry_selection": action_result is not None and action_result.event.payload["success"] is True if decision_callback is None else True,
-            "latency_fault_observed": regime != "latency" or float(tool_state["tool_alpha"]["latency_ewma_ms"]) >= 250.0,
-            "connection_fault_observed": regime != "connection_error" or tool_state["tool_alpha"]["last_error"] == "CONNECTION_ERROR",
-            "http_fault_observed": regime != "http_error" or tool_state["tool_beta"]["last_error"] == "HTTP_503",
+            "latency_fault_observed": regime != "latency" or float(tool_state[faulted_tool]["latency_ewma_ms"]) >= 250.0,
+            "connection_fault_observed": regime != "connection_error" or tool_state[faulted_tool]["last_error"] == "CONNECTION_ERROR",
+            "http_fault_observed": regime != "http_error" or tool_state[faulted_tool]["last_error"] == "HTTP_503",
             "neutral_control_has_same_tool_lines": all(
                 marker in str(condition_inputs["B"]["prompt"])
                 for marker in ("tool_alpha: window=3", "tool_beta: window=3")
@@ -268,9 +285,18 @@ def _run_regime(
                 and condition_inputs["C"]["visible_snapshot"] == snapshot
             ),
         }
-        if not all(checks.values()):
-            raise RuntimeError(f"transport calibration checks failed: {checks}")
-        _write_once(directory, "result.json", {"classification": "COMPLETED", "checks": checks})
+        outcome = {
+            "selected_action_is_observable_best": selected_action in best_actions,
+            "policy_regret": ToolRouteOracle.observable_regret(snapshot, selected_action),
+            "live_action_executed": action_result is not None,
+            "live_action_success": bool(action_result and action_result.event.payload["success"] is True),
+            "live_action_status_code": action_result.status_code if action_result is not None else None,
+        }
+        if not all(infrastructure_checks.values()):
+            raise RuntimeError(f"transport calibration checks failed: {infrastructure_checks}")
+        _write_once(directory, "result.json", {
+            "classification": "COMPLETED", "infrastructure_checks": infrastructure_checks, "outcome": outcome,
+        })
         classification = "COMPLETED"
     except Exception as exc:
         raised = exc

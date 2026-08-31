@@ -1,0 +1,26 @@
+{
+  "span": {
+    "attributes": {
+      "http.method": "GET",
+      "http.status_code": 200,
+      "http.url": "http://127.0.0.1:51423/customer/C-042",
+      "user_agent.original": "python-requests/2.34.2"
+    },
+    "end_time_unix_nano": 1788190429630820000,
+    "events": [],
+    "kind": "SpanKind.CLIENT",
+    "name": "GET",
+    "resource": {
+      "service.instance.id": "17fded5d-6f55-447b-8b13-7ced56ef11f3",
+      "service.name": "scac-toolroute-transport",
+      "telemetry.sdk.language": "python",
+      "telemetry.sdk.name": "opentelemetry",
+      "telemetry.sdk.version": "1.44.0"
+    },
+    "span_id": "e0817275196fb2e4",
+    "start_time_unix_nano": 1788190429629309000,
+    "status_code": "StatusCode.UNSET",
+    "trace_id": "e919fe5ba963b41fd24ec84567aab642"
+  },
+  "tool_id": "tool_alpha"
+}

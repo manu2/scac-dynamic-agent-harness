@@ -1,0 +1,62 @@
+{
+  "schema_version": "toolroute-otel-transport-pilot-v0.2",
+  "status": "DRAFT_NOT_AUTHORIZED",
+  "purpose": "Fresh, separately reported cross-provider OTel/Toxiproxy integration replication. It supersedes the v0.1 Gemini-only pilot for any cross-model comparison and is never pooled with ToolRoute v1.0.",
+  "design": {
+    "episode_mode": "independent_single_decision_persistent_transport_coordinator",
+    "telemetry_source": "OpenTelemetry Requests HTTP client spans via local in-memory exporter",
+    "fault_injector": "Toxiproxy local TCP proxy",
+    "monitor_probes_per_tool": 3,
+    "conditions": ["A", "B", "C"],
+    "regimes": ["latency", "connection_error", "http_error"],
+    "primary_oracle": "observable_monitor_cost_v0.6",
+    "state_delivery": "independent_full_checkpoint_only",
+    "provider_tools": "none",
+    "retry_policy": "no harness retries",
+    "execution_rule": "run the nine declared episodes for one model in ascending sequence; retain every attempt; do not rerun or substitute an episode",
+    "analysis_boundary": "integration replication only; report separately and do not alter the primary synthetic cohort claim"
+  },
+  "authorized_episodes": [
+    {"episode_id":"gemini-00-connection-c","sequence":0,"provider_label":"google","model_id":"gemini-3.7-flash","regime":"connection_error","condition":"C","faulted_tool":"tool_beta","option_order":["tool_beta","tool_alpha","wait"]},
+    {"episode_id":"gemini-01-latency-a","sequence":1,"provider_label":"google","model_id":"gemini-3.7-flash","regime":"latency","condition":"A","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"gemini-02-http-b","sequence":2,"provider_label":"google","model_id":"gemini-3.7-flash","regime":"http_error","condition":"B","faulted_tool":"tool_alpha","option_order":["tool_beta","tool_alpha","wait"]},
+    {"episode_id":"gemini-03-latency-c","sequence":3,"provider_label":"google","model_id":"gemini-3.7-flash","regime":"latency","condition":"C","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"gemini-04-connection-a","sequence":4,"provider_label":"google","model_id":"gemini-3.7-flash","regime":"connection_error","condition":"A","faulted_tool":"tool_beta","option_order":["tool_beta","tool_alpha","wait"]},
+    {"episode_id":"gemini-05-http-c","sequence":5,"provider_label":"google","model_id":"gemini-3.7-flash","regime":"http_error","condition":"C","faulted_tool":"tool_alpha","option_order":["tool_beta","tool_alpha","wait"]},
+    {"episode_id":"gemini-06-latency-b","sequence":6,"provider_label":"google","model_id":"gemini-3.7-flash","regime":"latency","condition":"B","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"gemini-07-connection-b","sequence":7,"provider_label":"google","model_id":"gemini-3.7-flash","regime":"connection_error","condition":"B","faulted_tool":"tool_beta","option_order":["tool_beta","tool_alpha","wait"]},
+    {"episode_id":"gemini-08-http-a","sequence":8,"provider_label":"google","model_id":"gemini-3.7-flash","regime":"http_error","condition":"A","faulted_tool":"tool_alpha","option_order":["tool_beta","tool_alpha","wait"]},
+
+    {"episode_id":"sonnet-00-latency-b","sequence":0,"provider_label":"anthropic","model_id":"claude-sonnet-5","regime":"latency","condition":"B","faulted_tool":"tool_beta","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"sonnet-01-http-a","sequence":1,"provider_label":"anthropic","model_id":"claude-sonnet-5","regime":"http_error","condition":"A","faulted_tool":"tool_beta","option_order":["tool_beta","tool_alpha","wait"]},
+    {"episode_id":"sonnet-02-connection-c","sequence":2,"provider_label":"anthropic","model_id":"claude-sonnet-5","regime":"connection_error","condition":"C","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"sonnet-03-latency-c","sequence":3,"provider_label":"anthropic","model_id":"claude-sonnet-5","regime":"latency","condition":"C","faulted_tool":"tool_beta","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"sonnet-04-http-b","sequence":4,"provider_label":"anthropic","model_id":"claude-sonnet-5","regime":"http_error","condition":"B","faulted_tool":"tool_beta","option_order":["tool_beta","tool_alpha","wait"]},
+    {"episode_id":"sonnet-05-connection-a","sequence":5,"provider_label":"anthropic","model_id":"claude-sonnet-5","regime":"connection_error","condition":"A","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"sonnet-06-latency-a","sequence":6,"provider_label":"anthropic","model_id":"claude-sonnet-5","regime":"latency","condition":"A","faulted_tool":"tool_beta","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"sonnet-07-http-c","sequence":7,"provider_label":"anthropic","model_id":"claude-sonnet-5","regime":"http_error","condition":"C","faulted_tool":"tool_beta","option_order":["tool_beta","tool_alpha","wait"]},
+    {"episode_id":"sonnet-08-connection-b","sequence":8,"provider_label":"anthropic","model_id":"claude-sonnet-5","regime":"connection_error","condition":"B","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]},
+
+    {"episode_id":"gpt-00-http-c","sequence":0,"provider_label":"openai","model_id":"gpt-5.6-sol","regime":"http_error","condition":"C","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"gpt-01-connection-a","sequence":1,"provider_label":"openai","model_id":"gpt-5.6-sol","regime":"connection_error","condition":"A","faulted_tool":"tool_beta","option_order":["tool_beta","tool_alpha","wait"]},
+    {"episode_id":"gpt-02-latency-b","sequence":2,"provider_label":"openai","model_id":"gpt-5.6-sol","regime":"latency","condition":"B","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"gpt-03-http-a","sequence":3,"provider_label":"openai","model_id":"gpt-5.6-sol","regime":"http_error","condition":"A","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"gpt-04-connection-c","sequence":4,"provider_label":"openai","model_id":"gpt-5.6-sol","regime":"connection_error","condition":"C","faulted_tool":"tool_beta","option_order":["tool_beta","tool_alpha","wait"]},
+    {"episode_id":"gpt-05-latency-a","sequence":5,"provider_label":"openai","model_id":"gpt-5.6-sol","regime":"latency","condition":"A","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"gpt-06-http-b","sequence":6,"provider_label":"openai","model_id":"gpt-5.6-sol","regime":"http_error","condition":"B","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]},
+    {"episode_id":"gpt-07-connection-b","sequence":7,"provider_label":"openai","model_id":"gpt-5.6-sol","regime":"connection_error","condition":"B","faulted_tool":"tool_beta","option_order":["tool_beta","tool_alpha","wait"]},
+    {"episode_id":"gpt-08-latency-c","sequence":8,"provider_label":"openai","model_id":"gpt-5.6-sol","regime":"latency","condition":"C","faulted_tool":"tool_alpha","option_order":["tool_alpha","tool_beta","wait"]}
+  ],
+  "provider_request_expectations": [
+    {"provider_label":"google","model_id":"gemini-3.7-flash","adapter":"gemini_generate_content_v1","required_body_fields":{"generationConfig":{"temperature":0.0,"maxOutputTokens":1024}},"forbidden_body_fields":["tools","tool_choice","function_call","functions"]},
+    {"provider_label":"anthropic","model_id":"claude-sonnet-5","adapter":"anthropic_messages_v1","required_body_fields":{"model":"claude-sonnet-5","max_tokens":1024},"forbidden_body_fields":["temperature","tools","tool_choice","function_call","functions"]},
+    {"provider_label":"openai","model_id":"gpt-5.6-sol","adapter":"openai_chat_completions_v1","required_body_fields":{"model":"gpt-5.6-sol","max_completion_tokens":1024},"forbidden_body_fields":["temperature","tools","tool_choice","function_call","functions"]}
+  ],
+  "precall_gate": [
+    "The v0.1 Gemini pilot is retained as preliminary integration evidence only and is not pooled with this cohort.",
+    "All three model-free OTel/Toxiproxy controls have valid finalization hashes.",
+    "A separate reviewer approves this exact manifest and its SHA-256 is bound in PROVENANCE.json.",
+    "The cohort runner reads a declared episode id; it must not accept ad hoc condition, faulted-tool, or option-order flags.",
+    "The coordinator remains one process from monitor through provider decision and action execution."
+  ]
+}

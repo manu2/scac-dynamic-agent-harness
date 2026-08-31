@@ -117,6 +117,18 @@ Every snapshot enforces:
   The next checkpoint is independent review of
   `manifests/toolroute_otel_transport_pilot.v0.1.json`, then a hash-bound
   Gemini-only 9-decision pilot if explicitly authorized in `PROVENANCE.json`.
+- **Transport pilot v0.1 (completed, preliminary):** Gemini 3.7 Flash completed
+  the nine live A/B/C-by-regime cells with valid artifact hashes and a strong
+  C-versus-A/B pattern. Direct audit found no span, action, prompt, or hash
+  defect, but it also found unbound provider metadata, misleading external-model
+  result flags, and no frozen route/list-order counterbalance. Preserve this as
+  an integration pilot; do not pool it or use it to decide a cross-model effect.
+- **Transport pilot v0.2 (next gated cohort):** a fresh 27-episode three-model
+  design predeclares the full action-order, route-fault, and run-sequence plan
+  for Gemini 3.7 Flash, Claude Sonnet 5, and GPT-5.6 Sol. It is code- and
+  model-free-validated but not authorized. Run a fresh Gemini v0.2 block first,
+  audit it, then run the Sonnet and GPT blocks only under the same frozen
+  manifest and revised runner.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
 - **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,

@@ -1,0 +1,107 @@
+{
+  "A": {
+    "prompt": "Task: retrieve customer record C-042. tool_alpha and tool_beta expose the same read-only record API. Return exactly one listed action label and no other text.\nOptions: tool_alpha, tool_beta, wait\n",
+    "visible_snapshot": null
+  },
+  "B": {
+    "prompt": "Task: retrieve customer record C-042. tool_alpha and tool_beta expose the same read-only record API. Return exactly one listed action label and no other text.\nOptions: tool_alpha, tool_beta, wait\n=== HOST TELEMETRY [seq=0 kind=full_checkpoint id=c2e98350 obs=1788187784788ms fresh=2000ms] ===\n[HARDWARE]\n  memory: cur=UNAVAILABLE max=UNLIMITED headroom=UNAVAILABLE state=UNKNOWN psi_some_avg10=UNAVAILABLE events_delta=UNAVAILABLE\n  cpu: quota=UNLIMITED throttled_usec_delta=UNAVAILABLE psi_some_avg10=UNAVAILABLE state=UNKNOWN\n  disk: free=UNAVAILABLE used_ratio=UNAVAILABLE state=UNKNOWN\n  gpu: available=false (UNAVAILABLE)\n[TOOLS]\n  tool_alpha: window=3 succ=3 consec_fail=0 latency_ewma=1000.0ms last_err=NONE circuit=CLOSED age=10ms\n  tool_beta: window=3 succ=3 consec_fail=0 latency_ewma=1000.0ms last_err=NONE circuit=CLOSED age=10ms\n[RUNTIME]\n  step=UNAVAILABLE wall_remaining=UNLIMITED pids=UNAVAILABLE/UNLIMITED network=UNKNOWN last_exit=UNAVAILABLE\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+    "visible_snapshot": null
+  },
+  "C": {
+    "prompt": "Task: retrieve customer record C-042. tool_alpha and tool_beta expose the same read-only record API. Return exactly one listed action label and no other text.\nOptions: tool_alpha, tool_beta, wait\n=== HOST TELEMETRY [seq=0 kind=full_checkpoint id=c2e98350 obs=1788187784788ms fresh=2000ms] ===\n[HARDWARE]\n  memory: cur=UNAVAILABLE max=UNLIMITED headroom=UNAVAILABLE state=UNKNOWN psi_some_avg10=UNAVAILABLE events_delta=UNAVAILABLE\n  cpu: quota=UNLIMITED throttled_usec_delta=UNAVAILABLE psi_some_avg10=UNAVAILABLE state=UNKNOWN\n  disk: free=UNAVAILABLE used_ratio=UNAVAILABLE state=UNKNOWN\n  gpu: available=false (UNAVAILABLE)\n[TOOLS]\n  tool_alpha: window=3 succ=3 consec_fail=0 latency_ewma=303.43ms last_err=NONE circuit=CLOSED age=0ms\n  tool_beta: window=3 succ=3 consec_fail=0 latency_ewma=1.7ms last_err=NONE circuit=CLOSED age=0ms\n[RUNTIME]\n  step=UNAVAILABLE wall_remaining=UNLIMITED pids=UNAVAILABLE/UNLIMITED network=UNKNOWN last_exit=UNAVAILABLE\n[UNAVAILABLE_FIELDS] hardware.cpu, hardware.ephemeral_disk, hardware.memory, runtime.network\n=========================================",
+    "visible_snapshot": {
+      "base_snapshot_id": null,
+      "derivation_provenance": {
+        "tools.tool_alpha": [
+          "b8312e9d402ec7096d5d0ce7f0389c8dc87805c77768d92924e6dcb4b98c0c79",
+          "8f2297450d6897f29b172f4350f0ac002c4eacad38bd0b8a822db1804dfbd32d",
+          "751fbcbb5ad666a5beb984c0d2e0ee7b6951a828646cc126ecc470081a7a0ca4"
+        ],
+        "tools.tool_beta": [
+          "7368ff9290b22b6b68cf3e99f238d7debc335048f6f70bc544095793fd8f0d81",
+          "67d57fe34b31fdaab1a0a25b7e913faf40c302c13d35609b69600550e7f32d66",
+          "ae846b1f506076bc28e8402dc6d680815475c98e83ded166198780f7c1ee4a0a"
+        ]
+      },
+      "economics": {},
+      "fresh_for_ms": 2000,
+      "hardware": {
+        "cpu": {
+          "state": "UNKNOWN"
+        },
+        "ephemeral_disk": {
+          "state": "UNKNOWN"
+        },
+        "gpu": {
+          "available": false,
+          "state": "UNAVAILABLE"
+        },
+        "memory": {
+          "state": "UNKNOWN"
+        }
+      },
+      "kind": "full_checkpoint",
+      "observed_at_ms": 1788187784788,
+      "raw_event_hashes": [
+        "b8312e9d402ec7096d5d0ce7f0389c8dc87805c77768d92924e6dcb4b98c0c79",
+        "8f2297450d6897f29b172f4350f0ac002c4eacad38bd0b8a822db1804dfbd32d",
+        "751fbcbb5ad666a5beb984c0d2e0ee7b6951a828646cc126ecc470081a7a0ca4",
+        "7368ff9290b22b6b68cf3e99f238d7debc335048f6f70bc544095793fd8f0d81",
+        "67d57fe34b31fdaab1a0a25b7e913faf40c302c13d35609b69600550e7f32d66",
+        "ae846b1f506076bc28e8402dc6d680815475c98e83ded166198780f7c1ee4a0a"
+      ],
+      "reducer": {
+        "name": "scac-deterministic-reducer",
+        "version": "0.1.0"
+      },
+      "runtime": {
+        "network": "UNKNOWN"
+      },
+      "schema": "scac-sst-v0.1",
+      "seq": 0,
+      "snapshot_id": "c2e98350cd0f4e32b6fbde1aae9084b2ee50ec55851d42f6a9e75d9c9059f993",
+      "subsystem_observed_at_ms": {
+        "tool_span": 1788187784788
+      },
+      "tools": {
+        "tool_alpha": {
+          "circuit": "CLOSED",
+          "consecutive_failures": 0,
+          "failures": 0,
+          "history": [
+            true,
+            true,
+            true
+          ],
+          "last_error": "NONE",
+          "latency_ewma_ms": 303.43,
+          "state": "OK",
+          "successes": 3,
+          "window_n": 3
+        },
+        "tool_beta": {
+          "circuit": "CLOSED",
+          "consecutive_failures": 0,
+          "failures": 0,
+          "history": [
+            true,
+            true,
+            true
+          ],
+          "last_error": "NONE",
+          "latency_ewma_ms": 1.7,
+          "state": "OK",
+          "successes": 3,
+          "window_n": 3
+        }
+      },
+      "trajectory_id": "toolroute-otel-transport-latency",
+      "unavailable_fields": [
+        "hardware.cpu",
+        "hardware.ephemeral_disk",
+        "hardware.memory",
+        "runtime.network"
+      ]
+    }
+  }
+}

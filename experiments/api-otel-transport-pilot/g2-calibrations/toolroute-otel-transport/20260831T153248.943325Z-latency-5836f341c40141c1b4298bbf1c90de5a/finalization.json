@@ -1,0 +1,16 @@
+{
+  "artifact_sha256": {
+    "action-result.json": "c294db6ba52bc0f40568000496484662749865faf2e675464b97863e7dd2bbd3",
+    "condition-inputs.json": "d76f4c8f0744691ebd5000f55b3428a04cccd76119250dc8ee1ccc99ce0684b0",
+    "manifest.json": "60cfca79f90b962bd38717821fb6269abd89fe08cf311ebbf0d799f525b1d453",
+    "model-decision.json": "85b43b5745183cf2254f26fd0312cf76fe022995516c821d6f4f3ebb158bf266",
+    "provider-request.json": "d765a43dfc881e4b7c6b77754260b45067cf389d39595386cbe328821c0158c7",
+    "provider-response.json": "f5a733f6cdee393db1c05bc7af641150e06a6f0d949f60c8f826de6860d8a649",
+    "raw-otel-action-span.json": "69edf77262dae9e693f697b5cdb2d3eca37a4af4b240dfeced9eca3313c27d83",
+    "raw-otel-monitor-spans.json": "0f7ddd385d982eca3623c630a85c3b88e2f5e52fea2fd74d1ae1a865df9b15eb",
+    "reducer-events.json": "2b69b85eb285f490944f216f8db8df46920810d0f23de7febe1db180fddeb5a1",
+    "result.json": "3759a9f84d9aef84ff98730f01ef084fbb77b7852358e96dae8012c671204b0d",
+    "snapshot.json": "cdd9b6806ba83d21cc170dae12471856a2f562fe8ed8e2cc11979a9f462e19d9"
+  },
+  "classification": "COMPLETED"
+}

@@ -863,3 +863,34 @@
   provider pilot cannot proceed until a separate review freezes and hash-binds
   the draft manifest; it must remain separately reported and unpooled with the
   frozen 216-decision synthetic cohort.
+
+### 2026-09-01 — Gemini v0.1 live OTel transport pilot audit
+
+- Audited the nine provider artifacts under
+  `experiments/api-otel-transport-pilot/g2-calibrations/toolroute-otel-transport/`.
+  All nine regime-by-condition cells exist, all finalization hashes validate,
+  each has six genuine OTel monitor spans (three per route), canonical reducer
+  events, a sanitized Gemini request/response, an exact parsed label, and a
+  post-decision action record linked to that label. No provider error or
+  malformed response was found.
+- The directly reconstructed descriptive outcomes are: A mean observable regret
+  6,768.67 ms with 2/3 successful live actions; B 6,767.90 ms with 2/3; and C
+  0.00 ms with 3/3. C selected the observable-best route in latency and
+  connection-error regimes and all C actions succeeded. A and B selected alpha
+  in every cell; that was costly in the two alpha-fault regimes but appropriate
+  in the beta-503 regime. These figures are valid **preliminary Gemini
+  integration-pilot observations**, not pooled primary evidence or a
+  cross-model result.
+- The audit found TR-035 and TR-036. v0.1 artifact metadata said
+  `not_provider_evidence`, its external-subject outcome checks were
+  unconditionally true, and it lacked model/manifest-hash binding and frozen
+  route/list-order counterbalancing. These are reporting/protocol defects, not
+  evidence that the raw calls or spans were fabricated. Finalized v0.1 artifacts
+  remain immutable and are not reclassified as a main cohort.
+- Implemented v0.2 before any further provider call: a 27-episode, three-model
+  manifest predeclares per-episode route fault assignment, option order, and
+  sequence; the runner writes manifest-hash/model/provider provenance and
+  separates infrastructure checks from actual model outcome facts. A new
+  no-provider beta-disabled, beta-listed-first control passed with valid hashes,
+  zero observable regret, and a live HTTP-200 fallback action. Provider
+  authorization remains false pending independent review of the v0.2 manifest.
