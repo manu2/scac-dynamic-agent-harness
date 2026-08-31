@@ -60,8 +60,14 @@ Every snapshot enforces:
   debugging artifact. ToolRoute establishes the route-selection instance of a
   split-plane architecture; it does not claim live production telemetry,
   replacement of deterministic middleware, or completed evidence for the other
-  state dimensions. The next artifact is a reproducible frozen-cohort analysis
-  report. The manuscript is organized as architecture, a controlled
+  state dimensions. A reproducible frozen-cohort analysis and manuscript review
+  draft now exist under `paper/`: its runner validates all 216 artifact hashes
+  before emitting derived tables and figures, shows normalized within-model
+  A/B/C regret alongside raw appendix values, and leaves the source cohort
+  immutable. A four-page formatted final-review proof with the same audited
+  figures exists at `output/pdf/toolroute_arxiv_review_draft.pdf`; LaTeX source
+  packaging and final release metadata remain before submission. The manuscript
+  is organized as architecture, a controlled
   information-ablation method, results, and bounded systems agenda; it uses
   “trust-separated harness interface,” not an unsupported L0/L2 zero-trust
   claim.

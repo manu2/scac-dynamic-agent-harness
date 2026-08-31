@@ -1,0 +1,173 @@
+{
+  "cohort": {
+    "decisions": 216,
+    "models": [
+      "gpt-5.6-sol",
+      "claude-sonnet-5",
+      "gemini-3.7-flash"
+    ],
+    "seeds": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "turns": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "conditions": [
+      "A",
+      "B",
+      "C"
+    ]
+  },
+  "condition_summary": [
+    {
+      "condition": "A",
+      "decisions": 72,
+      "mean_policy_regret_ms": 4826.447793209877,
+      "successful_outcomes": 47,
+      "completion_rate": 0.6527777777777778,
+      "completion_wilson_low": 0.5376108847085543,
+      "completion_wilson_high": 0.7524673836824078
+    },
+    {
+      "condition": "B",
+      "decisions": 72,
+      "mean_policy_regret_ms": 4251.542592592593,
+      "successful_outcomes": 50,
+      "completion_rate": 0.6944444444444444,
+      "completion_wilson_low": 0.5804553438658896,
+      "completion_wilson_high": 0.7887351795407894
+    },
+    {
+      "condition": "C",
+      "decisions": 72,
+      "mean_policy_regret_ms": 131.11902777777777,
+      "successful_outcomes": 69,
+      "completion_rate": 0.9583333333333334,
+      "completion_wilson_low": 0.8845053539454768,
+      "completion_wilson_high": 0.98572945122741
+    }
+  ],
+  "model_condition_summary": [
+    {
+      "model": "gpt-5.6-sol",
+      "condition": "A",
+      "decisions": 24,
+      "mean_policy_regret_ms": 4723.813703703704,
+      "successful_outcomes": 16,
+      "completion_rate": 0.6666666666666666,
+      "completion_wilson_low": 0.4670595949408046,
+      "completion_wilson_high": 0.8202802131162036
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "condition": "B",
+      "decisions": 24,
+      "mean_policy_regret_ms": 3307.0003703703705,
+      "successful_outcomes": 18,
+      "completion_rate": 0.75,
+      "completion_wilson_low": 0.5510017468789357,
+      "completion_wilson_high": 0.8800079652065766
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "condition": "C",
+      "decisions": 24,
+      "mean_policy_regret_ms": 75.5020833333333,
+      "successful_outcomes": 23,
+      "completion_rate": 0.9583333333333334,
+      "completion_wilson_low": 0.7975777375115778,
+      "completion_wilson_high": 0.992606734645195
+    },
+    {
+      "model": "claude-sonnet-5",
+      "condition": "A",
+      "decisions": 24,
+      "mean_policy_regret_ms": 5031.715972222222,
+      "successful_outcomes": 15,
+      "completion_rate": 0.625,
+      "completion_wilson_low": 0.42709619037907065,
+      "completion_wilson_high": 0.7884086656636855
+    },
+    {
+      "model": "claude-sonnet-5",
+      "condition": "B",
+      "decisions": 24,
+      "mean_policy_regret_ms": 4723.813703703704,
+      "successful_outcomes": 16,
+      "completion_rate": 0.6666666666666666,
+      "completion_wilson_low": 0.4670595949408046,
+      "completion_wilson_high": 0.8202802131162036
+    },
+    {
+      "model": "claude-sonnet-5",
+      "condition": "C",
+      "decisions": 24,
+      "mean_policy_regret_ms": 75.5020833333333,
+      "successful_outcomes": 23,
+      "completion_rate": 0.9583333333333334,
+      "completion_wilson_low": 0.7975777375115778,
+      "completion_wilson_high": 0.992606734645195
+    },
+    {
+      "model": "gemini-3.7-flash",
+      "condition": "A",
+      "decisions": 24,
+      "mean_policy_regret_ms": 4723.813703703704,
+      "successful_outcomes": 16,
+      "completion_rate": 0.6666666666666666,
+      "completion_wilson_low": 0.4670595949408046,
+      "completion_wilson_high": 0.8202802131162036
+    },
+    {
+      "model": "gemini-3.7-flash",
+      "condition": "B",
+      "decisions": 24,
+      "mean_policy_regret_ms": 4723.813703703704,
+      "successful_outcomes": 16,
+      "completion_rate": 0.6666666666666666,
+      "completion_wilson_low": 0.4670595949408046,
+      "completion_wilson_high": 0.8202802131162036
+    },
+    {
+      "model": "gemini-3.7-flash",
+      "condition": "C",
+      "decisions": 24,
+      "mean_policy_regret_ms": 242.3529166666667,
+      "successful_outcomes": 23,
+      "completion_rate": 0.9583333333333334,
+      "completion_wilson_low": 0.7975777375115778,
+      "completion_wilson_high": 0.992606734645195
+    }
+  ],
+  "descriptive_block_bootstrap": {
+    "B_minus_C_policy_regret_ms": {
+      "estimate": 4120.423564814815,
+      "bootstrap_95_low": 2543.1841358024694,
+      "bootstrap_95_high": 5892.6361882716055,
+      "blocks": 18
+    },
+    "B_minus_C_completion_rate": {
+      "estimate": -0.2638888888888889,
+      "bootstrap_95_low": -0.3472222222222222,
+      "bootstrap_95_high": -0.18055555555555555,
+      "blocks": 18
+    },
+    "A_minus_C_policy_regret_ms": {
+      "estimate": 4695.328765432099,
+      "bootstrap_95_low": 2907.0116975308642,
+      "bootstrap_95_high": 6633.808425925926,
+      "blocks": 18
+    },
+    "B_to_C_regret_reduction_percent": 96.91596579542153,
+    "B_to_C_completion_gain_percentage_points": 26.388888888888896
+  },
+  "methods_note": "Bootstrap resamples 18 model-by-seed blocks (four shared environment turns per block). It is descriptive uncertainty and does not convert independent provider generations into paired model draws."
+}

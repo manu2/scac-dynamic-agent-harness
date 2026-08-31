@@ -771,3 +771,29 @@
   directly to frozen-cohort analysis, manuscript, artifact release, and arXiv
   submission. Do not delay first publication for speculative production
   architecture or Toxiproxy extensions.
+
+### 2026-08-31 — ToolRoute v1.0 manuscript-analysis draft
+
+- Added `paper/toolroute_draft.md` and `scripts/analyze_toolroute_v1_paper.py`.
+  The analysis reads only the three frozen API-cohort roots, validates the exact
+  216-cell model/seed/turn/condition grid, re-hashes every finalized artifact,
+  and writes derived tables and figures under `paper/`; it makes no provider
+  calls and never alters `experiments/`.
+- The regenerated totals match the retained cohort: A 4,826.45 ms / 47 of 72
+  completion; B 4,251.54 ms / 50 of 72; C 131.12 ms / 69 of 72. B-to-C is a
+  4,120.42 ms (96.9%) reduction and +26.4 completion points. The bootstrap is
+  explicitly descriptive and does not treat provider generations as paired.
+
+### 2026-08-31 — ToolRoute final-review proof and handoff
+
+- Added `scripts/build_toolroute_final_draft.py` and the four-page formatted
+  review proof at `output/pdf/toolroute_arxiv_review_draft.pdf`. It contains
+  the reviewed narrative, condition and model-result tables, three audited
+  figures, and numbered references; it makes no provider call and leaves frozen
+  artifacts untouched.
+- Visual-polish review set Manu Agrawal first and Shrey Nagpal second in the
+  title block and PDF metadata; the neutral-condition cell wraps correctly; and
+  the figures are high-resolution chart panels with document-level captions.
+- Prepared this dedicated, `main`-based review package separately from active
+  RetryBudget work. The remaining submission steps are affiliations, verified
+  BibTeX, release DOI, and a LaTeX source build.

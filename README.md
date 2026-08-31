@@ -42,6 +42,8 @@ scenarios/               deterministic scenario definitions and oracles
 tests/                   unit, schema, enforcement, and reproducibility tests
 experiments/             immutable calibration and trial artifacts
 docs/                    design reviews and empirical reports
+paper/                   ToolRoute manuscript, derived analysis, and figures
+output/pdf/              formatted ToolRoute final-review proof
 ```
 
 ## Current status
@@ -65,3 +67,10 @@ use the same captured parameter. The completed cohort used
 `temperature: 0.0` for Gemini throughout. This narrow ToolRoute work does not close G1
 globally or apply to MemoryGovernor, RetryBudget, or a combined study. See
 `docs/17_toolroute_v1_execution_config_clarification.md`.
+
+## ToolRoute manuscript review package
+
+The reproducible ToolRoute manuscript, frozen-cohort analysis, and source
+figures are documented in `paper/README.md`. The shareable review proof is
+`output/pdf/toolroute_arxiv_review_draft.pdf`: a four-page formatted artifact
+for manual review, not yet an arXiv source bundle.
