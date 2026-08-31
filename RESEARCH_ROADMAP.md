@@ -101,6 +101,13 @@ Every snapshot enforces:
   local result tests socket-backed end-to-end capture only; it does not alter
   ToolRoute API readiness or provide paper evidence. Its cross-session
   lifecycle defect is TR-025; do not spend further first-paper effort there.
+- **Standards-based transport-replication candidate (research only):** a
+  separately labelled pre-approval appendix experiment may use standard
+  OpenTelemetry HTTP spans as the host observation source and persistent local
+  Toxiproxy routes as the deterministic fault path. It must not reuse the
+  cross-session smoke, pool with the frozen cohort, or contact a provider until
+  its own model-free gates and manifest are reviewed. See
+  `docs/24_otel_transport_replication_research_note.md`.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
 - **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,

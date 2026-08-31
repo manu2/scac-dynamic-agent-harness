@@ -810,3 +810,16 @@
   respectively; the results table and Appendix Figure A1 continue to show the
   complete raw A/B/C millisecond values. This is a presentation revision only:
   it neither changes the cohort nor adds an unmeasured claim.
+
+### 2026-08-31 — Standards-based transport-replication research
+
+- Reviewed existing telemetry and fault-injection infrastructure before any
+  new provider spend. The recommended candidate is standard OpenTelemetry HTTP
+  spans captured from the live local tool path, reduced by a host-owned adapter,
+  with Toxiproxy used only for deterministic transport faults. This is a
+  research/design note, not an authorization or a result.
+- Rejected the full OpenTelemetry Astronomy Shop demo for the immediate paper:
+  it is a multi-service observability/SRE environment and would replace the
+  tractable route-selection question with diagnosis/remediation confounds.
+  The retained candidate, its exact scope, lifecycle fix, claim boundary, and
+  sources are in `docs/24_otel_transport_replication_research_note.md`.
