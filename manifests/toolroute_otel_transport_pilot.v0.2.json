@@ -1,6 +1,6 @@
 {
   "schema_version": "toolroute-otel-transport-pilot-v0.2",
-  "status": "DRAFT_NOT_AUTHORIZED",
+  "status": "FROZEN_AUTHORIZED",
   "purpose": "Fresh, separately reported cross-provider OTel/Toxiproxy integration replication. It supersedes the v0.1 Gemini-only pilot for any cross-model comparison and is never pooled with ToolRoute v1.0.",
   "design": {
     "episode_mode": "independent_single_decision_persistent_transport_coordinator",
