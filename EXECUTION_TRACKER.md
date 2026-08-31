@@ -894,3 +894,19 @@
   no-provider beta-disabled, beta-listed-first control passed with valid hashes,
   zero observable regret, and a live HTTP-200 fallback action. Provider
   authorization remains false pending independent review of the v0.2 manifest.
+
+### 2026-09-01 — ToolRoute OTel transport v0.2 Stage 1 execution (3 episodes)
+
+- Authorized `manifests/toolroute_otel_transport_pilot.v0.2.json` (SHA-256
+  `4913a40f630dd5afbd406efef71affd01e4ddc7d1f30e9804d75ad0f3a1c56d4`) and executed
+  exactly the three Stage-1 cross-model episodes via `scripts/run_toolroute_otel_transport_cohort.py`:
+  1. `gemini-00-connection-c` (Google Gemini 3.7 Flash; Condition C; connection_error regime, faulted tool_beta):
+     Selected `tool_alpha` (observable best), 0.0 ms policy regret, live HTTP 200 success.
+  2. `sonnet-00-latency-b` (Anthropic Claude Sonnet 5; Condition B; latency regime, faulted tool_beta):
+     Selected `tool_alpha` (observable best), 0.0 ms policy regret, live HTTP 200 success.
+  3. `gpt-00-http-c` (OpenAI GPT-5.6 Sol; Condition C; http_error regime, faulted tool_alpha):
+     Selected `tool_beta` (observable best), 0.0 ms policy regret, live HTTP 200 success.
+- All three trials passed 100% of infrastructure checks and finalized with valid SHA-256 hashes.
+- Provider authorization was immediately revoked (`toolroute_otel_transport_provider_trials_authorized: false`,
+  `toolroute_otel_transport_pilot_manifest_sha256: null`) in `PROVENANCE.json`.
+
