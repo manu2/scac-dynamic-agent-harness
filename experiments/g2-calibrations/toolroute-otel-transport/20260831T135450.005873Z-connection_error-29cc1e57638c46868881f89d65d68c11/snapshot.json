@@ -1,0 +1,97 @@
+{
+  "base_snapshot_id": null,
+  "derivation_provenance": {
+    "tools.tool_alpha": [
+      "e355b63c3171f5c241a94f0fd2818a7081ccc34d7c90e63227fa29340d854992",
+      "e42688baac7c0bda3d816b146ef314450c070c1f74db9ebf5f9dc5bc19758324",
+      "3dbff4642d6d1fbca15a34994e78f7c06089ae8f4ee405f16d46af6c2bdb4835"
+    ],
+    "tools.tool_beta": [
+      "fa19d540136943c348886c105c3513c204c86337564e2e3b81e09e9fe6766ae5",
+      "d28639967cac47cdf09163eb96334c32341290491c65de4a8a91311f111da41b",
+      "ab96d114f1a7d11fcdb4bccd180821c2b8e980a33789a91522f00403b1bf6dc6"
+    ]
+  },
+  "economics": {},
+  "fresh_for_ms": 2000,
+  "hardware": {
+    "cpu": {
+      "state": "UNKNOWN"
+    },
+    "ephemeral_disk": {
+      "state": "UNKNOWN"
+    },
+    "gpu": {
+      "available": false,
+      "state": "UNAVAILABLE"
+    },
+    "memory": {
+      "state": "UNKNOWN"
+    }
+  },
+  "kind": "full_checkpoint",
+  "observed_at_ms": 1788184490147,
+  "raw_event_hashes": [
+    "e355b63c3171f5c241a94f0fd2818a7081ccc34d7c90e63227fa29340d854992",
+    "e42688baac7c0bda3d816b146ef314450c070c1f74db9ebf5f9dc5bc19758324",
+    "3dbff4642d6d1fbca15a34994e78f7c06089ae8f4ee405f16d46af6c2bdb4835",
+    "fa19d540136943c348886c105c3513c204c86337564e2e3b81e09e9fe6766ae5",
+    "d28639967cac47cdf09163eb96334c32341290491c65de4a8a91311f111da41b",
+    "ab96d114f1a7d11fcdb4bccd180821c2b8e980a33789a91522f00403b1bf6dc6"
+  ],
+  "recommended_constraints": [
+    "do not call tool_alpha before circuit closes"
+  ],
+  "reducer": {
+    "name": "scac-deterministic-reducer",
+    "version": "0.1.0"
+  },
+  "runtime": {
+    "network": "UNKNOWN"
+  },
+  "schema": "scac-sst-v0.1",
+  "seq": 0,
+  "snapshot_id": "0888c26dc928bcf004f9dcad0fea489d4701971e554f2a2f20179942f873ead5",
+  "subsystem_observed_at_ms": {
+    "tool_span": 1788184490147
+  },
+  "tools": {
+    "tool_alpha": {
+      "circuit": "OPEN",
+      "consecutive_failures": 3,
+      "failures": 3,
+      "history": [
+        false,
+        false,
+        false
+      ],
+      "last_error": "CONNECTION_ERROR",
+      "latency_ewma_ms": 6.24,
+      "state": "DEGRADED",
+      "successes": 0,
+      "window_n": 3
+    },
+    "tool_beta": {
+      "circuit": "CLOSED",
+      "consecutive_failures": 0,
+      "failures": 0,
+      "history": [
+        true,
+        true,
+        true
+      ],
+      "last_error": "NONE",
+      "latency_ewma_ms": 1.16,
+      "state": "OK",
+      "successes": 3,
+      "window_n": 3
+    }
+  },
+  "trajectory_id": "toolroute-otel-transport-connection_error",
+  "unavailable_fields": [
+    "hardware.cpu",
+    "hardware.ephemeral_disk",
+    "hardware.memory",
+    "runtime.network"
+  ]
+}

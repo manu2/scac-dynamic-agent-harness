@@ -108,6 +108,15 @@ Every snapshot enforces:
   cross-session smoke, pool with the frozen cohort, or contact a provider until
   its own model-free gates and manifest are reviewed. See
   `docs/24_otel_transport_replication_research_note.md`.
+- **Standards-based transport-replication (implemented, provider-gated):** the
+  OTel HTTP-span adapter, Toxiproxy persistent coordinator, raw-span archival,
+  three-regime model-free controls, structural A/B/C inputs, and separate
+  fail-closed provider command are complete. All three local controls passed
+  twice with valid finalization hashes; no provider has been called. This is an
+  appendix-replication candidate only and cannot be pooled with ToolRoute v1.0.
+  The next checkpoint is independent review of
+  `manifests/toolroute_otel_transport_pilot.v0.1.json`, then a hash-bound
+  Gemini-only 9-decision pilot if explicitly authorized in `PROVENANCE.json`.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
 - **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,

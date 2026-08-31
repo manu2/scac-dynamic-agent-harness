@@ -68,6 +68,23 @@ use the same captured parameter. The completed cohort used
 globally or apply to MemoryGovernor, RetryBudget, or a combined study. See
 `docs/17_toolroute_v1_execution_config_clarification.md`.
 
+## OTel/Toxiproxy transport replication (separate pre-provider path)
+
+`scripts/run_toolroute_otel_transport_calibration.py` is a model-free,
+socket-backed integration calibration. It instruments two local HTTP routes
+with standard OpenTelemetry Requests client spans, injects a predeclared
+latency, connection-error, or HTTP-error regime through Toxiproxy, reduces only
+the span facts into the existing host snapshot, and executes the selected route
+through the same still-live proxy. It archives raw spans, reducer events,
+condition inputs, action result, and finalization hashes under
+`experiments/g2-calibrations/toolroute-otel-transport/`.
+
+This is a distinct integration replication, not an alteration of or addition
+to the 216-decision ToolRoute v1.0 cohort. The provider command is deliberately
+blocked by the separate false provenance flag until the draft manifest is
+independently reviewed and hash-bound. See
+`docs/24_otel_transport_replication_research_note.md`.
+
 ## ToolRoute manuscript review package
 
 The reproducible ToolRoute manuscript, frozen-cohort analysis, and source

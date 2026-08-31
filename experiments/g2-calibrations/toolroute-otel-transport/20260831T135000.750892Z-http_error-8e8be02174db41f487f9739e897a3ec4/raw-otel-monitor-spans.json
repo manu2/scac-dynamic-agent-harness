@@ -1,0 +1,166 @@
+{
+  "spans": [
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.status_code": 200,
+          "http.url": "http://127.0.0.1:50470/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200870447000,
+        "events": [],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "4656ff1d55ab02b8",
+        "start_time_unix_nano": 1788184200869129000,
+        "status_code": "StatusCode.UNSET",
+        "status_description": null,
+        "trace_id": "12ec2529e9455a37ff982aaac9a628bf"
+      },
+      "tool_id": "tool_alpha"
+    },
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.status_code": 200,
+          "http.url": "http://127.0.0.1:50470/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200871991000,
+        "events": [],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "0d8beb951db13782",
+        "start_time_unix_nano": 1788184200871130000,
+        "status_code": "StatusCode.UNSET",
+        "status_description": null,
+        "trace_id": "aa71402030356288112191aff14e279b"
+      },
+      "tool_id": "tool_alpha"
+    },
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.status_code": 200,
+          "http.url": "http://127.0.0.1:50470/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200873321000,
+        "events": [],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "078f9091d6b998fd",
+        "start_time_unix_nano": 1788184200872475000,
+        "status_code": "StatusCode.UNSET",
+        "status_description": null,
+        "trace_id": "ffd1fa976f6af8dc24ae5f1750e0b7c8"
+      },
+      "tool_id": "tool_alpha"
+    },
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.status_code": 503,
+          "http.url": "http://127.0.0.1:50471/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200874648000,
+        "events": [],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "f199eb9228541125",
+        "start_time_unix_nano": 1788184200873853000,
+        "status_code": "StatusCode.ERROR",
+        "status_description": null,
+        "trace_id": "f433c4a9476b4e1dde7477c9f2b291c4"
+      },
+      "tool_id": "tool_beta"
+    },
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.status_code": 503,
+          "http.url": "http://127.0.0.1:50471/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200875929000,
+        "events": [],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "57260842c2a3ca2d",
+        "start_time_unix_nano": 1788184200875096000,
+        "status_code": "StatusCode.ERROR",
+        "status_description": null,
+        "trace_id": "32bc514f4c6ea5fb4b04fb313d721c1c"
+      },
+      "tool_id": "tool_beta"
+    },
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.status_code": 503,
+          "http.url": "http://127.0.0.1:50471/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200877264000,
+        "events": [],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "18c2f80751bccfba",
+        "start_time_unix_nano": 1788184200876477000,
+        "status_code": "StatusCode.ERROR",
+        "status_description": null,
+        "trace_id": "4a4c4330e67c710a6436e4fce44e20fc"
+      },
+      "tool_id": "tool_beta"
+    }
+  ]
+}

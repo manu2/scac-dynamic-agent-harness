@@ -1,0 +1,9 @@
+{
+  "decision_source": "host_observable_oracle_positive_control",
+  "observable_best_actions": [
+    "tool_alpha"
+  ],
+  "observable_margin_ms": 19999.73,
+  "policy_regret": 0.0,
+  "selected_action": "tool_alpha"
+}

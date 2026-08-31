@@ -103,6 +103,30 @@ The generic `provider_trials_authorized` field remains false until all scenarios
 meet the global gates. This narrower authorization applies only to ToolRoute
 and cannot be reused by MemoryGovernor or RetryBudget.
 
+## ToolRoute OTel/Toxiproxy integration-replication gate
+
+The socket-backed OTel/Toxiproxy path is a separate appendix-replication
+candidate, not a revision of the frozen synthetic ToolRoute v1.0 protocol. A
+provider call on that path is authorized only when all of the following hold:
+
+- all three persistent-coordinator model-free controls (latency,
+  connection-error, and HTTP-error) have passed with valid finalization hashes;
+- every reducer input is derived from exactly one completed standard OTel HTTP
+  client span per request; missing identity, duration, or failure evidence
+  fails closed;
+- the monitor collects three spans per equivalent route before the decision,
+  and the selected route is executed through the same still-live proxy after
+  the decision;
+- A, B, and C use the same task/options. B retains the same telemetry-shaped
+  tool rows as C but neutralizes all route-relevant values equally;
+- a separate manifest fixes provider/model, regime, condition, request fields,
+  retry policy, primary observable oracle, and analysis boundary; and
+- that exact manifest SHA-256 is bound to the separate
+  `toolroute_otel_transport_provider_trials_authorized` provenance flag.
+
+The resulting data are reported as a separately labelled transport integration
+replication and are never pooled into the frozen synthetic primary cohort.
+
 ## Global gate requirements
 
 No MemoryGovernor or cross-scenario provider call is allowed until:

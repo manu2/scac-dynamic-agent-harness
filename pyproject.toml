@@ -13,6 +13,16 @@ dependencies = [
 
 [project.optional-dependencies]
 test = ["pytest>=8", "jsonschema>=4"]
+# Kept optional so the frozen synthetic ToolRoute cohort remains runnable with
+# its original minimal dependency surface.  The transport-replication path uses
+# standard OpenTelemetry HTTP client spans rather than constructing host events
+# directly from a request result.
+transport = [
+    "requests>=2.31",
+    "opentelemetry-api>=1.25",
+    "opentelemetry-sdk>=1.25",
+    "opentelemetry-instrumentation-requests>=0.46b0",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

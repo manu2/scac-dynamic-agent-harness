@@ -1,7 +1,7 @@
 # Standards-based ToolRoute transport-replication research note
 
-**Status:** researched candidate only. No implementation, provider authorization,
-or result collection is authorized by this note.
+**Status:** implemented and model-free validated on 2026-08-31. Provider
+authorization remains false; no provider request has been made on this path.
 
 ## Decision question
 
@@ -91,6 +91,36 @@ provide collection and trace-context interoperability, while Harness Awareness
 defines a trust-separated policy layer that selects fresh, decision-relevant
 facts for an agent. That layer should be conditional, bounded, redacted, and
 freshness-labelled—not an unconditional dump of raw telemetry into every prompt.
+
+## Implemented model-free validation
+
+The retained implementation is `src/scac_harness/otel_transport.py` and
+`scripts/run_toolroute_otel_transport_calibration.py`. It uses the standard
+Requests auto-instrumentor and an SDK in-memory exporter. A span-to-event
+adapter rejects an incomplete request rather than deriving health from the
+request wrapper: a valid span must identify a GET endpoint, contain a valid
+start/end duration, and contain either an HTTP status or OTel error evidence.
+Exception messages and stack traces are deliberately excluded from the raw-span
+archive; the standard exception type is sufficient for the bounded adapter.
+
+Four complete, model-free three-regime calibration blocks were retained under
+`experiments/g2-calibrations/toolroute-otel-transport/` during implementation.
+The final block validated all finalization hashes and yielded:
+
+| Regime | OTel-derived pre-decision state | Observable-best route | Live selected action |
+|---|---|---|---|
+| 300 ms proxy latency on alpha | alpha EWMA 303.82 ms; beta 1.37 ms | beta | HTTP 200 |
+| disabled alpha proxy | alpha 0/3, `CONNECTION_ERROR`, open circuit | beta | HTTP 200 |
+| beta upstream HTTP 503 | beta 0/3, `HTTP_503`, open circuit | alpha | HTTP 200 |
+
+This establishes the integration mechanics—not an agent behavioral result. In
+each retained calibration, the *host observable oracle* made the final choice
+as a positive control. The next provider stage must use the exact same
+persistent coordinator but obtain the action from the model, archive its
+sanitized request/response, and report all attempts under the separate draft
+manifest. `scripts/run_toolroute_otel_transport_provider.py` exists for that
+stage and is fail-closed until the manifest SHA-256 is bound to the separate
+provenance authorization field.
 
 ## Why not the full OpenTelemetry Astronomy Shop demo?
 

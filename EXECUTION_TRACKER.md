@@ -828,3 +828,38 @@
   provider tool loops, Testcontainers, the Astronomy Shop, and Kubernetes chaos
   are intentionally deferred because they change the experimental unit or need
   unavailable environment infrastructure.
+
+### 2026-08-31 — OTel/Toxiproxy transport-replication implementation and model-free gate
+
+- Implemented a separate transport path in `src/scac_harness/otel_transport.py`.
+  Standard Requests auto-instrumentation emits the HTTP client span; a
+  fail-closed adapter then maps that completed span to the existing immutable
+  `RawTelemetryEvent`. It rejects missing request identity, duration, response
+  status, and transport-error evidence instead of inferring health from the
+  request wrapper. Raw span archives retain canonical metadata and exception
+  type only, never exception text or stack traces.
+- Implemented `scripts/run_toolroute_otel_transport_calibration.py` as a
+  reservation-first, single-process persistent coordinator. Two local HTTP
+  backends, Toxiproxy, the OTel monitor, host reducer, condition renderer, and
+  selected live action remain alive in the same process. This explicitly avoids
+  the old cross-session lifecycle defect TR-025.
+- Completed four retained model-free three-regime controls under
+  `experiments/g2-calibrations/toolroute-otel-transport/`. The later block
+  passed valid finalization hashes for all three artifacts: (1) injected
+  300 ms alpha latency yielded alpha 303.82 ms versus beta 1.37 ms and selected
+  beta; (2) a disabled alpha proxy yielded alpha 0/3 and
+  `CONNECTION_ERROR`, selecting beta; (3) beta HTTP 503 yielded beta 0/3 and
+  `HTTP_503`, selecting alpha. All selected live actions returned HTTP 200.
+  These are host-oracle positive controls and integration evidence only, not
+  model behavior or paper outcome data.
+- Added a distinct draft provider manifest,
+  `manifests/toolroute_otel_transport_pilot.v0.1.json`, a distinct
+  hash-authorization guard, and a persistent provider command. The separate
+  provenance flag remains false and its SHA-256 null; the command was invoked
+  only to verify that it rejects before any provider request. No provider/API
+  call was made on this path.
+- Added three adapter tests plus authorization fail-closed coverage. The full
+  suite passed with local loopback enabled: **110 passed**. The OTel/Toxiproxy
+  provider pilot cannot proceed until a separate review freezes and hash-binds
+  the draft manifest; it must remain separately reported and unpooled with the
+  frozen 216-decision synthetic cohort.

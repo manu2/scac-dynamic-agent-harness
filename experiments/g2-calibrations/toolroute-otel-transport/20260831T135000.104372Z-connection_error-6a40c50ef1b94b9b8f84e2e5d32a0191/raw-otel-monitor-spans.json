@@ -1,0 +1,178 @@
+{
+  "spans": [
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.url": "http://127.0.0.1:50447/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200235936000,
+        "events": [
+          {
+            "exception_type": "requests.exceptions.ConnectionError",
+            "name": "exception"
+          }
+        ],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "46bd84c178cea98e",
+        "start_time_unix_nano": 1788184200226582000,
+        "status_code": "StatusCode.ERROR",
+        "status_description": "ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=50447): Max retries exceeded with url: /customer/C-042 (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=50447): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+        "trace_id": "87a29cabd971dbdd4021f474f7aff042"
+      },
+      "tool_id": "tool_alpha"
+    },
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.url": "http://127.0.0.1:50447/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200238464000,
+        "events": [
+          {
+            "exception_type": "requests.exceptions.ConnectionError",
+            "name": "exception"
+          }
+        ],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "68a9be0debac274d",
+        "start_time_unix_nano": 1788184200236769000,
+        "status_code": "StatusCode.ERROR",
+        "status_description": "ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=50447): Max retries exceeded with url: /customer/C-042 (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=50447): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+        "trace_id": "14aafd2fb7583afff835527da5270e00"
+      },
+      "tool_id": "tool_alpha"
+    },
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.url": "http://127.0.0.1:50447/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200240871000,
+        "events": [
+          {
+            "exception_type": "requests.exceptions.ConnectionError",
+            "name": "exception"
+          }
+        ],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "e3add65a8c8ea838",
+        "start_time_unix_nano": 1788184200239179000,
+        "status_code": "StatusCode.ERROR",
+        "status_description": "ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=50447): Max retries exceeded with url: /customer/C-042 (Caused by NewConnectionError(\"HTTPConnection(host='127.0.0.1', port=50447): Failed to establish a new connection: [Errno 61] Connection refused\"))",
+        "trace_id": "25150948a81360c168dcbdef9f028109"
+      },
+      "tool_id": "tool_alpha"
+    },
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.status_code": 200,
+          "http.url": "http://127.0.0.1:50448/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200242778000,
+        "events": [],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "fccd74c42d92d2ac",
+        "start_time_unix_nano": 1788184200241423000,
+        "status_code": "StatusCode.UNSET",
+        "status_description": null,
+        "trace_id": "2892b3946cecd3d6051813d87945c4d6"
+      },
+      "tool_id": "tool_beta"
+    },
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.status_code": 200,
+          "http.url": "http://127.0.0.1:50448/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200244267000,
+        "events": [],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "9f7159f7a623a08f",
+        "start_time_unix_nano": 1788184200243292000,
+        "status_code": "StatusCode.UNSET",
+        "status_description": null,
+        "trace_id": "1b17fe5dc0b90e651bac1ac834d73a7a"
+      },
+      "tool_id": "tool_beta"
+    },
+    {
+      "span": {
+        "attributes": {
+          "http.method": "GET",
+          "http.status_code": 200,
+          "http.url": "http://127.0.0.1:50448/customer/C-042",
+          "user_agent.original": "python-requests/2.34.2"
+        },
+        "end_time_unix_nano": 1788184200245668000,
+        "events": [],
+        "kind": "SpanKind.CLIENT",
+        "name": "GET",
+        "resource": {
+          "service.instance.id": "c63d18fe-ab77-487d-9db1-c77ff2e56d35",
+          "service.name": "scac-toolroute-transport",
+          "telemetry.sdk.language": "python",
+          "telemetry.sdk.name": "opentelemetry",
+          "telemetry.sdk.version": "1.44.0"
+        },
+        "span_id": "64bbc0f4d3753970",
+        "start_time_unix_nano": 1788184200244760000,
+        "status_code": "StatusCode.UNSET",
+        "status_description": null,
+        "trace_id": "53cd8cee54046e16b4a76f9640fa97dd"
+      },
+      "tool_id": "tool_beta"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "toolroute-otel-transport-pilot-v0.1",
+  "status": "DRAFT_NOT_AUTHORIZED",
+  "purpose": "Separate, socket-backed ToolRoute replication pilot. It is excluded from the frozen synthetic v1.0 cohort and must never be pooled with it.",
+  "design": {
+    "episode_mode": "independent_single_decision_persistent_transport_coordinator",
+    "telemetry_source": "OpenTelemetry Requests HTTP client spans via local in-memory exporter",
+    "fault_injector": "Toxiproxy local TCP proxy",
+    "monitor_probes_per_tool": 3,
+    "conditions": ["A", "B", "C"],
+    "regimes": ["latency", "connection_error", "http_error"],
+    "primary_oracle": "observable_monitor_cost_v0.6",
+    "state_delivery": "independent_full_checkpoint_only",
+    "provider_tools": "none",
+    "retry_policy": "no harness retries",
+    "analysis_boundary": "integration replication only; report separately and do not alter the primary synthetic cohort claim"
+  },
+  "authorized_episodes": [
+    {"regime": "latency", "condition": "A", "model_id": "gemini-3.7-flash", "provider_label": "google"},
+    {"regime": "latency", "condition": "B", "model_id": "gemini-3.7-flash", "provider_label": "google"},
+    {"regime": "latency", "condition": "C", "model_id": "gemini-3.7-flash", "provider_label": "google"},
+    {"regime": "connection_error", "condition": "A", "model_id": "gemini-3.7-flash", "provider_label": "google"},
+    {"regime": "connection_error", "condition": "B", "model_id": "gemini-3.7-flash", "provider_label": "google"},
+    {"regime": "connection_error", "condition": "C", "model_id": "gemini-3.7-flash", "provider_label": "google"},
+    {"regime": "http_error", "condition": "A", "model_id": "gemini-3.7-flash", "provider_label": "google"},
+    {"regime": "http_error", "condition": "B", "model_id": "gemini-3.7-flash", "provider_label": "google"},
+    {"regime": "http_error", "condition": "C", "model_id": "gemini-3.7-flash", "provider_label": "google"}
+  ],
+  "provider_request_expectations": [
+    {
+      "provider_label": "google",
+      "model_id": "gemini-3.7-flash",
+      "adapter": "gemini_generate_content_v1",
+      "required_body_fields": {
+        "generationConfig": {"temperature": 0.0, "maxOutputTokens": 1024}
+      },
+      "forbidden_body_fields": ["tools", "tool_choice", "function_call", "functions"]
+    }
+  ],
+  "precall_gate": [
+    "All three model-free OTel/Toxiproxy calibrations have valid finalization hashes.",
+    "A separate reviewer approves this exact manifest and its SHA-256 is bound in PROVENANCE.json.",
+    "The target provider adapter records the frozen request shape and does not expose tools.",
+    "The coordinator remains one process from monitor through provider decision and action execution."
+  ]
+}
