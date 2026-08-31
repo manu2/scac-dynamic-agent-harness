@@ -955,8 +955,28 @@
   12. `gpt-06-http-b` (OpenAI GPT-5.6 Sol; Condition B; http_error regime, faulted tool_alpha):
      Selected `tool_alpha` (observable best: `tool_beta`), 20000.70 ms policy regret, live HTTP 503 failure.
 - All 12 trials passed 100% of infrastructure checks and finalized with valid SHA-256 hashes.
+### 2026-09-01 — ToolRoute OTel transport v0.2 Stage 4 execution (final 6 episodes)
+
+- Authorized `manifests/toolroute_otel_transport_pilot.v0.2.json` (SHA-256
+  `4913a40f630dd5afbd406efef71affd01e4ddc7d1f30e9804d75ad0f3a1c56d4`) and executed
+  the final six cross-model episodes via `scripts/run_toolroute_otel_transport_cohort.py`,
+  completing the full 27-episode cohort:
+  1. `gemini-07-connection-b` (Google Gemini 3.7 Flash; Condition B; connection_error regime, faulted tool_beta):
+     Selected `tool_alpha` (observable best: `tool_alpha`), 0.0 ms policy regret, live HTTP 200 success.
+  2. `gemini-08-http-a` (Google Gemini 3.7 Flash; Condition A; http_error regime, faulted tool_alpha):
+     Selected `tool_alpha` (observable best: `tool_beta`), 20000.46 ms policy regret, live HTTP 503 failure.
+  3. `sonnet-07-http-c` (Anthropic Claude Sonnet 5; Condition C; http_error regime, faulted tool_beta):
+     Selected `tool_alpha` (observable best: `tool_alpha`), 0.0 ms policy regret, live HTTP 200 success.
+  4. `sonnet-08-connection-b` (Anthropic Claude Sonnet 5; Condition B; connection_error regime, faulted tool_alpha):
+     Selected `tool_alpha` (observable best: `tool_beta`), 20001.53 ms policy regret, live connection failure.
+  5. `gpt-07-connection-b` (OpenAI GPT-5.6 Sol; Condition B; connection_error regime, faulted tool_beta):
+     Selected `tool_beta` (observable best: `tool_alpha`), 20001.09 ms policy regret, live connection failure.
+  6. `gpt-08-latency-c` (OpenAI GPT-5.6 Sol; Condition C; latency regime, faulted tool_alpha):
+     Selected `tool_beta` (observable best: `tool_beta`), 0.0 ms policy regret, live HTTP 200 success.
+- All six trials passed 100% of infrastructure checks and finalized with valid SHA-256 hashes.
 - Provider authorization was immediately revoked (`toolroute_otel_transport_provider_trials_authorized: false`,
-  `toolroute_otel_transport_pilot_manifest_sha256: null`) in `PROVENANCE.json`.
+  `toolroute_otel_transport_pilot_manifest_sha256: null`, `toolroute_otel_transport_v0_2_status: completed_27_episode_cross_model_replication_cohort`) in `PROVENANCE.json`.
+
 
 
 
