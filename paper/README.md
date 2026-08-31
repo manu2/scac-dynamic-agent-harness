@@ -21,9 +21,10 @@ source, validates the exact 216-cell grid, and writes derived output under
 `paper/analysis/` and `paper/figures/`. It makes no provider calls and never
 rewrites `experiments/`.
 
-The main manuscript figure uses within-model normalization (neutral control B =
-100%) to make the information treatment visible without encouraging a provider
-ranking. Raw-millisecond values remain in the appendix figure and derived CSVs.
+The main manuscript figure shows the within-model B-to-C percentage reduction
+in regret, making the information treatment visible without encouraging a
+provider ranking. Raw A/B/C milliseconds remain in the results table, appendix
+figure, and derived CSVs.
 
 ## Final-review PDF
 

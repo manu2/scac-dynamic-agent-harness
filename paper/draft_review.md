@@ -16,7 +16,8 @@ second author.
   agent unreliability.
 - Lead the abstract and results with one concrete, traceable measured effect.
 - Show the principal result as a within-model treatment contrast, not a model
-  leaderboard. Figure 1 sets B to 100% independently for each model family.
+  leaderboard. Figure 1 reports B-to-C regret reduction independently for each
+  model family.
 - Preserve the corresponding raw values. Figure A1 and the derived CSVs make
   the normalization fully inspectable.
 - Move the wider research program after the empirical instance: ToolRoute

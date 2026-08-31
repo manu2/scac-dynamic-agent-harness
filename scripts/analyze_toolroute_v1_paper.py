@@ -180,20 +180,43 @@ def bars(c: canvas.Canvas, x: float, y: float, width: float, height: float, valu
 def figure_relative(path: Path, summary: list[dict]) -> None:
     c = canvas.Canvas(str(path), pagesize=landscape(letter))
     width, _ = landscape(letter)
-    header(c, "Figure 1. Verified tool state collapses policy regret within every model family",
-           "Mean observable policy regret; each panel normalizes neutral same-shape control B to 100%. n = 24 decisions per bar.")
+    header(c, "Figure 1. Verified tool state removes nearly all neutral-control policy regret",
+           "B-to-C reduction in mean observable policy regret. Taller is better; n = 24 decisions per model family.")
     lookup = {(r["model"], r["condition"]): r for r in summary}
     for index, model in enumerate(MODELS):
         baseline = lookup[(model, "B")]["mean_policy_regret_ms"]
-        values = {condition: 100*lookup[(model, condition)]["mean_policy_regret_ms"]/baseline for condition in CONDITIONS}
-        top = max(160, math.ceil(max(values.values())/20)*20)
-        bars(c, 68+index*238, 180, 188, 310, values, top, MODEL_LABELS[model], percent=True)
+        remaining = 100 * lookup[(model, "C")]["mean_policy_regret_ms"] / baseline
+        reduction = 100 - remaining
+        x, y, plot_width, plot_height = 68+index*238, 180, 188, 310
+        c.setStrokeColor(colors.HexColor("#AEB8C7"))
+        c.rect(x, y, plot_width, plot_height, fill=0, stroke=1)
+        c.setFillColor(colors.HexColor("#172033"))
+        c.setFont("Helvetica-Bold", 10)
+        c.drawString(x, y+plot_height+11, MODEL_LABELS[model])
+        for tick in range(5):
+            value, py = 100*tick/4, y+plot_height*tick/4
+            c.setStrokeColor(colors.HexColor("#E5EAF1"))
+            c.line(x, py, x+plot_width, py)
+            c.setFillColor(colors.HexColor("#526173"))
+            c.setFont("Helvetica", 7.3)
+            c.drawRightString(x-5, py-2.5, f"{value:.0f}%")
+        bar_width = 62
+        bar_x = x + (plot_width-bar_width)/2
+        bar_height = plot_height * reduction / 100
+        c.setFillColor(COLORS["C"])
+        c.rect(bar_x, y, bar_width, bar_height, fill=1, stroke=0)
+        c.setFillColor(colors.white)
+        c.setFont("Helvetica-Bold", 11)
+        c.drawCentredString(bar_x+bar_width/2, max(y+16, y+bar_height-16), f"{reduction:.1f}%")
+        c.setFillColor(colors.HexColor("#172033"))
+        c.setFont("Helvetica-Bold", 7.8)
+        c.drawCentredString(x+plot_width/2, y-12, "B-to-C regret reduction")
     c.setFillColor(colors.HexColor("#107A5A"))
     c.setFont("Helvetica-Bold", 11)
-    c.drawCentredString(width/2, 127, "Across all models, C is 3.1% of B's mean regret (131 ms vs 4,252 ms).")
+    c.drawCentredString(width/2, 127, "Across all models, C removes 96.9% of B's mean regret (4,252 ms to 131 ms).")
     c.setFillColor(colors.HexColor("#46546B"))
     c.setFont("Helvetica", 8.4)
-    c.drawCentredString(width/2, 111, "Normalization foregrounds within-model treatment effects; Figure A1 reports raw milliseconds.")
+    c.drawCentredString(width/2, 111, "Figure A1 and the model table retain the corresponding raw A/B/C milliseconds.")
     footer(c, "ToolRoute v1.0 frozen cohort: 3 provider/model families x 6 seeds x 4 turns x 3 conditions. Lower is better.")
     c.save()
 

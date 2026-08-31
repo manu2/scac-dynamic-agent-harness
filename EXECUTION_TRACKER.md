@@ -797,3 +797,16 @@
 - Prepared this dedicated, `main`-based review package separately from active
   RetryBudget work. The remaining submission steps are affiliations, verified
   BibTeX, release DOI, and a LaTeX source build.
+
+### 2026-08-31 — ToolRoute review-proof clarity revision
+
+- Corrected the Section 2.1 projection notation in the formatted proof: the
+  embedded STIX math font now renders the intended phi in
+  `z_t = phi(h_t)` rather than an unsupported-glyph block. The Markdown source
+  already retained portable LaTeX notation for the later TeX package.
+- Replaced the visually compressed "remaining regret" bars in Figure 1 with
+  the mathematically equivalent primary B-to-C regret reduction. The new figure
+  shows 97.7%, 98.4%, and 94.9% reduction for GPT, Sonnet, and Gemini,
+  respectively; the results table and Appendix Figure A1 continue to show the
+  complete raw A/B/C millisecond values. This is a presentation revision only:
+  it neither changes the cohort nor adds an unmeasured claim.

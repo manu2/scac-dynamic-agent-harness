@@ -143,9 +143,9 @@ The predeclared empirical centerpiece is B-to-C: neutral versus truthful
 operational state in the same interface. We report all decisions in the
 denominator, Wilson intervals for completion, and raw as well as normalized
 regret. To make model-scale differences visually secondary, the main regret
-figure normalizes each model family's B mean to 100%; the appendix reports raw
-milliseconds. This is a within-model treatment display, not a cross-provider
-ranking. Independent provider generations remain independent; a descriptive
+figure reports each model family's B-to-C percentage reduction; the appendix
+reports raw milliseconds. This is a within-model treatment display, not a
+cross-provider ranking. Independent provider generations remain independent; a descriptive
 bootstrap over the 18 model-by-seed environment blocks summarizes variation
 without pretending that providers share a sampling seed.
 
@@ -159,11 +159,11 @@ rises from 50/72 (69.4%; Wilson 95% CI 58.0-79.0%) to 69/72 (95.8%; 95% CI
 C (4,826.45 ms regret; 47/72, 65.3% completion), showing that the benefit is
 not merely a neutral telemetry envelope.
 
-![Within-model normalized policy regret](figures/figure_1_relative_regret.pdf)
+![Within-model B-to-C policy-regret reduction](figures/figure_1_relative_regret.pdf)
 
-*Figure 1. Mean observable policy regret normalized within each model family
-to B = 100%. C remains sharply lower for GPT-5.6 Sol, Claude Sonnet 5, and
-Gemini 3.7 Flash. Raw milliseconds are shown in Appendix Figure A1.*
+*Figure 1. B-to-C reduction in mean observable policy regret within each model
+family. Verified state removes 94.9% to 98.4% of neutral-control regret. Raw
+A/B/C milliseconds are shown in the table and Appendix Figure A1.*
 
 | Model | A regret (ms) | B regret (ms) | C regret (ms) | C completion |
 | --- | ---: | ---: | ---: | ---: |

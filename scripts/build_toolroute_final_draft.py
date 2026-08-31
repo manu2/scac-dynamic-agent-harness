@@ -17,6 +17,8 @@ from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
     Image, KeepTogether, Paragraph, SimpleDocTemplate,
     Spacer, Table, TableStyle,
@@ -30,6 +32,17 @@ FIGURES = (
     "appendix_figure_a1_raw_regret.pdf",
 )
 AUTHORS = "Manu Agrawal and Shrey Nagpal"
+MATH_FONT_NAME = "ToolRouteSTIX"
+MATH_FONT_PATH = Path("/System/Library/Fonts/Supplemental/STIXTwoText.ttf")
+
+
+def math_phi() -> str:
+    """Return an embedded Greek phi, with an ASCII-safe portable fallback."""
+
+    if MATH_FONT_PATH.exists():
+        pdfmetrics.registerFont(TTFont(MATH_FONT_NAME, str(MATH_FONT_PATH)))
+        return f"<font name='{MATH_FONT_NAME}'>φ</font>"
+    return "<i>phi</i>"
 
 
 def styles():
@@ -130,6 +143,7 @@ def footer(canvas, doc):
 
 def build(output: Path) -> None:
     s = styles()
+    phi = math_phi()
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="toolroute-final-figures-") as temp:
         rendered = render_figures(Path(temp))
@@ -152,7 +166,7 @@ def build(output: Path) -> None:
             p("This paper makes two linked contributions. First, it articulates Harness Awareness as a general systems design principle: agents should reason not only over task semantics but also over verified operational state. Second, it provides a rigorous multi-model empirical validation in the tools dimension: verified tool-health state reduces observable policy regret by 96.9% and raises operational completion from 69.4% to 95.8% across three provider/model families.", s["body"]),
             p("2. Agent Harness Awareness", s["h1"]),
             p("2.1 Trust-separated state interface", s["h2"]),
-            p("At a decision time <i>t</i>, let <i>x</i><sub>t</sub> be the task and tool interface, <i>h</i><sub>t</sub> the host state, and <i>z</i><sub>t</sub> = <font name='Symbol'>f</font>(<i>h</i><sub>t</sub>) a compact snapshot emitted by the harness. ToolRoute shows why this projection matters: when <i>z</i><sub>t</sub> carries truthful route-relevant monitor facts, agents select actions with substantially lower observable cost than under task-only or neutral same-shape information. A selected, verifiable projection can therefore be a high-leverage operational input without moving measurement or enforcement authority into the model.", s["body"]),
+            p(f"At a decision time <i>t</i>, let <i>x</i><sub>t</sub> be the task and tool interface, <i>h</i><sub>t</sub> the host state, and <i>z</i><sub>t</sub> = {phi}(<i>h</i><sub>t</sub>) a compact snapshot emitted by the harness. ToolRoute shows why this projection matters: when <i>z</i><sub>t</sub> carries truthful route-relevant monitor facts, agents select actions with substantially lower observable cost than under task-only or neutral same-shape information. A selected, verifiable projection can therefore be a high-leverage operational input without moving measurement or enforcement authority into the model.", s["body"]),
             p("The intended contract spans four state families: <b>Tools</b> (success, latency, error/circuit state); <b>Runtime</b> (deadlines and execution policy); <b>Hardware</b> (memory, CPU, disk, processes); and <b>Economics</b> (context, quota, rate limits, and cost). ToolRoute empirically evaluates Tools. The remaining families are next empirical instantiations of the same state contract.", s["body"]),
             p("2.2 Split planes: deterministic recovery and agent adaptation", s["h2"]),
             p("The data plane - kernel, proxy, circuit breaker, retry policy, and scheduler - continues to own fast local enforcement and recovery. The agent control plane becomes useful when state changes the strategy: choose a different tool, defer an operation, select a degraded-mode plan, or allocate remaining time and budget differently. ToolRoute isolates this fundamental strategic boundary while preserving deterministic enforcement in the data plane.", s["body"]),
@@ -170,10 +184,10 @@ def build(output: Path) -> None:
             p("3.2 External evaluation and auditability", s["h2"]),
             p("The primary outcome is <b>observable policy regret</b>: the excess cost of the selected action under an oracle restricted to canonical monitor facts rendered in C. Successful operational outcome is a secondary binary evaluation. Every provider attempt reserved its artifact directory before invocation and preserved its prompt, sanitized request/response, monitor snapshot, tool event, evaluator result, streams, and finalization hashes. The cohort contains 3 model families x 6 seeds x 4 turns x 3 conditions = 216 independent direct-provider decisions. All records completed and finalized with valid artifact hashes; no request was retried.", s["body"]),
             p("3.3 Analysis", s["h2"]),
-            p("The empirical centerpiece is B-to-C: neutral versus truthful operational state in the same interface. We report all decisions in the denominator, Wilson intervals for completion, and raw as well as normalized regret. The primary display normalizes each model family's B mean to 100%; raw milliseconds remain in the appendix. Independent provider generations remain independent; a descriptive bootstrap over 18 model-by-seed environment blocks summarizes variation without treating providers as shared-seed paired draws.", s["body"]),
+            p("The empirical centerpiece is B-to-C: neutral versus truthful operational state in the same interface. We report all decisions in the denominator, Wilson intervals for completion, and raw as well as normalized regret. The primary display reports each model family's B-to-C percentage reduction; raw A/B/C milliseconds remain in the table and appendix. Independent provider generations remain independent; a descriptive bootstrap over 18 model-by-seed environment blocks summarizes variation without treating providers as shared-seed paired draws.", s["body"]),
             p("4. Results", s["h1"]),
             p("Truthful operational state changes the next action substantially. Across 72 decisions per condition, C reduces mean observable policy regret from 4,251.54 ms in B to 131.12 ms - a 4,120.42 ms reduction (96.9%). Completion rises from 50/72 (69.4%; Wilson 95% CI 58.0-79.0%) to 69/72 (95.8%; 95% CI 88.3-98.5%), a 26.4-point increase. Condition A is also materially worse than C (4,826.45 ms regret; 47/72, 65.3% completion).", s["body"]),
-            figure(rendered["figure_1_relative_regret.pdf"], "Figure 1. Mean observable policy regret normalized within each model family to B = 100%. Verified state (C) remains sharply lower across all three model families.", 5.65*inch, s["caption"]),
+            figure(rendered["figure_1_relative_regret.pdf"], "Figure 1. B-to-C reduction in mean observable policy regret. Verified state removes 94.9% to 98.4% of neutral-control regret in every model family; the raw A/B/C milliseconds remain in the table and Appendix Figure A1.", 5.65*inch, s["caption"]),
             table([
                 ["Model", "A regret (ms)", "B regret (ms)", "C regret (ms)", "A completion", "B completion", "C completion"],
                 ["GPT-5.6 Sol", "4,723.81", "3,307.00", "75.50", "16/24 (66.7%)", "18/24 (75.0%)", "23/24 (95.8%)"],

@@ -62,8 +62,8 @@ Every snapshot enforces:
   replacement of deterministic middleware, or completed evidence for the other
   state dimensions. A reproducible frozen-cohort analysis and manuscript review
   draft now exist under `paper/`: its runner validates all 216 artifact hashes
-  before emitting derived tables and figures, shows normalized within-model
-  A/B/C regret alongside raw appendix values, and leaves the source cohort
+  before emitting derived tables and figures, shows within-model B-to-C regret
+  reduction alongside raw A/B/C appendix values, and leaves the source cohort
   immutable. A four-page formatted final-review proof with the same audited
   figures exists at `output/pdf/toolroute_arxiv_review_draft.pdf`; LaTeX source
   packaging and final release metadata remain before submission. The manuscript
