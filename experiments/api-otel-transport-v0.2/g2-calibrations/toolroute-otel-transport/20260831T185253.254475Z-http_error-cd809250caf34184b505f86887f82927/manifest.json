@@ -1,0 +1,33 @@
+{
+  "condition": "B",
+  "coordinator": "single_process_persistent_backend_toxiproxy_otel_v0.1",
+  "evidence_class": "provider_transport_pilot",
+  "fault_schedule": {
+    "backend": "alpha",
+    "http_status": 503
+  },
+  "faulted_tool": "tool_alpha",
+  "instrumentation": "opentelemetry-instrumentation-requests",
+  "kind": "toolroute_otel_transport_provider_pilot_v0.2_v0.1",
+  "not_pooled_with_toolroute_v1.0": true,
+  "option_order": [
+    "tool_alpha",
+    "tool_beta",
+    "wait"
+  ],
+  "primary_oracle": "observable_monitor_cost_v0.6",
+  "probes_per_tool": 3,
+  "provider_run": {
+    "authorization": "manifest_hash_bound_before_provider_request",
+    "episode_id": "gpt-06-http-b",
+    "model_id": "gpt-5.6-sol",
+    "pilot_manifest_path": "manifests/toolroute_otel_transport_pilot.v0.2.json",
+    "pilot_manifest_sha256": "4913a40f630dd5afbd406efef71affd01e4ddc7d1f30e9804d75ad0f3a1c56d4",
+    "provider_label": "openai",
+    "sequence": 6
+  },
+  "reducer_source_required": "otel_requests_http_client_span_v1",
+  "regime": "http_error",
+  "scenario": "ToolRoute-OTel-Transport-v0.1",
+  "toxiproxy_binary_sha256": "fb9085e232ffe7bfdae3a0be8da5f041cc66fb75740ec173173b5b3cc1b35750"
+}

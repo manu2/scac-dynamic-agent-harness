@@ -1,0 +1,18 @@
+{
+  "event": {
+    "event_id": "a8f83a8e8d3f65530a3da0f7a3c01c73e16864207e7f186123839c61f6e83ff2",
+    "payload": {
+      "error_class": "HTTP_503",
+      "http_status_code": 503,
+      "latency_ms": 2.681,
+      "otel_span_id": "98f95e8992559223",
+      "otel_trace_id": "1c01a39e74de466719860abad594e510",
+      "success": false,
+      "tool_id": "tool_alpha"
+    },
+    "source": "otel_requests_http_client_span_v1",
+    "timestamp_ms": 1788202364190,
+    "topic": "tool_span"
+  },
+  "status_code": 503
+}

@@ -1,0 +1,94 @@
+{
+  "events": [
+    {
+      "event_id": "d1c4cdb5d4dd5d952ed5d22843a13c07d37abdf9c06365292a8e65cc92118470",
+      "payload": {
+        "error_class": "HTTP_503",
+        "http_status_code": 503,
+        "latency_ms": 1.89,
+        "otel_span_id": "1c9e3a5039ecf56a",
+        "otel_trace_id": "d7df457f8e968dfaf9069579966a7c25",
+        "success": false,
+        "tool_id": "tool_alpha"
+      },
+      "source": "otel_requests_http_client_span_v1",
+      "timestamp_ms": 1788202373283,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "1472c6b026d06e5baa66fe8c35650fcdd193104094d49d0b73e1b2453e82c226",
+      "payload": {
+        "error_class": "HTTP_503",
+        "http_status_code": 503,
+        "latency_ms": 1.068,
+        "otel_span_id": "b6423e9cfda43732",
+        "otel_trace_id": "6b1204f3c4056dca4d02282d92915c3c",
+        "success": false,
+        "tool_id": "tool_alpha"
+      },
+      "source": "otel_requests_http_client_span_v1",
+      "timestamp_ms": 1788202373285,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "9300592e8b74490f4188572842aee951b5edf72ecff9fe5d43774f153ca41f8b",
+      "payload": {
+        "error_class": "HTTP_503",
+        "http_status_code": 503,
+        "latency_ms": 0.983,
+        "otel_span_id": "32ecf04e43074835",
+        "otel_trace_id": "dae71289b81dfbe8af7aeec4b6760c53",
+        "success": false,
+        "tool_id": "tool_alpha"
+      },
+      "source": "otel_requests_http_client_span_v1",
+      "timestamp_ms": 1788202373287,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "be1ed7ba04f39f355f30b9277a0e008ff88e8386420154fcbea26c7aba69c9e7",
+      "payload": {
+        "error_class": "NONE",
+        "http_status_code": 200,
+        "latency_ms": 0.937,
+        "otel_span_id": "712fd371e732fcc7",
+        "otel_trace_id": "4a62b2bdbb8e1a724e8897132f85940e",
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "otel_requests_http_client_span_v1",
+      "timestamp_ms": 1788202373288,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "cf7d294126e7f77284905dc2c005a7870f0204a8cee4bc377d55588091332a3b",
+      "payload": {
+        "error_class": "NONE",
+        "http_status_code": 200,
+        "latency_ms": 0.848,
+        "otel_span_id": "4733460706e037f0",
+        "otel_trace_id": "8e05ab31241575b197d0dd992c838f8c",
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "otel_requests_http_client_span_v1",
+      "timestamp_ms": 1788202373290,
+      "topic": "tool_span"
+    },
+    {
+      "event_id": "7e9eb8c1b6b01ab765465c84e03c2500f9c2b9434035fe784ca650bbca03d3e6",
+      "payload": {
+        "error_class": "NONE",
+        "http_status_code": 200,
+        "latency_ms": 0.722,
+        "otel_span_id": "e075789b3166ca1f",
+        "otel_trace_id": "cba2c343b16cc1b235d22c62dcaef230",
+        "success": true,
+        "tool_id": "tool_beta"
+      },
+      "source": "otel_requests_http_client_span_v1",
+      "timestamp_ms": 1788202373291,
+      "topic": "tool_span"
+    }
+  ]
+}

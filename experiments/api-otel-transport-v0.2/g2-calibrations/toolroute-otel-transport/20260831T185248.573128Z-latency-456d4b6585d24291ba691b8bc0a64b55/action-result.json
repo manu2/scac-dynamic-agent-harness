@@ -1,0 +1,18 @@
+{
+  "event": {
+    "event_id": "7ca2f61cca6e679c7e8ac86332370fa800f29f4425444eabd714b878386e08f4",
+    "payload": {
+      "error_class": "NONE",
+      "http_status_code": 200,
+      "latency_ms": 303.108,
+      "otel_span_id": "24ca22f39a1fc19f",
+      "otel_trace_id": "15a3c4f656e69106b8c1ba8e3500119f",
+      "success": true,
+      "tool_id": "tool_alpha"
+    },
+    "source": "otel_requests_http_client_span_v1",
+    "timestamp_ms": 1788202372521,
+    "topic": "tool_span"
+  },
+  "status_code": 200
+}

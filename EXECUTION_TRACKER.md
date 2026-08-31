@@ -925,7 +925,38 @@
   6. `gpt-02-latency-b` (OpenAI GPT-5.6 Sol; Condition B; latency regime, faulted tool_alpha):
      Selected `tool_alpha` (observable best: `tool_beta`), 302.23 ms policy regret, live HTTP 200 success.
 - All six trials passed 100% of infrastructure checks and finalized with valid SHA-256 hashes.
+### 2026-09-01 — ToolRoute OTel transport v0.2 Stage 3 execution (12 episodes)
+
+- Authorized `manifests/toolroute_otel_transport_pilot.v0.2.json` (SHA-256
+  `4913a40f630dd5afbd406efef71affd01e4ddc7d1f30e9804d75ad0f3a1c56d4`) and executed
+  exactly the 12 Stage-3 cross-model episodes via `scripts/run_toolroute_otel_transport_cohort.py`:
+  1. `gemini-03-latency-c` (Google Gemini 3.7 Flash; Condition C; latency regime, faulted tool_alpha):
+     Selected `tool_beta` (observable best: `tool_beta`), 0.0 ms policy regret, live HTTP 200 success.
+  2. `gemini-04-connection-a` (Google Gemini 3.7 Flash; Condition A; connection_error regime, faulted tool_beta):
+     Selected `tool_alpha` (observable best: `tool_alpha`), 0.0 ms policy regret, live HTTP 200 success.
+  3. `gemini-05-http-c` (Google Gemini 3.7 Flash; Condition C; http_error regime, faulted tool_alpha):
+     Selected `tool_beta` (observable best: `tool_beta`), 0.0 ms policy regret, live HTTP 200 success.
+  4. `gemini-06-latency-b` (Google Gemini 3.7 Flash; Condition B; latency regime, faulted tool_alpha):
+     Selected `tool_alpha` (observable best: `tool_beta`), 301.22 ms policy regret, live HTTP 200 success.
+  5. `sonnet-03-latency-c` (Anthropic Claude Sonnet 5; Condition C; latency regime, faulted tool_beta):
+     Selected `tool_alpha` (observable best: `tool_alpha`), 0.0 ms policy regret, live HTTP 200 success.
+  6. `sonnet-04-http-b` (Anthropic Claude Sonnet 5; Condition B; http_error regime, faulted tool_beta):
+     Selected `tool_alpha` (observable best: `tool_alpha`), 0.0 ms policy regret, live HTTP 200 success.
+  7. `sonnet-05-connection-a` (Anthropic Claude Sonnet 5; Condition A; connection_error regime, faulted tool_alpha):
+     Selected `tool_alpha` (observable best: `tool_beta`), 20004.16 ms policy regret, live connection failure.
+  8. `sonnet-06-latency-a` (Anthropic Claude Sonnet 5; Condition A; latency regime, faulted tool_beta):
+     Selected `tool_alpha` (observable best: `tool_alpha`), 0.0 ms policy regret, live HTTP 200 success.
+  9. `gpt-03-http-a` (OpenAI GPT-5.6 Sol; Condition A; http_error regime, faulted tool_alpha):
+     Selected `tool_alpha` (observable best: `tool_beta`), 20000.40 ms policy regret, live HTTP 503 failure.
+  10. `gpt-04-connection-c` (OpenAI GPT-5.6 Sol; Condition C; connection_error regime, faulted tool_beta):
+     Selected `tool_alpha` (observable best: `tool_alpha`), 0.0 ms policy regret, live HTTP 200 success.
+  11. `gpt-05-latency-a` (OpenAI GPT-5.6 Sol; Condition A; latency regime, faulted tool_alpha):
+     Selected `tool_alpha` (observable best: `tool_beta`), 302.51 ms policy regret, live HTTP 200 success.
+  12. `gpt-06-http-b` (OpenAI GPT-5.6 Sol; Condition B; http_error regime, faulted tool_alpha):
+     Selected `tool_alpha` (observable best: `tool_beta`), 20000.70 ms policy regret, live HTTP 503 failure.
+- All 12 trials passed 100% of infrastructure checks and finalized with valid SHA-256 hashes.
 - Provider authorization was immediately revoked (`toolroute_otel_transport_provider_trials_authorized: false`,
   `toolroute_otel_transport_pilot_manifest_sha256: null`) in `PROVENANCE.json`.
+
 
 
