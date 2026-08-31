@@ -12,8 +12,8 @@
   "toolroute_provider_trials_authorized": false,
   "toolroute_pilot_manifest_sha256": null,
   "toolroute_execution_config_sha256": null,
-  "toolroute_otel_transport_provider_trials_authorized": false,
-  "toolroute_otel_transport_pilot_manifest_sha256": null,
+  "toolroute_otel_transport_provider_trials_authorized": true,
+  "toolroute_otel_transport_pilot_manifest_sha256": "4913a40f630dd5afbd406efef71affd01e4ddc7d1f30e9804d75ad0f3a1c56d4",
   "toolroute_otel_transport_v0_1_status": "completed_preliminary_integration_pilot_not_poolable_with_v0_2",
-  "authorization_scope": "No provider call is authorized. Stage 1 of the ToolRoute OTel/Toxiproxy v0.2 provider replication (3 episodes: gemini-00-connection-c, sonnet-00-latency-b, gpt-00-http-c) completed and was audited; any subsequent execution requires a new reviewed authorization."
+  "authorization_scope": "Authorized strictly for Stage 2 of the ToolRoute OTel/Toxiproxy v0.2 provider replication (6 episodes: gemini-01-latency-a, gemini-02-http-b, sonnet-01-http-a, sonnet-02-connection-c, gpt-01-connection-a, gpt-02-latency-b) under manifest SHA-256 4913a40f630dd5afbd406efef71affd01e4ddc7d1f30e9804d75ad0f3a1c56d4."
 }
