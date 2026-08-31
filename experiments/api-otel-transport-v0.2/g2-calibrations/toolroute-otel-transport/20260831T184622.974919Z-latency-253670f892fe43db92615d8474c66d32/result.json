@@ -1,0 +1,21 @@
+{
+  "classification": "COMPLETED",
+  "infrastructure_checks": {
+    "connection_fault_observed": true,
+    "each_tool_has_three_standard_otel_spans": true,
+    "every_reducer_event_is_otel_derived": true,
+    "http_fault_observed": true,
+    "latency_fault_observed": true,
+    "neutral_control_has_same_tool_lines": true,
+    "neutral_control_preserves_tool_row_shape": true,
+    "observable_margin_is_actionable": true,
+    "only_c_carries_truthful_snapshot": true
+  },
+  "outcome": {
+    "live_action_executed": true,
+    "live_action_status_code": 200,
+    "live_action_success": true,
+    "policy_regret": 302.23,
+    "selected_action_is_observable_best": false
+  }
+}
