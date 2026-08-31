@@ -81,8 +81,13 @@ condition inputs, action result, and finalization hashes under
 
 This is a distinct integration replication, not an alteration of or addition
 to the 216-decision ToolRoute v1.0 cohort. The provider command is deliberately
-blocked by the separate false provenance flag until the draft manifest is
-independently reviewed and hash-bound. See
+blocked by the separate false provenance flag except during a reviewed,
+hash-bound execution window. The frozen v0.2 transport-replication manifest is
+being collected in audited stages: nine of its 27 independent episodes (three
+per provider) are retained under
+`experiments/api-otel-transport-v0.2/g2-calibrations/toolroute-otel-transport/`.
+Authorization is currently revoked; those partial results are not a completed
+cross-model effect estimate. See
 `docs/24_otel_transport_replication_research_note.md`.
 
 ## ToolRoute manuscript review package

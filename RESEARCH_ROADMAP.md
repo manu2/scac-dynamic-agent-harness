@@ -123,12 +123,15 @@ Every snapshot enforces:
   defect, but it also found unbound provider metadata, misleading external-model
   result flags, and no frozen route/list-order counterbalance. Preserve this as
   an integration pilot; do not pool it or use it to decide a cross-model effect.
-- **Transport pilot v0.2 (next gated cohort):** a fresh 27-episode three-model
-  design predeclares the full action-order, route-fault, and run-sequence plan
-  for Gemini 3.7 Flash, Claude Sonnet 5, and GPT-5.6 Sol. It is code- and
-  model-free-validated but not authorized. Run a fresh Gemini v0.2 block first,
-  audit it, then run the Sonnet and GPT blocks only under the same frozen
-  manifest and revised runner.
+- **Transport pilot v0.2 (staged collection, 9/27 complete):** a fresh
+  27-episode three-model design predeclares the full action-order, route-fault,
+  and run-sequence plan for Gemini 3.7 Flash, Claude Sonnet 5, and GPT-5.6 Sol.
+  Stage 1 (one episode per provider) and Stage 2 (two additional episodes per
+  provider) are complete, independently audited, hash-finalized, and retained.
+  The provenance authorization is revoked between stages. These nine episodes
+  validate the live cross-provider path but are not yet a balanced or complete
+  cross-model effect estimate; any further provider execution requires a new
+  reviewed, manifest-hash-bound authorization window.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
 - **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,
