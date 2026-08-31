@@ -1,9 +1,10 @@
 # Standards-based ToolRoute transport-replication research note
 
-**Status:** model-free validated and a nine-decision Gemini v0.1 provider
-pilot completed on 2026-09-01. Provider authorization is currently false. The
-v0.1 artifacts are preliminary integration evidence; a fresh, counterbalanced
-v0.2 cohort is required before cross-model reporting.
+**Status:** model-free validation, the preliminary Gemini v0.1 pilot, and the
+fresh counterbalanced v0.2 cohort are complete. The v0.2 cohort contains 27
+hash-finalized remote-model decisions across Gemini 3.7 Flash, Claude Sonnet 5,
+and GPT-5.6 Sol; provider authorization is currently false. It is separately
+reported from the primary ToolRoute v1.0 cohort and is not pooled with it.
 
 ## Decision question
 

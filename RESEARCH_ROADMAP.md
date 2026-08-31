@@ -123,15 +123,16 @@ Every snapshot enforces:
   defect, but it also found unbound provider metadata, misleading external-model
   result flags, and no frozen route/list-order counterbalance. Preserve this as
   an integration pilot; do not pool it or use it to decide a cross-model effect.
-- **Transport pilot v0.2 (staged collection, 9/27 complete):** a fresh
-  27-episode three-model design predeclares the full action-order, route-fault,
-  and run-sequence plan for Gemini 3.7 Flash, Claude Sonnet 5, and GPT-5.6 Sol.
-  Stage 1 (one episode per provider) and Stage 2 (two additional episodes per
-  provider) are complete, independently audited, hash-finalized, and retained.
-  The provenance authorization is revoked between stages. These nine episodes
-  validate the live cross-provider path but are not yet a balanced or complete
-  cross-model effect estimate; any further provider execution requires a new
-  reviewed, manifest-hash-bound authorization window.
+- **Transport pilot v0.2 (complete, 27/27):** a fresh 27-episode three-model
+  design predeclared action order, route-fault assignment, and run sequence for
+  Gemini 3.7 Flash, Claude Sonnet 5, and GPT-5.6 Sol. All A/B/C-by-regime cells
+  completed, were hash-finalized, and are retained under a single frozen
+  manifest. In the separately labelled live transport replication, Condition C
+  selected the observable-best route and completed the post-decision HTTP action
+  in all 9/9 model-by-regime cells; the neutral control completed 5/9. The
+  provenance authorization is revoked. This strengthens the ToolRoute tools
+  evidence through a standard-OTel, real TCP/HTTP path but is never pooled with
+  the frozen 216-decision synthetic cohort.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
 - **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,

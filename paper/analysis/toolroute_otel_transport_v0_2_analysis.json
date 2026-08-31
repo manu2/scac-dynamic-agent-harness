@@ -1,0 +1,455 @@
+{
+  "cohort": {
+    "decisions": 27,
+    "models": [
+      "gpt-5.6-sol",
+      "claude-sonnet-5",
+      "gemini-3.7-flash"
+    ],
+    "conditions": [
+      "A",
+      "B",
+      "C"
+    ],
+    "regimes": [
+      "latency",
+      "connection_error",
+      "http_error"
+    ],
+    "evidence_class": "separate_live_transport_replication_not_pooled_with_toolroute_v1"
+  },
+  "condition_summary": [
+    {
+      "condition": "A",
+      "decisions": 9,
+      "successful_live_actions": 6,
+      "completion_rate": 0.6666666666666666,
+      "mean_policy_regret_ms": 6734.303333333333,
+      "observable_best_actions": 4
+    },
+    {
+      "condition": "B",
+      "decisions": 9,
+      "successful_live_actions": 5,
+      "completion_rate": 0.5555555555555556,
+      "mean_policy_regret_ms": 8956.366666666667,
+      "observable_best_actions": 3
+    },
+    {
+      "condition": "C",
+      "decisions": 9,
+      "successful_live_actions": 9,
+      "completion_rate": 1.0,
+      "mean_policy_regret_ms": 0.0,
+      "observable_best_actions": 9
+    }
+  ],
+  "rows": [
+    {
+      "episode_id": "gemini-00-connection-c",
+      "model": "gemini-3.7-flash",
+      "condition": "C",
+      "regime": "connection_error",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "sonnet-00-latency-b",
+      "model": "claude-sonnet-5",
+      "condition": "B",
+      "regime": "latency",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gpt-00-http-c",
+      "model": "gpt-5.6-sol",
+      "condition": "C",
+      "regime": "http_error",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_beta",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gemini-01-latency-a",
+      "model": "gemini-3.7-flash",
+      "condition": "A",
+      "regime": "latency",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 301.2,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gemini-02-http-b",
+      "model": "gemini-3.7-flash",
+      "condition": "B",
+      "regime": "http_error",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 20000.530000000002,
+      "live_action_success": false,
+      "live_http_status": 503,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "sonnet-01-http-a",
+      "model": "claude-sonnet-5",
+      "condition": "A",
+      "regime": "http_error",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "sonnet-02-connection-c",
+      "model": "claude-sonnet-5",
+      "condition": "C",
+      "regime": "connection_error",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_beta",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gpt-01-connection-a",
+      "model": "gpt-5.6-sol",
+      "condition": "A",
+      "regime": "connection_error",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gpt-02-latency-b",
+      "model": "gpt-5.6-sol",
+      "condition": "B",
+      "regime": "latency",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 302.23,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gemini-03-latency-c",
+      "model": "gemini-3.7-flash",
+      "condition": "C",
+      "regime": "latency",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_beta",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gemini-04-connection-a",
+      "model": "gemini-3.7-flash",
+      "condition": "A",
+      "regime": "connection_error",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gemini-05-http-c",
+      "model": "gemini-3.7-flash",
+      "condition": "C",
+      "regime": "http_error",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_beta",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gemini-06-latency-b",
+      "model": "gemini-3.7-flash",
+      "condition": "B",
+      "regime": "latency",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 301.21999999999997,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "sonnet-03-latency-c",
+      "model": "claude-sonnet-5",
+      "condition": "C",
+      "regime": "latency",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "sonnet-04-http-b",
+      "model": "claude-sonnet-5",
+      "condition": "B",
+      "regime": "http_error",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "sonnet-05-connection-a",
+      "model": "claude-sonnet-5",
+      "condition": "A",
+      "regime": "connection_error",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 20004.16,
+      "live_action_success": false,
+      "live_http_status": null,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "sonnet-06-latency-a",
+      "model": "claude-sonnet-5",
+      "condition": "A",
+      "regime": "latency",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gpt-03-http-a",
+      "model": "gpt-5.6-sol",
+      "condition": "A",
+      "regime": "http_error",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 20000.399999999998,
+      "live_action_success": false,
+      "live_http_status": 503,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gpt-04-connection-c",
+      "model": "gpt-5.6-sol",
+      "condition": "C",
+      "regime": "connection_error",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gpt-05-latency-a",
+      "model": "gpt-5.6-sol",
+      "condition": "A",
+      "regime": "latency",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 302.51000000000005,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gpt-06-http-b",
+      "model": "gpt-5.6-sol",
+      "condition": "B",
+      "regime": "http_error",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 20000.7,
+      "live_action_success": false,
+      "live_http_status": 503,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gemini-07-connection-b",
+      "model": "gemini-3.7-flash",
+      "condition": "B",
+      "regime": "connection_error",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gemini-08-http-a",
+      "model": "gemini-3.7-flash",
+      "condition": "A",
+      "regime": "http_error",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 20000.46,
+      "live_action_success": false,
+      "live_http_status": 503,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "sonnet-07-http-c",
+      "model": "claude-sonnet-5",
+      "condition": "C",
+      "regime": "http_error",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "sonnet-08-connection-b",
+      "model": "claude-sonnet-5",
+      "condition": "B",
+      "regime": "connection_error",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_alpha",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 20001.53,
+      "live_action_success": false,
+      "live_http_status": null,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gpt-07-connection-b",
+      "model": "gpt-5.6-sol",
+      "condition": "B",
+      "regime": "connection_error",
+      "faulted_tool": "tool_beta",
+      "selected_action": "tool_beta",
+      "observable_best_actions": [
+        "tool_alpha"
+      ],
+      "policy_regret_ms": 20001.09,
+      "live_action_success": false,
+      "live_http_status": null,
+      "finalization_hashes_valid": true
+    },
+    {
+      "episode_id": "gpt-08-latency-c",
+      "model": "gpt-5.6-sol",
+      "condition": "C",
+      "regime": "latency",
+      "faulted_tool": "tool_alpha",
+      "selected_action": "tool_beta",
+      "observable_best_actions": [
+        "tool_beta"
+      ],
+      "policy_regret_ms": 0.0,
+      "live_action_success": true,
+      "live_http_status": 200,
+      "finalization_hashes_valid": true
+    }
+  ],
+  "validation": "all listed finalization hashes validated; complete frozen 3-model \u00d7 A/B/C \u00d7 3-regime grid"
+}

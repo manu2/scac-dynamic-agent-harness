@@ -83,16 +83,18 @@ This is a distinct integration replication, not an alteration of or addition
 to the 216-decision ToolRoute v1.0 cohort. The provider command is deliberately
 blocked by the separate false provenance flag except during a reviewed,
 hash-bound execution window. The frozen v0.2 transport-replication manifest is
-being collected in audited stages: nine of its 27 independent episodes (three
-per provider) are retained under
+complete: all 27 independent episodes (three model families × three fault
+regimes × A/B/C) are retained under
 `experiments/api-otel-transport-v0.2/g2-calibrations/toolroute-otel-transport/`.
-Authorization is currently revoked; those partial results are not a completed
-cross-model effect estimate. See
+Authorization is revoked. The separately labelled replication reports 9/9
+successful, zero-regret Condition-C live actions versus 5/9 for the neutral
+control; it is never pooled with the 216-decision synthetic primary cohort. See
 `docs/24_otel_transport_replication_research_note.md`.
 
 ## ToolRoute manuscript review package
 
-The reproducible ToolRoute manuscript, frozen-cohort analysis, and source
-figures are documented in `paper/README.md`. The shareable review proof is
-`output/pdf/toolroute_arxiv_review_draft.pdf`: a four-page formatted artifact
-for manual review, not yet an arXiv source bundle.
+The reproducible ToolRoute manuscript, frozen-cohort analysis, transport
+replication figures, and source builders are documented in `paper/README.md`.
+The shareable submission-ready proof is
+`output/pdf/agent_harness_awareness_toolroute.pdf`; it is a formatted PDF, not
+yet an arXiv source bundle.

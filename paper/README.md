@@ -1,8 +1,8 @@
 # ToolRoute manuscript artifacts
 
-This directory holds a review draft for the ToolRoute-only arXiv preprint and
-the reproducible analysis built from the frozen v1.0 API cohort. It is not a
-submission package yet.
+This directory holds the ToolRoute manuscript source, the reproducible frozen
+v1.0 analysis, and the separately labelled OTel/Toxiproxy transport-replication
+figures. It is not an arXiv source package yet.
 
 Install the sole figure dependency, then regenerate all derived tables and PDFs
 from the repository root:
@@ -21,23 +21,37 @@ source, validates the exact 216-cell grid, and writes derived output under
 `paper/analysis/` and `paper/figures/`. It makes no provider calls and never
 rewrites `experiments/`.
 
-The main manuscript figure shows the within-model B-to-C percentage reduction
-in regret, making the information treatment visible without encouraging a
-provider ranking. Raw A/B/C milliseconds remain in the results table, appendix
-figure, and derived CSVs.
-
-## Final-review PDF
-
-The polished final-review proof is written to
-`output/pdf/toolroute_arxiv_review_draft.pdf` by:
+The versioned manuscript source is
+`paper/toolroute_draft_transport_replication_v0.2.md`. Its primary figure shows
+all A/B/C condition means on a logarithmic regret scale, while the second figure
+shows the complete 27-decision live transport replication. Generate these
+figures with:
 
 ```bash
 /Users/manuagrawal/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 \
-  scripts/build_toolroute_final_draft.py
+  scripts/generate_toolroute_transport_draft_figures.py
+```
+
+Regenerate the hash-validated transport summary used by the replication figure
+with:
+
+```bash
+/Users/manuagrawal/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 \
+  scripts/analyze_toolroute_otel_transport_v0_2.py
+```
+
+## Submission-ready PDF
+
+The polished submission-ready proof is written to
+`output/pdf/agent_harness_awareness_toolroute.pdf` by:
+
+```bash
+/Users/manuagrawal/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 \
+  scripts/build_toolroute_submission_pdf.py
 ```
 
 The builder embeds the audited figures and uses macOS `sips` only to rasterize
 them for ReportLab. The output identifies Manu Agrawal as first author and
-Shrey Nagpal as second author. It is a final-review PDF, not yet an arXiv
-source package: this workspace has no LaTeX engine, and affiliations, verified
-BibTeX, release DOI, and the final submission commit remain to be added.
+Shrey Nagpal as second author. It remains a formatted submission proof rather
+than an arXiv source package: affiliations, verified BibTeX, and final release
+metadata remain to be added.
