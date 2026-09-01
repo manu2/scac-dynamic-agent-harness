@@ -1000,4 +1000,18 @@
 - The redundant Figure 1 `ms` unit label was removed because it sat adjacent to the 10,000 tick label. The figure
   title and all point labels retain the unit; no data, evaluator, cohort, or analysis rule changed.
 
+### 2026-09-01 — Final manuscript metric clarity and baseline framing
+
+- The submission text now distinguishes the three information conditions by evidentiary role: A is the practical
+  task-only deployment baseline, B is the same-shape neutral structural control, and C is the verified-state
+  intervention. Results report both A-to-C deployment improvement and B-to-C mechanism-identifying comparisons;
+  B remains the primary structural comparison and neither cohort is pooled.
+- The manuscript now defines observable policy regret as selected observable operational cost minus the minimum
+  observable cost under the same monitor facts available to C. It explicitly states that 0 ms regret means no
+  excess observable operational cost, not zero HTTP duration, and defines completion as a distinct route-success
+  outcome. The evaluator's observable-only restriction remains unchanged.
+- Figure 2 was replaced with the reviewed white-background publication layout: a nine-cell verified-state live
+  evidence matrix plus all-A/B/C regret and completion summaries, with B-to-C reductions highlighted. This is a
+  presentation and terminology revision only; no raw trial artifact, evaluator, manifest, cohort, or analysis rule
+  changed.
 

@@ -43,9 +43,11 @@ The task is to retrieve a read-only customer record via one of two functionally 
 | B: neutral envelope | Same telemetry-shaped envelope, fields, row order, and tool rows as C, with equal neutral values for both routes. |
 | C: verified state | The same envelope with fresh host-owned facts for current route state. |
 
-B is the structural control. It holds interface shape and technical content constant while neutralizing route-relevant values, isolating operational information from the presence of a table or extra prompt text. It is not an exact provider-token-matching control; input-token counts are descriptive.
+**A is the deployment baseline:** task and tool semantics alone, approximating conventional agent behavior without harness state. **B is the structural control:** the same telemetry-shaped interface with all route-relevant values neutralized. **C is the intervention:** verified current state. Thus A-to-C measures the practical deployment gain, while B-to-C isolates the informational contribution of telemetry from interface shape and formatting. B is not an exact provider-token-matching control; input-token counts are descriptive.
 
-The primary outcome is **observable policy regret**: excess selected-action cost under an oracle restricted to canonical facts rendered in C. This avoids scoring a model against latent reliability it could not observe. The frozen direct-provider cohort contains 216 independent decisions: three model families × six seeds × four turns × three conditions. Every attempt retained a prompt, sanitized request/response, snapshot, tool event, evaluation result, and finalization hashes; no request was retried.
+We report two complementary outcomes. **Observable policy regret** is the avoidable observable operational cost of the selected action: \(r_{\mathrm{obs}}(a,z)=c_{\mathrm{obs}}(a,z)-\min_{a'}c_{\mathrm{obs}}(a',z)\). The host computes \(c_{\mathrm{obs}}\) using only canonical monitor facts rendered in C, combining monitored latency with predeclared failure, circuit-open, and missed-record penalties. It is reported in milliseconds; **0 ms regret means that the agent selected an observable-best action with no excess operational cost, not that the request itself took zero time.** The evaluator never uses hidden latent anomalies unavailable to the model. **Completion** is a separate binary outcome: whether the selected route successfully retrieves the requested record; in Study 2, whether the post-decision live HTTP action succeeds. A route can complete yet still have positive regret when it was avoidably slower or riskier.
+
+The frozen direct-provider cohort contains 216 independent decisions: three model families × six seeds × four turns × three conditions. Every attempt retained a prompt, sanitized request/response, snapshot, tool event, evaluation result, and finalization hashes; no request was retried.
 
 ### 3.2 Study 2: live OpenTelemetry transport replication
 
@@ -69,13 +71,13 @@ The frozen replication contains 27 independent decisions: three model families �
 
 ### 4.1 Study 1: controlled information ablation
 
-Across 72 decisions per condition, C reduces mean observable policy regret from 4,251.54 ms in B to 131.12 ms: a 96.9% reduction. Completion rises from 50/72 (69.4%; Wilson 95% CI 58.0–79.0%) to 69/72 (95.8%; Wilson 95% CI 88.3–98.5%), a 26.4-point increase. A is also materially worse than C (4,826.45 ms regret; 47/72 completion), demonstrating that a telemetry-shaped envelope alone does not explain the result.
+Against the task-only deployment baseline A, verified state C reduces mean observable policy regret from 4,826.45 ms to 131.12 ms: a **97.3% reduction**. Completion rises from 47/72 (65.3%) to 69/72 (95.8%), a **30.6-point increase**. The structural B-to-C comparison reaches the same conclusion while holding interface shape constant: regret falls from 4,251.54 ms to 131.12 ms (**96.9% lower**) and completion rises from 50/72 (69.4%; Wilson 95% CI 58.0–79.0%) to 69/72 (95.8%; Wilson 95% CI 88.3–98.5%), a **26.4-point increase**. Together, these comparisons show both practical deployment value and the informational contribution of verified telemetry.
 
-| Model | A regret (ms) | B regret (ms) | C regret (ms) | C completion |
-| --- | ---: | ---: | ---: | ---: |
-| GPT-5.6 Sol | 4,723.81 | 3,307.00 | 75.50 | 23/24 (95.8%) |
-| Claude Sonnet 5 | 5,031.72 | 4,723.81 | 75.50 | 23/24 (95.8%) |
-| Gemini 3.7 Flash | 4,723.81 | 4,723.81 | 242.35 | 23/24 (95.8%) |
+| Condition | Role | Mean observable regret (ms) | Completion |
+| --- | --- | ---: | ---: |
+| A | Task-only deployment baseline | 4,826.45 | 47/72 (65.3%) |
+| B | Neutral structural control | 4,251.54 | 50/72 (69.4%) |
+| C | Verified host state | 131.12 | 69/72 (95.8%) |
 
 ![A, B, and C observable policy regret](figures/figure_1_conditions_log.pdf)
 
@@ -83,7 +85,7 @@ Across 72 decisions per condition, C reduces mean observable policy regret from 
 
 ### 4.2 Study 2: live transport replication
 
-The transport replication reproduces the central result without relying on the synthetic monitor. Across nine B decisions, models completed 5/9 actions (55.6%) and incurred 8,956.37 ms mean observable policy regret. Across nine C decisions, models selected the observable-best route in **9/9 cases**, completed **9/9 live actions**, and incurred **0.00 ms** mean observable policy regret: a 100% B-to-C regret reduction in this frozen replication.
+The transport replication reproduces the central result without relying on the synthetic monitor. The task-only deployment baseline A completed 6/9 live actions (66.7%) with 6,734.30 ms mean observable policy regret. The neutral structural control B completed 5/9 actions (55.6%) with 8,956.37 ms regret. Verified state C selected the observable-best route in **9/9 cases**, completed **9/9 live actions**, and incurred **0.00 ms** regret. Thus C improves both the practical task-only baseline and the same-shape structural control, while the B-to-C comparison isolates the information effect.
 
 The result holds in every model family and every predeclared fault regime. C contains one latency, one connection-error, and one HTTP-error episode for Gemini 3.7 Flash, Claude Sonnet 5, and GPT-5.6 Sol; every C decision selected the viable route from OTel-derived state and that route completed over the live proxied HTTP path.
 
@@ -96,7 +98,7 @@ The result holds in every model family and every predeclared fault regime. C con
 
 ![OpenTelemetry transport replication outcome matrix](figures/figure_2_transport_replication.pdf)
 
-*Figure 2. Study 2 outcome summary. All nine verified-state cells in the frozen OpenTelemetry/Toxiproxy replication selected the observable-best route and completed the subsequent live proxied HTTP action; the lower panel reports all A/B/C completion outcomes.*
+*Figure 2. Study 2 live transport replication. The upper panel shows that all nine verified-state C cases selected the observable-best route and completed the subsequent live proxied HTTP action. The lower panel reports mean observable policy regret and live completion for all A/B/C conditions, highlighting the B-to-C structural-control comparison. Here, 0 ms regret denotes zero excess observable operational cost, not zero HTTP duration.*
 
 The counterbalanced design also exposes the baseline decision pattern that the state interface corrects. Across A and B, models selected `tool_alpha` in 17 of 18 decisions (94.4%), including 7 of 8 cases in which `tool_beta` was listed first. We describe this as an observed **default route-label preference** in this cohort, not as a claim about universal positional bias. Condition C removed its operational consequence: the model selected the healthy route in every regime regardless of which route was degraded or listed first.
 
@@ -112,7 +114,7 @@ The evidence is strong for the mechanism tested here: current verified tool-heal
 
 ## 6. Conclusion
 
-Agent Harness Awareness closes an operational loop that tool-using systems often leave open: the harness observes execution state while the agent chooses as if that state did not exist. In a frozen 216-decision cohort, verified state reduced mean observable policy regret by 96.9% and raised completion by 26.4 points against a neutral same-shape control. In a separately reported 27-decision OpenTelemetry/Toxiproxy replication, verified state selected the best route and completed the live action in all nine C episodes across three providers and three fault regimes. The evidence supports a clear systems direction: turn selected, verified telemetry into an active agent control input while keeping truth and enforcement in the harness.
+Agent Harness Awareness closes an operational loop that tool-using systems often leave open: the harness observes execution state while the agent chooses as if that state did not exist. In the frozen controlled cohort, verified state substantially outperformed both the task-only deployment baseline and the neutral same-shape structural control; the latter shows that the improvement is attributable to verified operational information rather than interface formatting. In the separately reported OpenTelemetry/Toxiproxy replication, that same information intervention selected the observable-best route and completed every C action across three providers and three fault regimes. The evidence supports a clear systems direction: turn selected, verified telemetry into an active agent control input while keeping truth and enforcement in the harness.
 
 ## References
 

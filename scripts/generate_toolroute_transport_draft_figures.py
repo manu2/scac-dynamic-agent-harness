@@ -159,21 +159,21 @@ def figure_transport_replication(path: Path, rows: list[dict]) -> None:
     pdf = canvas.Canvas(str(path), pagesize=landscape(letter))
     draw_header(
         pdf,
-        "Figure 2. Verified telemetry succeeds across every live transport case",
+        "Figure 2. Verified telemetry improves every live transport decision",
         "Frozen OpenTelemetry/Toxiproxy v0.2 replication: 27 independent remote-model decisions; live selected-route execution after each decision.",
     )
     width, _ = landscape(letter)
     c_rows = {(r["regime"], r["model"]): r for r in rows if r["condition"] == "C"}
     regimes = (("latency", "300 ms latency"), ("connection_error", "connection error"), ("http_error", "HTTP 503"))
-    x0, y0, cell_w, cell_h = 145, 286, 160, 62
+    x0, y0, cell_w, cell_h = 128, 315, 180, 60
     pdf.setFillColor(INK)
     pdf.setFont("Helvetica-Bold", 11)
-    pdf.drawCentredString(width / 2, y0 + cell_h * 3 + 46, "Condition C: all nine model-by-fault cases selected the viable route")
+    pdf.drawCentredString(width / 2, y0 + cell_h * 3 + 43, "Verified state (C): all nine model-by-fault cases selected the viable route and completed live")
     for col, model in enumerate(MODELS):
         x = x0 + col * cell_w
         pdf.setFillColor(INK)
         pdf.setFont("Helvetica-Bold", 8.5)
-        pdf.drawCentredString(x + (cell_w - 10) / 2, y0 + cell_h * 3 + 23, MODEL_LABELS[model])
+        pdf.drawCentredString(x + 83, y0 + cell_h * 3 + 21, MODEL_LABELS[model])
     for row_index, (regime, label) in enumerate(regimes):
         y = y0 + (2 - row_index) * cell_h
         pdf.setFillColor(INK)
@@ -183,43 +183,74 @@ def figure_transport_replication(path: Path, rows: list[dict]) -> None:
             x = x0 + col * cell_w
             data = c_rows[(regime, model)]
             pdf.setFillColor(colors.HexColor("#EAF6F1"))
-            pdf.roundRect(x, y, cell_w - 10, cell_h - 8, 5, fill=1, stroke=0)
+            pdf.roundRect(x, y, cell_w - 14, cell_h - 6, 5, fill=1, stroke=0)
             pdf.setFillColor(GOOD)
-            pdf.circle(x + 25, y + 29, 10, fill=1, stroke=0)
+            pdf.circle(x + 23, y + 28, 10, fill=1, stroke=0)
             pdf.setFillColor(colors.white)
             pdf.setFont("Helvetica-Bold", 6.8)
-            pdf.drawCentredString(x + 25, y + 26.5, "OK")
+            pdf.drawCentredString(x + 23, y + 25.5, "OK")
             pdf.setFillColor(INK)
             pdf.setFont("Helvetica-Bold", 9)
-            pdf.drawString(x + 44, y + 34, data["selected_action"].replace("tool_", ""))
-            pdf.setFont("Helvetica", 7.8)
-            pdf.drawString(x + 44, y + 20, "HTTP 200  ·  0 ms")
-            pdf.setFillColor(GOOD)
-            pdf.setFont("Helvetica-Bold", 7.2)
-            pdf.drawString(x + 44, y + 8, "selected viable route")
+            pdf.drawString(x + 42, y + 34, data["selected_action"])
+            pdf.setFont("Helvetica", 7.2)
+            pdf.drawString(x + 42, y + 20, "live HTTP 200")
+            pdf.drawString(x + 42, y + 9, "0 ms regret")
 
-    summary_x, chart_y, chart_w = 185, 106, 370
-    pdf.setFillColor(INK)
-    pdf.setFont("Helvetica-Bold", 11)
-    pdf.drawCentredString(width / 2, chart_y + 108, "All conditions: post-decision live completion")
     grouped = defaultdict(list)
     for row in rows:
         grouped[row["condition"]].append(row)
-    values = {condition: 100 * sum(row["success"] for row in grouped[condition]) / len(grouped[condition]) for condition in "ABC"}
-    for index, condition in enumerate("ABC"):
-        y = chart_y + (2 - index) * 30
+    regret = {condition: sum(row["regret"] for row in grouped[condition]) / len(grouped[condition]) for condition in "ABC"}
+    completion = {condition: 100 * sum(row["success"] for row in grouped[condition]) / len(grouped[condition]) for condition in "ABC"}
+    successes = {condition: sum(row["success"] for row in grouped[condition]) for condition in "ABC"}
+
+    panel_x, panel_y, panel_w, panel_h = 72, 58, 648, 222
+    pdf.setFillColor(colors.white)
+    pdf.setStrokeColor(FRAME)
+    pdf.roundRect(panel_x, panel_y, panel_w, panel_h, 5, fill=1, stroke=1)
+    pdf.setFillColor(INK)
+    pdf.setFont("Helvetica-Bold", 11)
+    pdf.drawCentredString(width / 2, 260, "All conditions, with the structural-control comparison highlighted: B-to-C")
+    bar_x, bar_w = 244, 330
+    pdf.setFont("Helvetica-Bold", 8.8)
+    pdf.drawString(90, 239, "Mean observable policy regret")
+    for condition, y in (("A", 220), ("B", 196), ("C", 172)):
+        pdf.setFillColor(MUTED)
+        pdf.setFont("Helvetica", 7.5)
+        label = {"A": "A - task only", "B": "B - neutral envelope", "C": "C - verified state"}[condition]
+        pdf.drawRightString(bar_x - 8, y + 3, label)
         pdf.setFillColor(colors.HexColor("#E8EDF3"))
-        pdf.roundRect(summary_x, y, chart_w, 18, 4, fill=1, stroke=0)
+        pdf.roundRect(bar_x, y - 6, bar_w, 12, 3, fill=1, stroke=0)
         pdf.setFillColor(CONDITION_COLORS[condition])
-        pdf.roundRect(summary_x, y, chart_w * values[condition] / 100, 18, 4, fill=1, stroke=0)
+        if regret[condition] == 0:
+            pdf.circle(bar_x, y, 5, fill=1, stroke=0)
+        else:
+            pdf.roundRect(bar_x, y - 6, bar_w * regret[condition] / max(regret.values()), 12, 3, fill=1, stroke=0)
         pdf.setFillColor(INK)
         pdf.setFont("Helvetica-Bold", 8.6)
-        pdf.drawRightString(summary_x - 10, y + 5.2, condition)
-        pdf.drawString(summary_x + chart_w + 9, y + 5.2, f"{sum(row['success'] for row in grouped[condition])}/9  ({values[condition]:.1f}%)")
-    pdf.setFillColor(MUTED)
-    pdf.setFont("Helvetica", 8)
-    pdf.drawCentredString(width / 2, 72, "Condition C: 0.00 ms mean regret; neutral envelope: 8,956 ms mean regret.")
-    draw_footer(pdf, "All C cells selected the observable-best route from OTel-derived state and completed the subsequent live proxied HTTP action.")
+        pdf.drawString(bar_x + bar_w + 10, y - 3, f"{regret[condition]:,.0f} ms")
+    pdf.setFillColor(GOOD)
+    pdf.setFont("Helvetica-Bold", 9.2)
+    pdf.drawString(595, 169, "B-to-C: 100% lower regret")
+    pdf.setStrokeColor(GRID)
+    pdf.line(88, 148, 704, 148)
+    pdf.setFillColor(INK)
+    pdf.setFont("Helvetica-Bold", 8.8)
+    pdf.drawString(90, 132, "Live action completion")
+    for condition, y in (("A", 113), ("B", 91), ("C", 69)):
+        pdf.setFillColor(MUTED)
+        pdf.setFont("Helvetica", 7.5)
+        pdf.drawRightString(bar_x - 8, y + 3, condition)
+        pdf.setFillColor(colors.HexColor("#E8EDF3"))
+        pdf.roundRect(bar_x, y - 6, bar_w, 12, 3, fill=1, stroke=0)
+        pdf.setFillColor(CONDITION_COLORS[condition])
+        pdf.roundRect(bar_x, y - 6, bar_w * completion[condition] / 100, 12, 3, fill=1, stroke=0)
+        pdf.setFillColor(INK)
+        pdf.setFont("Helvetica-Bold", 8.6)
+        pdf.drawString(bar_x + bar_w + 10, y - 3, f"{successes[condition]}/9 ({completion[condition]:.1f}%)")
+    pdf.setFillColor(GOOD)
+    pdf.setFont("Helvetica-Bold", 9.2)
+    pdf.drawString(638, 66, "B-to-C: +44.4 pp")
+    draw_footer(pdf, "Zero regret denotes no excess observable operational cost, not a zero-duration HTTP request.")
     pdf.save()
 
 
