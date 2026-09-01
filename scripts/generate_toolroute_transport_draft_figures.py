@@ -119,9 +119,6 @@ def figure_primary_conditions(path: Path, summary: dict[tuple[str, str], float])
             pdf.setFont("Helvetica", 7.5)
             pdf.drawRightString(x - 5, py - 2.5, f"{tick:,}")
 
-        pdf.setFillColor(MUTED)
-        pdf.setFont("Helvetica", 7.3)
-        pdf.drawRightString(x - 5, y + h + 1, "ms")
         positions = {"A": x + 42, "B": x + 102, "C": x + 162}
         for condition, px in positions.items():
             value = summary[(model, condition)]

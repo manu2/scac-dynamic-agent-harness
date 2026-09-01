@@ -991,5 +991,13 @@
   The submission PDF was visually inspected page-by-page; the mathematical host-observation mapping now renders
   the Greek \u03c6 glyph rather than the word `phi`. The final PDF contains no draft label.
 
+### 2026-09-01 — Submission abstract and Figure 1 polish
+
+- The abstract now leads with the operational-blindness problem, states the trust-separated Harness Awareness
+  intervention, and reports the primary 216-decision ablation and the separate 27-decision live transport
+  replication without combining their denominators. Its closing claim is restricted to the demonstrated principle:
+  selected, provenance-preserving telemetry can be an agent control input.
+- The redundant Figure 1 `ms` unit label was removed because it sat adjacent to the 10,000 tick label. The figure
+  title and all point labels retain the unit; no data, evaluator, cohort, or analysis rule changed.
 
 
