@@ -15,11 +15,24 @@ from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Image, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 
 REPO = Path(__file__).resolve().parents[1]
 AUTHORS = "Manu Agrawal and Shrey Nagpal"
+MATH_FONT_NAME = "HarnessSTIX"
+MATH_FONT_PATH = Path("/System/Library/Fonts/Supplemental/STIXTwoText.ttf")
+
+
+def phi() -> str:
+    """Render Greek phi with an embedded math font, never an unsupported glyph."""
+
+    if MATH_FONT_PATH.exists():
+        pdfmetrics.registerFont(TTFont(MATH_FONT_NAME, str(MATH_FONT_PATH)))
+        return f"<font name='{MATH_FONT_NAME}'>φ</font>"
+    return "<i>phi</i>"
 
 
 def styles() -> dict[str, ParagraphStyle]:
@@ -85,6 +98,7 @@ def footer(pdf, doc) -> None:
 
 def build(output: Path) -> None:
     s = styles()
+    greek_phi = phi()
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="toolroute-submission-figures-") as temp:
         temp_dir = Path(temp)
@@ -99,12 +113,21 @@ def build(output: Path) -> None:
             paragraph("Tool-using agents commonly choose among APIs from task semantics and tool descriptions while the execution harness separately observes latency, failures, and route health. This separation creates <b>operational blindness</b>: a healthy route and a degraded route can look identical at the decision where the choice matters. We introduce <b>Agent Harness Awareness</b>, a trust-separated design in which compact, fresh, host-verified operational state becomes a first-class control input while measurement, enforcement, and evaluation remain outside the model. In a frozen 216-decision direct-provider ToolRoute cohort spanning GPT-5.6 Sol, Claude Sonnet 5, and Gemini 3.7 Flash, truthful tool-health state reduced mean observable policy regret by 96.9% versus a neutral same-shape telemetry control (4,252 ms to 131 ms) and increased completion from 69.4% to 95.8%. We separately reproduce the decision effect in a standards-based live transport integration: 27 remote-model decisions over actual local TCP/HTTP routes, OpenTelemetry HTTP client spans, and Toxiproxy-injected latency, connection, and HTTP failures. There, verified state produced 9/9 successful, zero-regret selections across all model families and fault regimes, versus 5/9 completion and 8,956 ms mean regret for the neutral control. Selected, verified operational facts can become direct control inputs for autonomous agents.", s["abstract"]),
             paragraph("1. From operational blindness to closed-loop control", s["h1"]),
             paragraph("An agent can understand a user request and every tool's semantics yet still make an avoidable operational error. The missing information is often not semantic; it is the current state of the harness: which route is slow, failing, rate-limited, stale, resource-constrained, or no longer economical. When the harness knows this state but the agent does not, equivalent APIs remain indistinguishable at the moment the agent selects one.", s["body"]),
+            paragraph("This is a general agent-runtime problem, not merely a routing problem. Harnesses already observe four high-value operational dimensions: <b>tools and network</b> (route health and circuit state); <b>runtime</b> (deadlines, queueing, and concurrency); <b>hardware and sandbox</b> (memory headroom, CPU pressure, storage); and <b>economics</b> (context headroom, token burn, quota, and cost). A harness-aware agent can use these facts for alternate-route selection, deadline-aware decomposition, checkpointing before budget exhaustion, resource-aware concurrency, and backpressure-aware coordination.", s["body"]),
             paragraph("We call this gap <b>operational blindness</b>. Agent Harness Awareness closes it by reducing bounded, freshness-labelled, host-verified execution state into an agent decision interface. The host retains authority over collection, reduction, safety, and enforcement. The model may adapt its next strategic action, but cannot rewrite measurements, disable constraints, or modify the evaluator.", s["body"]),
             paragraph("This paper contributes a general systems paradigm, a trust-separated state interface, a frozen 216-decision multi-model information ablation, and a separately analysed 27-decision OpenTelemetry/Toxiproxy transport replication. It is evidence that what an agent knows about its harness can be as consequential as what it knows about the user task.", s["body"]),
             paragraph("2. Agent Harness Awareness", s["h1"]),
-            paragraph("At decision time <i>t</i>, let <i>x</i><sub>t</sub> denote the task and tool interface, <i>h</i><sub>t</sub> the host state, and <i>z</i><sub>t</sub> = <i>phi</i>(<i>h</i><sub>t</sub>) a bounded host-generated projection. The proposed <b>Substrate State Telemetry (SST) contract</b> covers Tools (success history, latency, error/circuit state), Runtime (deadlines and exit state), Hardware (memory, CPU, disk, processes), and Economics (context headroom, quota, rate, cost). ToolRoute evaluates the Tools dimension; the other dimensions are direct future instantiations, not pooled evidence.", s["body"]),
+            paragraph(f"At decision time <i>t</i>, let <i>x</i><sub>t</sub> denote the task and tool interface, <i>h</i><sub>t</sub> the host state, and <i>z</i><sub>t</sub> = {greek_phi}(<i>h</i><sub>t</sub>) a bounded host-generated projection. The proposed <b>Substrate State Telemetry (SST) contract</b> covers Tools (success history, latency, error/circuit state), Runtime (deadlines and exit state), Hardware (memory, CPU, disk, processes), and Economics (context headroom, quota, rate, cost). ToolRoute evaluates the Tools dimension; the other dimensions are direct future instantiations, not pooled evidence.", s["body"]),
             paragraph("Harness Awareness complements rather than replaces deterministic controls. The data plane—kernel, proxy, circuit breaker, retry policy, and scheduler—continues to own immediate recovery and safety. The agent control plane acts when current state changes strategy: choose a route, defer work, adopt a degraded-mode plan, or allocate time and budget differently.", s["body"]),
-            paragraph("3. ToolRoute method", s["h1"]),
+            paragraph("3. Two complementary ToolRoute studies", s["h1"]),
+            paragraph("ToolRoute evaluates the tools-and-network dimension through two deliberately distinct studies. Study 1 is the primary controlled information ablation; Study 2 is an independently reported systems replication. Their data are never pooled.", s["body"]),
+            make_table([
+                ["Study", "Question", "Evidence", "Role"],
+                ["Study 1", "Does truthful state improve route selection when the interface is held constant?", "216 frozen provider decisions; seeded monitor", "Primary behavioral estimate"],
+                ["Study 2", "Does the effect survive an OTel-instrumented live HTTP tool path?", "27 frozen decisions; OTel, Toxiproxy, live action", "End-to-end replication"],
+            ], [0.72 * inch, 2.15 * inch, 1.72 * inch, 1.28 * inch], s),
+            Spacer(1, 7),
+            paragraph("3.1 Study 1: controlled information ablation", s["h2"]),
             paragraph("The agent retrieves a read-only customer record through one of two functionally equivalent routes, <font name='Courier'>tool_alpha</font> and <font name='Courier'>tool_beta</font>, or chooses <font name='Courier'>wait</font>. The host owns monitoring, schedules, execution, and an external observable-cost oracle. Each decision is an independent full-checkpoint episode; models have no shell, filesystem, network-tool, schedule, oracle, or artifact access.", s["body"]),
             make_table([
                 ["Condition", "Model-visible information"],
@@ -114,8 +137,10 @@ def build(output: Path) -> None:
             ], [1.3 * inch, 4.55 * inch], s),
             Spacer(1, 7),
             paragraph("B is the structural control: it holds interface shape and technical content constant while neutralizing route-relevant values. The primary outcome is <b>observable policy regret</b>, the excess selected-action cost under an oracle restricted to facts rendered in C. The frozen direct-provider cohort contains 216 independent decisions (three model families × six seeds × four turns × three conditions); every attempt retains its prompt, sanitized request/response, snapshot, tool event, evaluation result, and finalization hashes. No request was retried.", s["body"]),
+            paragraph("3.2 Study 2: live OpenTelemetry transport replication", s["h2"]),
             paragraph("The separately labelled v0.2 replication preserves the A/B/C information intervention but moves to a live instrumented tool path. Each episode makes three monitor requests per route through local TCP/HTTP proxies. Standard OpenTelemetry HTTP client spans provide duration and outcome facts; a host reducer converts them to the decision snapshot. Toxiproxy injects a predeclared latency, connection, or HTTP failure on one route, and the selected route is then executed through the same still-live proxy. The frozen replication contains 27 independent decisions (three models × three fault regimes × A/B/C) and retains raw spans, reducer events, provider records, action spans, results, and hashes.", s["body"]),
             paragraph("4. Results", s["h1"]),
+            paragraph("4.1 Study 1: controlled information ablation", s["h2"]),
             paragraph("Across 72 decisions per condition, verified state reduces mean observable policy regret from 4,251.54 ms in B to 131.12 ms: a 96.9% reduction. Completion rises from 50/72 (69.4%; Wilson 95% CI 58.0–79.0%) to 69/72 (95.8%; Wilson 95% CI 88.3–98.5%), a 26.4-point increase. A is also materially worse than C (4,826.45 ms regret; 47/72 completion), demonstrating that a telemetry-shaped envelope alone does not explain the result.", s["body"]),
             *figure(fig1, "Figure 1. Mean observable policy regret for all three information conditions in the frozen 216-decision cohort. Log scaling keeps verified-state values visible; A, B, and C are independent condition means, not trajectories.", s),
             make_table([
@@ -125,8 +150,9 @@ def build(output: Path) -> None:
                 ["Gemini 3.7 Flash", "4,723.81 ms", "4,723.81 ms", "242.35 ms", "23/24 (95.8%)"],
             ], [1.32 * inch, 0.96 * inch, 0.96 * inch, 0.96 * inch, 1.15 * inch], s),
             Spacer(1, 7),
+            paragraph("4.2 Study 2: live transport replication", s["h2"]),
             paragraph("The transport replication reproduces the central result without relying on the synthetic monitor. Across nine B decisions, models completed 5/9 actions (55.6%) and incurred 8,956.37 ms mean observable policy regret. Across nine C decisions, models selected the observable-best route in 9/9 cases, completed 9/9 live actions, and incurred 0.00 ms mean observable policy regret. Each model has one C episode in each predeclared latency, connection-error, and HTTP-error regime.", s["body"]),
-            *figure(fig2, "Figure 2. The nine verified-state cells in the frozen 27-decision OpenTelemetry/Toxiproxy replication. Each selected the observable-best route and completed the subsequent live proxied HTTP action; the adjacent chart reports all A/B/C completion outcomes.", s),
+            *figure(fig2, "Figure 2. Study 2 outcome summary. All nine verified-state cells in the frozen OpenTelemetry/Toxiproxy replication selected the observable-best route and completed the subsequent live proxied HTTP action; the lower panel reports all A/B/C completion outcomes.", s),
             paragraph("The counterbalanced replication also exposes the baseline pattern that verified state corrects. Across A and B, models selected <font name='Courier'>tool_alpha</font> in 17 of 18 decisions, including 7 of 8 cases in which <font name='Courier'>tool_beta</font> was listed first. This is an observed default route-label preference in this cohort, not a claim about universal positional bias. Condition C removed its operational consequence by selecting the healthy route in every regime regardless of which route was degraded or listed first.", s["body"]),
             paragraph("5. Implications, boundaries, and agenda", s["h1"]),
             paragraph("Modern observability systems collect traces, metrics, and logs for human operators. Harness Awareness supplies the missing control-plane step: select the facts relevant to the immediate decision, preserve provenance and freshness, and expose the bounded result to the agent without giving it authority over truth or enforcement. The interface can support alternate-region routing, deadline-aware planning, quota-aware work decomposition, context-budget checkpointing, resource-aware concurrency, and multi-agent backpressure.", s["body"]),

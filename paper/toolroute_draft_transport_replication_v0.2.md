@@ -10,6 +10,8 @@ Tool-using agents commonly choose among APIs from task semantics and tool descri
 
 An agent can understand a user request and every tool's semantics yet still make an avoidable operational error. The missing information is often not semantic; it is the current state of the harness: which route is slow, failing, rate-limited, stale, resource-constrained, or no longer economical. When the harness knows this state but the agent does not, equivalent APIs remain indistinguishable at the moment the agent selects one.
 
+This is a general agent-runtime problem, not merely a routing problem. Agent harnesses already observe four high-value operational dimensions: **tools and network** (route health, errors, circuit state); **runtime** (deadlines, queueing, and concurrency); **hardware and sandbox** (memory headroom, CPU pressure, storage); and **economics** (context headroom, token burn, quota, and cost). A harness-aware agent can use these facts for alternate-route selection, deadline-aware decomposition, checkpointing before budget exhaustion, resource-aware concurrency, and backpressure-aware coordination. The challenge is to expose a trustworthy, decision-relevant projection without handing the model authority over measurement or enforcement.
+
 We call this gap **operational blindness**. **Agent Harness Awareness** closes it by reducing bounded, freshness-labelled, host-verified execution state into an agent decision interface. The host retains authority over collection, reduction, safety, and enforcement. The model may adapt its next strategic action, but cannot rewrite the measurements, disable constraints, or modify the evaluator.
 
 This paper contributes a general systems paradigm, a trust-separated state interface, a frozen 216-decision multi-model information ablation, and a separately analysed 27-decision OpenTelemetry/Toxiproxy transport replication. The contribution is not a new tool-call syntax or model ranking. It is evidence that what an agent knows about its harness can be as consequential as what it knows about the user task. This addresses a practical reliability gap: recent agent evaluations find that controlled tool/API failures and dynamic replanning remain difficult even when ordinary task execution succeeds (Gupta, 2026; Zhu et al., 2026). Harness Awareness supplies a distinct missing capability: make verified current operational facts available *before* the consequential route decision.
@@ -22,7 +24,16 @@ The proposed **Substrate State Telemetry (SST) contract** is intentionally minim
 
 Harness Awareness complements rather than replaces deterministic systems controls. The data plane—kernel, proxy, circuit breaker, retry policy, and scheduler—continues to own immediate recovery and safety. The agent control plane acts when current state changes strategy: choose a route, defer work, adopt a degraded-mode plan, or allocate time and budget differently.
 
-## 3. ToolRoute method
+## 3. Two complementary ToolRoute studies
+
+ToolRoute evaluates the tools-and-network dimension through two deliberately distinct studies. They answer different questions and are analysed separately throughout this paper.
+
+| Study | Question | Evidence | Role in the paper |
+| --- | --- | --- | --- |
+| **Study 1: controlled information ablation** | Does truthful state improve route selection when the decision interface is held constant? | 216 frozen direct-provider decisions; seeded host-owned monitor. | Primary behavioral estimate. |
+| **Study 2: live transport replication** | Does the same information effect survive a standard-telemetry, actual HTTP tool path? | 27 frozen remote-model decisions; OTel spans, Toxiproxy, and live selected-route execution. | End-to-end systems replication; never pooled with Study 1. |
+
+### 3.1 Study 1: controlled information ablation
 
 The task is to retrieve a read-only customer record via one of two functionally equivalent routes, `tool_alpha` and `tool_beta`, or choose `wait`. The host owns monitoring, schedules, execution, and an external observable-cost oracle. Each decision is an independent full-checkpoint episode; models have no shell, filesystem, network-tool, schedule, oracle, or artifact access.
 
@@ -36,7 +47,7 @@ B is the structural control. It holds interface shape and technical content cons
 
 The primary outcome is **observable policy regret**: excess selected-action cost under an oracle restricted to canonical facts rendered in C. This avoids scoring a model against latent reliability it could not observe. The frozen direct-provider cohort contains 216 independent decisions: three model families × six seeds × four turns × three conditions. Every attempt retained a prompt, sanitized request/response, snapshot, tool event, evaluation result, and finalization hashes; no request was retried.
 
-### 3.1 Live OpenTelemetry transport replication
+### 3.2 Study 2: live OpenTelemetry transport replication
 
 The separately labelled v0.2 replication preserves the same A/B/C intervention but changes the observation and execution substrate:
 
@@ -56,7 +67,7 @@ The frozen replication contains 27 independent decisions: three model families �
 
 ## 4. Results
 
-### 4.1 Frozen ToolRoute cohort
+### 4.1 Study 1: controlled information ablation
 
 Across 72 decisions per condition, C reduces mean observable policy regret from 4,251.54 ms in B to 131.12 ms: a 96.9% reduction. Completion rises from 50/72 (69.4%; Wilson 95% CI 58.0–79.0%) to 69/72 (95.8%; Wilson 95% CI 88.3–98.5%), a 26.4-point increase. A is also materially worse than C (4,826.45 ms regret; 47/72 completion), demonstrating that a telemetry-shaped envelope alone does not explain the result.
 
@@ -70,7 +81,7 @@ Across 72 decisions per condition, C reduces mean observable policy regret from 
 
 *Figure 1. Mean observable policy regret for all three information conditions in the frozen 216-decision cohort. Log scaling keeps verified-state values visible; A, B, and C are independent condition means, not trajectories.*
 
-### 4.2 Live transport replication
+### 4.2 Study 2: live transport replication
 
 The transport replication reproduces the central result without relying on the synthetic monitor. Across nine B decisions, models completed 5/9 actions (55.6%) and incurred 8,956.37 ms mean observable policy regret. Across nine C decisions, models selected the observable-best route in **9/9 cases**, completed **9/9 live actions**, and incurred **0.00 ms** mean observable policy regret: a 100% B-to-C regret reduction in this frozen replication.
 
@@ -85,11 +96,11 @@ The result holds in every model family and every predeclared fault regime. C con
 
 ![OpenTelemetry transport replication outcome matrix](figures/figure_2_transport_replication.pdf)
 
-*Figure 2. The nine verified-state cells in the 27-decision OpenTelemetry/Toxiproxy replication. Each selected the observable-best route and completed the subsequent live proxied HTTP action; the adjacent chart reports all A/B/C completion outcomes.*
+*Figure 2. Study 2 outcome summary. All nine verified-state cells in the frozen OpenTelemetry/Toxiproxy replication selected the observable-best route and completed the subsequent live proxied HTTP action; the lower panel reports all A/B/C completion outcomes.*
 
 The counterbalanced design also exposes the baseline decision pattern that the state interface corrects. Across A and B, models selected `tool_alpha` in 17 of 18 decisions (94.4%), including 7 of 8 cases in which `tool_beta` was listed first. We describe this as an observed **default route-label preference** in this cohort, not as a claim about universal positional bias. Condition C removed its operational consequence: the model selected the healthy route in every regime regardless of which route was degraded or listed first.
 
-The two cohorts answer complementary questions. The 216-decision cohort isolates a repeated behavioral effect under a precisely controlled monitor. The 27-decision cohort shows that the same information intervention survives a real instrumented tool path: telemetry is collected from actual requests, reduced by the host, supplied to the model, and followed by a live route execution. Together, they support a strong systems conclusion: **verified operational telemetry is a high-leverage control input for agentic tool use.**
+The two studies answer complementary questions. Study 1 isolates a repeated behavioral effect under a precisely controlled monitor. Study 2 shows that the same information intervention survives a real instrumented tool path: telemetry is collected from actual requests, reduced by the host, supplied to the model, and followed by a live route execution. Together, they support a strong systems conclusion: **verified operational telemetry is a high-leverage control input for agentic tool use.**
 
 ## 5. Implications, boundaries, and agenda
 

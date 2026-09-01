@@ -977,6 +977,19 @@
 - Provider authorization was immediately revoked (`toolroute_otel_transport_provider_trials_authorized: false`,
   `toolroute_otel_transport_pilot_manifest_sha256: null`, `toolroute_otel_transport_v0_2_status: completed_27_episode_cross_model_replication_cohort`) in `PROVENANCE.json`.
 
+### 2026-09-01 — Submission manuscript evidence separation and visual QA
+
+- The submission manuscript now identifies two non-pooled ToolRoute studies at first mention and in distinct
+  methods/results subsections: the 216-decision seeded-monitor information ablation is the primary behavioral
+  estimate; the 27-decision OpenTelemetry/Toxiproxy/live-HTTP cohort is a separate end-to-end transport
+  replication.
+- The opening frames ToolRoute as the Tools/Network instance of the broader trust-separated Harness Awareness
+  contract (Tools/Network, Runtime, Hardware/Sandbox, and Economics), with high-value uses stated before the
+  experiment details. The document does not imply that the two denominators were pooled.
+- Figure 1 retains the per-model A/B/C primary result on a log regret scale. Figure 2 was rebuilt as a centered
+  3-by-3 live-case matrix plus centered A/B/C completion bars, removing the prior right-aligned/table-like layout.
+  The submission PDF was visually inspected page-by-page; the mathematical host-observation mapping now renders
+  the Greek \u03c6 glyph rather than the word `phi`. The final PDF contains no draft label.
 
 
 
