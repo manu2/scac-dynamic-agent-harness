@@ -50,8 +50,9 @@ The polished submission-ready proof is written to
   scripts/build_toolroute_submission_pdf.py
 ```
 
-The builder embeds the audited figures and uses macOS `sips` only to rasterize
-them for ReportLab. The output identifies Manu Agrawal as first author and
+The builder embeds the audited figures. It uses macOS `sips` only to rasterize
+Figure 1; the approved 2400-pixel Figure 2 PNG is embedded directly, without a
+second rasterization step. The output identifies Manu Agrawal as first author and
 Shrey Nagpal as second author. It remains a formatted submission proof rather
 than an arXiv source package: affiliations, verified BibTeX, and final release
 metadata remain to be added.

@@ -1015,3 +1015,25 @@
   presentation and terminology revision only; no raw trial artifact, evaluator, manifest, cohort, or analysis rule
   changed.
 
+### 2026-09-02 — Figure 2 direct-embed and equation legibility revision
+
+- The reviewed white-background Study-2 Figure 2 is retained as a 2400×1854 PNG and embedded directly into the
+  submission builder, avoiding the prior PDF-to-PNG conversion path that produced a visually different and lower
+  quality result. The B-to-C regret and completion annotations are aligned to their corresponding C rows.
+- The observable-policy-regret definition is promoted from a dense inline expression to a centered display equation;
+  `0 ms` remains explicitly defined as zero excess observable operational cost, not zero request duration.
+- This is a presentation-only revision. No raw trial artifact, evaluator, manifest, cohort, provider call, or
+  analysis rule changed.
+
+### 2026-09-02 — Manuscript claim calibration and source reconciliation
+
+- Reconciled the canonical Markdown and formatted submission manuscript around the same two-study narrative.
+  The abstract now reports the separate Study-2 B-to-C regret reduction (8,956 ms to 0 ms) as well as live
+  completion, while describing telemetry as shaping operational cost and likelihood of success rather than
+  deterministically causing success.
+- The manuscript now states the exact scope of the B-to-C structural comparison, labels trust separation as a
+  property of the proposed interface, describes Study 2 as a live OpenTelemetry-instrumented HTTP replication,
+  and adds the complementary distinction from Agent-Native Telemetry.
+- Study-2 Wilson completion intervals and the per-model outcome table are included for transparent interpretation
+  of the nine-cell cross-model-by-fault coverage. No experimental artifact, cohort, evaluator, manifest, provider
+  call, or analysis rule changed.
