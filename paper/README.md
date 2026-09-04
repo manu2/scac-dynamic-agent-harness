@@ -53,6 +53,9 @@ The polished submission-ready proof is written to
 The builder embeds the audited figures. It uses macOS `sips` only to rasterize
 Figure 1; the approved 2400-pixel Figure 2 PNG is embedded directly, without a
 second rasterization step. The output identifies Manu Agrawal as first author and
-Shrey Nagpal as second author. It remains a formatted submission proof rather
-than an arXiv source package: affiliations, verified BibTeX, and final release
-metadata remain to be added.
+Shrey Nagpal as second author. The canonical Markdown now includes artifact
+availability, a reproducibility appendix, and numbered references; synchronize
+the builder to that reviewed source before the final PDF pass. `CITATION.cff`
+provides repository-level citation metadata. It remains a formatted submission
+proof rather than an arXiv source package: final author affiliation details and
+the release license decision remain outstanding.

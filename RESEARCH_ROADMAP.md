@@ -133,13 +133,13 @@ Every snapshot enforces:
   provenance authorization is revoked. This strengthens the ToolRoute tools
   evidence through a standard-OTel, real TCP/HTTP path but is never pooled with
   the frozen 216-decision synthetic cohort.
-- **Submission visual finalization (in review):** the approved Study-2 figure is
+- **Submission visual finalization (complete):** the approved Study-2 figure is
   now retained as a direct high-resolution PNG source alongside its PDF form so
   the submission builder does not apply a second rasterization. The formatted
   regret definition is promoted to a display equation for legible subscripts;
   this is a presentation-only revision with no change to data, cohorts,
   evaluator, manifest, or analysis.
-- **Submission manuscript claim calibration (in review):** the canonical Markdown
+- **Submission manuscript claim calibration (complete):** the canonical Markdown
   and formatted manuscript now use the same bounded claim language: the
   structural B-to-C comparison supports attribution to route-relevant verified
   information, and the live replication demonstrates the decision pattern on an
@@ -147,6 +147,21 @@ Every snapshot enforces:
   Study 2 completion Wilson intervals and the distinct relationship to
   Agent-Native Telemetry (representation/transport versus behavioral effect)
   are stated explicitly. This changes presentation only, not data or analysis.
+- **Submission manuscript reproducibility pass (complete):** the canonical
+  Markdown now makes the frozen ToolRoute oracle, `wait` semantics, neutral
+  envelope values, OTel reducer settings, independent-episode terminology,
+  per-model C outcomes, and descriptive Study-1 uncertainty explicit. It
+  frames ToolRoute as a minimal semantic-constant benchmark and distinguishes
+  deterministic data-plane recovery from agent-level strategic control. This
+  is a manuscript-only revision: no cohort, evaluator, manifest, or analysis
+  output changed; the formatted PDF is synchronized and visually verified.
+- **Submission repository finalization (complete except license choice):** the canonical Markdown
+  now contains an artifact-availability section, a compact reproducibility
+  appendix, and numbered references; the root README names the canonical GitHub
+  URL and `CITATION.cff` supplies machine-readable artifact citation metadata.
+  The PDF builder is synchronized and the output has been visually verified.
+  Licensing is a pending release decision; no license has been
+  inferred or applied.
 - **G3 — pilot:** one configured model; A/B/C conditions; natural-language subset.
 - **G4 — main study:** powered, randomized, frozen multi-model execution with sample size determined by simulation from pilot base rates and minimum detectable effect.
 - **G5 — extensions:** GPU pressure, shared multi-agent resources, real outages,

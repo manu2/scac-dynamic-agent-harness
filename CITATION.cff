@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software or its evaluation artifacts, please cite it as below."
+type: software
+title: "SCAC Dynamic Agent Harness: ToolRoute Evaluation Artifacts"
+authors:
+  - family-names: Agrawal
+    given-names: Manu
+  - family-names: Nagpal
+    given-names: Shrey
+repository-code: "https://github.com/manu2/scac-dynamic-agent-harness"

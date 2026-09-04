@@ -1037,3 +1037,40 @@
 - Study-2 Wilson completion intervals and the per-model outcome table are included for transparent interpretation
   of the nine-cell cross-model-by-fault coverage. No experimental artifact, cohort, evaluator, manifest, provider
   call, or analysis rule changed.
+
+### 2026-09-04 — Markdown reproducibility and systems-boundary revision
+
+- Revised `paper/toolroute_draft_transport_replication_v0.2.md` before final PDF generation. The Markdown now
+  presents ToolRoute as a minimal semantic-constant benchmark, explicitly separates deterministic data-plane
+  protection from agent-level strategic control, and keeps the two studies non-pooled.
+- Added the exact frozen observable-cost terms, `wait` scoring/completion rule, B neutral-row values, Study-2
+  reducer/proxy parameters, Study-1 Wilson and descriptive block-bootstrap intervals, per-model C outcomes, and
+  symmetric Study-2 A/B/C regret columns. The route-label observation is retained as a cohort diagnostic and the
+  manuscript points to the frozen allocation manifest rather than claiming universal bias.
+- This is documentation only. No provider call, raw artifact, manifest, evaluator, cohort membership, or derived
+  analysis file changed. The Markdown is awaiting independent review; PDF regeneration is intentionally deferred.
+
+### 2026-09-04 — Submission repository finalization materials
+
+- Compared the ToolRoute release materials against the finalized Substrate Awareness submission. Added a canonical
+  artifact-availability section and compact reproducibility appendix to the ToolRoute Markdown; these identify the
+  immutable manifests, retained records, prompts, spans, hashes, analyses, and build scripts without pooling studies.
+- Added numbered Markdown references, accessed dates for the software documentation, a root canonical repository URL,
+  and `CITATION.cff` for machine-readable artifact citation. The PDF builder was not changed and no PDF was rendered:
+  it must be synchronized only after independent Markdown review.
+- No license was inferred from the other repository. The previous paper uses Apache-2.0, but licensing this repository
+  remains an explicit release decision. No experimental artifact, provider authorization, evaluator, or cohort changed.
+
+### 2026-09-04 — Final submission PDF regeneration and visual verification
+
+- Synchronized `scripts/build_toolroute_submission_pdf.py` with the reviewed canonical Markdown and regenerated
+  `output/pdf/agent_harness_awareness_toolroute.pdf`. The six-page PDF was visually checked for title/author layout,
+  tables, both figures, mathematical notation, citations, and pagination. Figure 2 remains a direct high-resolution
+  PNG embed; its B-to-C annotations are legible and do not overlap the zero-regret value.
+- The observable-policy-regret expression now uses a centered display with formatted subscripts and minimization
+  notation. Its accompanying cost definition is kept as one self-contained block rather than splitting a formula from
+  its interpretation across pages. The author line is names only: Manu Agrawal and Shrey Nagpal; no affiliation label
+  is included.
+- Final local verification: `112 passed` under the repository virtual environment; `git diff --check` is clean.
+- This is a document-build and release-readiness update only. No provider call, raw artifact, manifest, evaluator,
+  cohort, or derived analysis changed. The remaining nontechnical release choice is the repository license.

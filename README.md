@@ -1,5 +1,7 @@
 # SCAC Dynamic Agent Harness
 
+**Repository:** https://github.com/manu2/scac-dynamic-agent-harness
+
 An experimental harness for testing whether fresh, host-verified execution
 telemetry improves the decisions of multi-turn, tool-using LLM agents under
 resource pressure, tool degradation, and quota exhaustion.
@@ -98,3 +100,11 @@ replication figures, and source builders are documented in `paper/README.md`.
 The shareable submission-ready proof is
 `output/pdf/agent_harness_awareness_toolroute.pdf`; it is a formatted PDF, not
 yet an arXiv source bundle.
+
+## Citation and artifact availability
+
+`CITATION.cff` provides machine-readable citation metadata. The repository
+retains the frozen ToolRoute manifests, hash-finalized experiment records,
+derived analyses, figures, and manuscript build scripts. The canonical paper
+source is `paper/toolroute_draft_transport_replication_v0.2.md`; Study 1 and
+Study 2 evidence remain separately labelled and are never pooled.
